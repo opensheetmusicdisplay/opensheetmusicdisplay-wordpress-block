@@ -1,0 +1,15 @@
+{
+	"apiVersion": 2,
+	"name": "phonicscore/opensheetmusicdisplay",
+	"title": "OpenSheetMusicDisplay",
+	"category": "embed",
+	"icon": "playlist-audio",
+	"description": "Block to render MusicXML in the browser as sheet music using OSMD.",
+	"textdomain": "opensheetmusicdisplay",
+	"supports": {
+		"html": false
+	},
+	"editorScript": "file:./build/index.js",
+	"editorStyle": "file:./build/index.css",
+	"style": "file:./build/style-index.css"
+}
