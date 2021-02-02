@@ -1,30 +1,42 @@
 import React, { PureComponent } from 'react';
-import OSMDOptions, { OpenSheetMusicDisplay as OSMD} from 'opensheetmusicdisplay';
+import { OSMDOptions, OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
 
-export class OpenSheetMusicDisplay extends PureComponent {
+export class OpenSheetMusicDisplayComponent extends PureComponent {
     constructor(props) {
       super(props);
-      this.state = { dataReady: false, loadingClass: 'loader' };
+      this.pendingLoad = undefined;
       this.osmd = undefined;
-      this.divRef = React.createRef();
+      this.osmdDivRef = React.createRef();
+      this.loaderDivRef = React.createRef();
+      /*
       const _self = this;
       window.addEventListener('resize', function(){
         _self.resize();
-      });
+      });*/
+    }
+
+    getOptionsObjectFromProps(props){
+      let options = {};
+      const propKeys = Object.keys(props);
+      for(let i = 0; i < propKeys.length; i++){
+        const key = propKeys[i];
+        if(key !== 'file' && key !== 'zoom' && key !== 'width'){
+          options[key] = props[key];
+        }
+      }
+      return options;
     }
   
     setupOsmd() {
-      const options = {
-        autoResize: this.props.autoResize !== undefined ? this.props.autoResize : true,
-        drawTitle: this.props.drawTitle !== undefined ? this.props.drawTitle : true,
-      }
-      this.osmd = new OSMD(this.divRef.current, options);
-      this.setState({loadingClass: 'loader'});
+      const options = this.getOptionsObjectFromProps(this.props);
+      this.osmd = new OpenSheetMusicDisplay(this.osmdDivRef.current, options);
       if(this.props.file){
         const _self = this;
-        _self.osmd.load(this.props.file).then(function(){
+        this.pendingLoad = this.osmd.load(this.props.file);
+        this.pendingLoad.then(function(){
+          _self.pendingLoad = undefined;
           _self.osmd.render();
-          _self.setState({loadingClass: ''});
+          _self.loaderDivRef.current.classList.remove('loader');
         });
       }
     }
@@ -34,22 +46,53 @@ export class OpenSheetMusicDisplay extends PureComponent {
     }
   
     componentWillUnmount() {
-      window.removeEventListener('resize', this.resize);
+      //console.log("componentWillUnmount");
+      //window.removeEventListener('resize', this.resize);
     }
-  
+  /*
+    shouldComponentUpdate(nextProps, nextState){
+      if(nextProps.file !== this.props.file){
+        return true;
+      }
+
+      const nextOptions = nextProps.options;
+      const currentOptions = this.props.options;
+      if(nextOptions === currentOptions){
+        return true;
+      }
+      const nextOptionsKVPairs = Object.entries(nextOptions);
+      const currentOptionsKVPairs = Object.entries(currentOptions);
+      const testKeys = Object.keys(IOSMDOptions);
+      for(let i = 0; i < testKeys.length; i++){
+        console.log(testKeys[i]);
+      }
+      return false;
+    }
+*/
     componentDidUpdate(prevProps) {
-      this.setState({loadingClass: 'loader'});
+      this.loaderDivRef.current.classList.add('loader');
       if (this.props.file !== prevProps.file) {
         const _self = this;
-        _self.osmd.load(this.props.file).then(function(){
+        this.pendingLoad = this.osmd.load(this.props.file);
+        this.pendingLoad.then(function(){
+          _self.pendingLoad = undefined;
           _self.osmd.render();
-          _self.setState({loadingClass: ''});
+          _self.loaderDivRef.current.classList.remove('loader');
         });
+        return;
+      }
+      
+      if(this.props.zoom !== prevProps.zoom){
+        this.osmd.Zoom = this.props.zoom;
       } else {
-        //TODO: other options
-        this.osmd.setOptions({drawTitle: this.props.drawTitle});
+        const options = this.getOptionsObjectFromProps(this.props);
+        console.log("updating options", options);
+        this.osmd.setOptions(options);
+      }
+
+      if(!this.pendingLoad){
         this.osmd.render();
-        this.setState({loadingClass: ''});
+        this.loaderDivRef.current.classList.remove('loader');
       }
     }
 
@@ -61,8 +104,8 @@ export class OpenSheetMusicDisplay extends PureComponent {
     render() {
       return (
         <div className="osmd-container">
-          <div className= { this.state.loadingClass }></div>
-          <div className="osmd-render-block" ref={this.divRef} />
+          <div className="loader" ref={this.loaderDivRef}></div>
+          <div className="osmd-render-block" ref={this.osmdDivRef} />
         </div>
         );
     }

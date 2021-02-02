@@ -26,15 +26,16 @@ export default function save({attributes}) {
 	const items = [];
 	if(typeof attributes === 'object'){
 		for(let [key, value] of Object.entries(attributes)){
-			if(typeof value === 'boolean'){
+			let type = typeof value;
+			if(type === 'boolean'){
 				if(value){
 					value = 'true';
 				} else {
 					value = 'false';
 				}
 			}
-			if(key !== 'musicXmlUrl'){
-				items.push(<input type="hidden" key={key} name={key} value={value} />);
+			if(key !== 'musicXmlUrl' || key !== 'zoom' || key !== 'width'){
+				items.push(<input type="hidden" attributeType={type} key={key} name={key} value={value} />);
 			}
 		}
 	}
@@ -42,9 +43,10 @@ export default function save({attributes}) {
 		<div { ...useBlockProps.save() }>
 			<div className="osmd-container-placeholder">
 				<div className="loader" />
-				<div className="osmd-render-block"/>
+				<div className="osmd-render-block" style={{width: attributes.width + '%'}}/>
 				{items}
 				<input type="hidden" className="musicXmlUrl" name="musicXmlUrl" value={attributes.musicXmlUrl} />
+				<input type="hidden" className="zoom" name="zoom" value={attributes.zoom} />
 			</div>
 		</div>
 	);

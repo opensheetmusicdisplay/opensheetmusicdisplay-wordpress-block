@@ -1,6 +1,6 @@
 import { InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
-import { CheckboxControl, Button, PanelBody } from '@wordpress/components';
-import { OpenSheetMusicDisplay } from './OpenSheetMusicDisplayComponent.jsx';
+import { CheckboxControl, Button, PanelBody, __experimentalNumberControl as NumberControl } from '@wordpress/components';
+import { OpenSheetMusicDisplayComponent } from './OpenSheetMusicDisplayComponent.jsx';
 import { withSelect } from "@wordpress/data";
 
 /**
@@ -25,7 +25,6 @@ import { useBlockProps } from '@wordpress/block-editor';
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import './editor.scss';
-
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -42,43 +41,141 @@ const Edit = ({attributes, setAttributes}) => {
 			musicXmlTitle: media.title
 		});
 	}
-
+	//TODO: add button to batch update settings instead of live. since render is so expensive on larger scores
 	return (
-		<div { ...useBlockProps() }>
+		<div { ...useBlockProps() } style={{width: attributes.width + '%'}}>
 			{
 				<InspectorControls>
+					<PanelBody
+						title={__('Basic Options')}
+						initialOpen = { true }
+						>
 						<div className="musicxml-selector">
 						<MediaUploadCheck>
 							<MediaUpload
-								allowedTypes={ ['application/vnd.recordare.musicxml', 'application/vnd.recordare.musicxml+xml'] }
+								allowedTypes={ ['application/vnd.recordare.musicxml',
+												'application/vnd.recordare.musicxml+xml',            
+												'text/xml',
+												'application/xml'
+											] }
 								onSelect={onSelectMedia}
 								value={attributes.musicXmlId}
 								render={({open}) => (
-									<Button 
-										onClick={open}
-									>
-										{attributes.musicXmlId == -1 && __('Choose a MusicXML File')}
-										{attributes.musicXmlId > -1 && attributes.musicXmlTitle}
-									</Button>
+									<div>
+										<sub>
+											<strong>
+											{attributes.musicXmlId > -1 ? 'Current Score: ' + attributes.musicXmlTitle : 'No MusicXML selected.'}
+											</strong>
+										</sub>
+										<br/>
+										<Button 
+											isPrimary= {true}
+											onClick={open}
+										>
+											{__('Select Media')}
+										</Button>
+									</div>
 								)}
 							/>
 						</MediaUploadCheck>
 						</div>
+						<NumberControl
+								label="Width (%)"
+								min={10.0}
+								onChange={ (val) => setAttributes( { width: val } ) }
+								value={ attributes.width }
+							>
+							</NumberControl>
+							<NumberControl
+								label="Zoom (%)"
+								min={1}
+								onChange={ (val) => setAttributes( { zoom: val / 100.0 } ) }
+								value={ attributes.zoom * 100 }
+							>
+							</NumberControl>
+					</PanelBody>
 					<PanelBody
-						title={__('Options')}
-						initialOpen = { true }
+						title={__('Drawing Options')}
+						initialOpen = { false }
 						>
 							<CheckboxControl
-								label="Render Title"
+								label="Draw Title"
 								checked={ attributes.drawTitle }
 								onChange={ (val) => setAttributes( { drawTitle: val } ) }
 							>
 							</CheckboxControl>
+							<CheckboxControl
+								label="Draw Subtitle"
+								checked={ attributes.drawSubtitle }
+								onChange={ (val) => setAttributes( { drawSubtitle: val } ) }
+							>
+							</CheckboxControl>
+							<CheckboxControl
+								label="Draw Composer"
+								checked={ attributes.drawComposer }
+								onChange={ (val) => setAttributes( { drawComposer: val } ) }
+							>
+							</CheckboxControl>
+							<CheckboxControl
+								label="Draw Lyricist"
+								checked={ attributes.drawLyricist }
+								onChange={ (val) => setAttributes( { drawLyricist: val } ) }
+							>
+							</CheckboxControl>
+							<CheckboxControl
+								label="Draw Metronome Marks"
+								checked={ attributes.drawMetronomeMarks }
+								onChange={ (val) => setAttributes( { drawMetronomeMarks: val } ) }
+							>
+							</CheckboxControl>
+							<CheckboxControl
+								label="Draw Part Names"
+								checked={ attributes.drawPartNames }
+								onChange={ (val) => setAttributes( { drawPartNames: val } ) }
+							>
+							</CheckboxControl>
+							<CheckboxControl
+								label="Draw Part Abbreviations"
+								checked={ attributes.drawPartAbbreviations }
+								onChange={ (val) => setAttributes( { drawPartAbbreviations: val } ) }
+							>
+							</CheckboxControl>
+							<CheckboxControl
+								label="Draw Measure Numbers"
+								checked={ attributes.drawMeasureNumbers }
+								onChange={ (val) => setAttributes( { drawMeasureNumbers: val } ) }
+							>
+							</CheckboxControl>
+							<CheckboxControl
+								label="Draw Measure Numbers Only at System Start"
+								checked={ attributes.drawMeasureNumbersOnlyAtSystemStart }
+								onChange={ (val) => setAttributes( { drawMeasureNumbersOnlyAtSystemStart: val } ) }
+							>
+							</CheckboxControl>
+							<CheckboxControl
+								label="Draw Time Signatures"
+								checked={ attributes.drawTimeSignatures }
+								onChange={ (val) => setAttributes( { drawTimeSignatures: val } ) }
+							>
+							</CheckboxControl>
 						</PanelBody>
-
 				</InspectorControls>
 			}
-			<OpenSheetMusicDisplay file={ attributes.musicXmlUrl } options= { attributes.osmdOptions } />
+			<OpenSheetMusicDisplayComponent 
+				file={ attributes.musicXmlUrl }
+				width={ attributes.width }
+				zoom= { attributes.zoom }
+				drawTitle= { attributes.drawTitle }
+				drawSubtitle= { attributes.drawSubtitle }
+				drawComposer= { attributes.drawComposer }
+				drawLyricist= { attributes.drawLyricist }
+				drawMetronomeMarks= { attributes.drawMetronomeMarks }
+				drawPartNames= { attributes.drawPartNames }
+				drawPartAbbreviations= { attributes.drawPartAbbreviations }
+				drawMeasureNumbers= { attributes.drawMeasureNumbers }
+				drawMeasureNumbersOnlyAtSystemStart= { attributes.drawMeasureNumbersOnlyAtSystemStart }
+				drawTimeSignatures= { attributes.drawTimeSignatures }
+			/>
 		</div>
 	);
 }

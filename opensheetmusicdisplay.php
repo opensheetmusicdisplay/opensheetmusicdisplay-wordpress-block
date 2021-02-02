@@ -75,10 +75,15 @@ function phonicscore_opensheetmusicdisplay_enqueue_scripts(){
 function phonicscore_opensheetmusicdisplay_musicxml_mime_types( $mimes ) {
 	$mimes['musicxml'] = 'application/vnd.recordare.musicxml+xml';
 	$mimes['mxl'] = 'application/vnd.recordare.musicxml';
+	$mimes['xml'] = 'text/xml|application/xml';
 	return $mimes;
 }
+add_filter( 'upload_mimes', 'phonicscore_opensheetmusicdisplay_musicxml_mime_types', 98 );
+
+include_once 'MultipleMimes.php';
+MultipleMimes::init();
+
 function phonicscore_opensheetmusicdisplay_activate_plugin(){
-	add_filter( 'upload_mimes', 'phonicscore_opensheetmusicdisplay_musicxml_mime_types' );
 	add_action( 'init', 'phonicscore_opensheetmusicdisplay_block_init' );
 	add_action( 'wp_enqueue_scripts', 'phonicscore_opensheetmusicdisplay_enqueue_scripts' );
 }
