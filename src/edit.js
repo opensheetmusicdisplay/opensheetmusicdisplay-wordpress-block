@@ -82,7 +82,7 @@ const Edit = ({attributes, setAttributes}) => {
 						<NumberControl
 								label="Width (%)"
 								min={10.0}
-								onChange={ (val) => setAttributes( { width: val } ) }
+								onChange={ (val) => setAttributes( { width: parseInt(val, 10) } ) }
 								value={ attributes.width }
 							>
 							</NumberControl>

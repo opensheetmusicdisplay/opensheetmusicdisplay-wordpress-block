@@ -33,6 +33,13 @@ export default function save({attributes}) {
 				} else {
 					value = 'false';
 				}
+			} else if(type === 'object' || type === 'array'){
+				try{
+					value = JSON.stringify(value);
+				} catch(error){
+					console.warn("Error serializing value for key: " + key + " defaulting to '{}'.", error);
+					value = '{}';
+				}
 			}
 			if(key !== 'musicXmlUrl' || key !== 'zoom' || key !== 'width'){
 				items.push(<input type="hidden" attributeType={type} key={key} name={key} value={value} />);
@@ -43,7 +50,7 @@ export default function save({attributes}) {
 		<div { ...useBlockProps.save() }>
 			<div className="osmd-container-placeholder">
 				<div className="loader" />
-				<div className="osmd-render-block" style={{width: attributes.width + '%'}}/>
+				<div className="osmd-render-block" style={{width: attributes.width.toString() + '%'}}/>
 				{items}
 				<input type="hidden" className="musicXmlUrl" name="musicXmlUrl" value={attributes.musicXmlUrl} />
 				<input type="hidden" className="zoom" name="zoom" value={attributes.zoom} />

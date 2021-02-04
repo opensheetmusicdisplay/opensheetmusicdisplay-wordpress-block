@@ -72,7 +72,6 @@ import { OpenSheetMusicDisplay, OSMDOptions } from 'opensheetmusicdisplay';
 
             optionsObject[attributeElementList[j].name] = value;
         }
-
         const loader: HTMLDivElement = currentPlaceholder.getElementsByClassName('loader')[0] as HTMLDivElement;
         const currentOsmd: OpenSheetMusicDisplay = new OpenSheetMusicDisplay(osmdRenderBlock, optionsObject);
         currentOsmd.load(url).then(function(){
