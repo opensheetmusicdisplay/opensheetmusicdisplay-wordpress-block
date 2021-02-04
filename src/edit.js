@@ -2,6 +2,7 @@ import { InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/blo
 import { CheckboxControl, Button, PanelBody, __experimentalNumberControl as NumberControl } from '@wordpress/components';
 import { OpenSheetMusicDisplayComponent } from './OpenSheetMusicDisplayComponent.jsx';
 import { withSelect } from "@wordpress/data";
+import {useState} from 'react';
 
 /**
  * Retrieves the translation of text.
@@ -41,11 +42,44 @@ const Edit = ({attributes, setAttributes}) => {
 			musicXmlTitle: media.title
 		});
 	}
+
+	const [width, setWidth] = useState(attributes.width);
+	const [zoom, setZoom] = useState(attributes.zoom);
+	const [drawTitle, setDrawTitle] = useState(attributes.drawTitle);
+	const [drawSubtitle, setDrawSubtitle] = useState(attributes.drawSubtitle);
+	const [drawComposer, setDrawComposer] = useState(attributes.drawComposer);
+	const [drawLyricist, setDrawLyricist] = useState(attributes.drawLyricist);
+	const [drawMetronomeMarks, setDrawMetronomeMarks] = useState(attributes.drawMetronomeMarks);
+	const [drawPartNames, setDrawPartNames] = useState(attributes.drawPartNames);
+	const [drawPartAbbreviations, setDrawPartAbbreviations] = useState(attributes.drawPartAbbreviations);
+	const [drawMeasureNumbers, setDrawMeasureNumbers] = useState(attributes.drawMeasureNumbers);
+	const [drawMeasureNumbersOnlyAtSystemStart, setDrawMeasureNumbersOnlyAtSystemStart] = useState(attributes.drawMeasureNumbersOnlyAtSystemStart);
+	const [drawTimeSignatures, setDrawTimeSignatures] = useState(attributes.drawTimeSignatures);
+
 	//TODO: add button to batch update settings instead of live. since render is so expensive on larger scores
 	return (
 		<div { ...useBlockProps() } style={{width: attributes.width + '%'}}>
 			{
 				<InspectorControls>
+					<Button 
+						isPrimary= {true}
+						onClick={() => setAttributes({
+							width: width,
+							zoom: zoom,
+							drawTitle: drawTitle,
+							drawSubtitle: drawSubtitle,
+							drawComposer: drawComposer,
+							drawLyricist: drawLyricist,
+							drawMetronomeMarks: drawMetronomeMarks,
+							drawPartNames: drawPartNames,
+							drawPartAbbreviations: drawPartAbbreviations,
+							drawMeasureNumbers: drawMeasureNumbers,
+							drawMeasureNumbersOnlyAtSystemStart: drawMeasureNumbersOnlyAtSystemStart,
+							drawTimeSignatures: drawTimeSignatures
+						})}
+					>
+						{__('Rerender')}
+					</Button>
 					<PanelBody
 						title={__('Basic Options')}
 						initialOpen = { true }
@@ -69,7 +103,7 @@ const Edit = ({attributes, setAttributes}) => {
 										</sub>
 										<br/>
 										<Button 
-											isPrimary= {true}
+											isSecondary= {true}
 											onClick={open}
 										>
 											{__('Select Media')}
@@ -82,15 +116,15 @@ const Edit = ({attributes, setAttributes}) => {
 						<NumberControl
 								label="Width (%)"
 								min={10.0}
-								onChange={ (val) => setAttributes( { width: parseInt(val, 10) } ) }
-								value={ attributes.width }
+								onChange={ (val) => setWidth( parseInt(val, 10) ) }
+								value={ width }
 							>
 							</NumberControl>
 							<NumberControl
 								label="Zoom (%)"
 								min={1}
-								onChange={ (val) => setAttributes( { zoom: val / 100.0 } ) }
-								value={ attributes.zoom * 100 }
+								onChange={ (val) => setZoom( val / 100.0 ) }
+								value={ zoom * 100 }
 							>
 							</NumberControl>
 					</PanelBody>
@@ -100,62 +134,62 @@ const Edit = ({attributes, setAttributes}) => {
 						>
 							<CheckboxControl
 								label="Draw Title"
-								checked={ attributes.drawTitle }
-								onChange={ (val) => setAttributes( { drawTitle: val } ) }
+								checked={ drawTitle }
+								onChange={ (val) => setDrawTitle( val ) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label="Draw Subtitle"
-								checked={ attributes.drawSubtitle }
-								onChange={ (val) => setAttributes( { drawSubtitle: val } ) }
+								checked={ drawSubtitle }
+								onChange={ (val) => setDrawSubtitle( val ) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label="Draw Composer"
-								checked={ attributes.drawComposer }
-								onChange={ (val) => setAttributes( { drawComposer: val } ) }
+								checked={ drawComposer }
+								onChange={ (val) => setDrawComposer( val ) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label="Draw Lyricist"
-								checked={ attributes.drawLyricist }
-								onChange={ (val) => setAttributes( { drawLyricist: val } ) }
+								checked={ drawLyricist }
+								onChange={ (val) => setDrawLyricist( val ) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label="Draw Metronome Marks"
-								checked={ attributes.drawMetronomeMarks }
-								onChange={ (val) => setAttributes( { drawMetronomeMarks: val } ) }
+								checked={ drawMetronomeMarks }
+								onChange={ (val) => setDrawMetronomeMarks( val ) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label="Draw Part Names"
-								checked={ attributes.drawPartNames }
-								onChange={ (val) => setAttributes( { drawPartNames: val } ) }
+								checked={ drawPartNames }
+								onChange={ (val) => setDrawPartNames( val ) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label="Draw Part Abbreviations"
-								checked={ attributes.drawPartAbbreviations }
-								onChange={ (val) => setAttributes( { drawPartAbbreviations: val } ) }
+								checked={ drawPartAbbreviations }
+								onChange={ (val) => setDrawPartAbbreviations( val ) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label="Draw Measure Numbers"
-								checked={ attributes.drawMeasureNumbers }
-								onChange={ (val) => setAttributes( { drawMeasureNumbers: val } ) }
+								checked={ drawMeasureNumbers }
+								onChange={ (val) => setDrawMeasureNumbers( val ) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label="Draw Measure Numbers Only at System Start"
-								checked={ attributes.drawMeasureNumbersOnlyAtSystemStart }
-								onChange={ (val) => setAttributes( { drawMeasureNumbersOnlyAtSystemStart: val } ) }
+								checked={ drawMeasureNumbersOnlyAtSystemStart }
+								onChange={ (val) => setDrawMeasureNumbersOnlyAtSystemStart( val ) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label="Draw Time Signatures"
-								checked={ attributes.drawTimeSignatures }
-								onChange={ (val) => setAttributes( { drawTimeSignatures: val } ) }
+								checked={ drawTimeSignatures }
+								onChange={ (val) => setDrawTimeSignatures( val ) }
 							>
 							</CheckboxControl>
 						</PanelBody>

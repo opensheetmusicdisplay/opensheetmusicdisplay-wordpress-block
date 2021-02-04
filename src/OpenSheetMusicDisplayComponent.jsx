@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { OSMDOptions, OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
+import { OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
 
 export class OpenSheetMusicDisplayComponent extends PureComponent {
     constructor(props) {
@@ -35,6 +35,7 @@ export class OpenSheetMusicDisplayComponent extends PureComponent {
         this.pendingLoad = this.osmd.load(this.props.file);
         this.pendingLoad.then(function(){
           _self.pendingLoad = undefined;
+          _self.osmd.Zoom = _self.props.zoom;
           _self.osmd.render();
           _self.loaderDivRef.current.classList.remove('loader');
         });
@@ -71,26 +72,20 @@ export class OpenSheetMusicDisplayComponent extends PureComponent {
 */
     componentDidUpdate(prevProps) {
       this.loaderDivRef.current.classList.add('loader');
+
+      const options = this.getOptionsObjectFromProps(this.props);
+      this.osmd.setOptions(options);
       if (this.props.file !== prevProps.file) {
         const _self = this;
         this.pendingLoad = this.osmd.load(this.props.file);
         this.pendingLoad.then(function(){
           _self.pendingLoad = undefined;
+          _self.osmd.Zoom = _self.props.zoom;
           _self.osmd.render();
           _self.loaderDivRef.current.classList.remove('loader');
         });
-        return;
-      }
-      
-      if(this.props.zoom !== prevProps.zoom){
+      }else{
         this.osmd.Zoom = this.props.zoom;
-      } else {
-        const options = this.getOptionsObjectFromProps(this.props);
-        console.log("updating options", options);
-        this.osmd.setOptions(options);
-      }
-
-      if(!this.pendingLoad){
         this.osmd.render();
         this.loaderDivRef.current.classList.remove('loader');
       }

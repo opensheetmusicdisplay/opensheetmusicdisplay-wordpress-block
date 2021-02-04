@@ -75,6 +75,7 @@ import { OpenSheetMusicDisplay, OSMDOptions } from 'opensheetmusicdisplay';
         const loader: HTMLDivElement = currentPlaceholder.getElementsByClassName('loader')[0] as HTMLDivElement;
         const currentOsmd: OpenSheetMusicDisplay = new OpenSheetMusicDisplay(osmdRenderBlock, optionsObject);
         currentOsmd.load(url).then(function(){
+            currentOsmd.Zoom = zoom;
             currentOsmd.render();
             loader.classList.add('hide');
         });
@@ -84,6 +85,7 @@ import { OpenSheetMusicDisplay, OSMDOptions } from 'opensheetmusicdisplay';
             loader.classList.remove('hide');
             clearTimeout(timeoutObject);
             timeoutObject = setTimeout(function(){
+                currentOsmd.Zoom = zoom;
                 currentOsmd.render();
                 loader.classList.add('hide');
             }, 500);
