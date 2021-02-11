@@ -341,6 +341,10 @@ registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 		musicXmlTitle: {
 			type: 'string',
 			default: ''
+		},
+		autoRender: {
+			type: 'boolean',
+			default: false
 		}
 	}
 } );

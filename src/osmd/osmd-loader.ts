@@ -37,7 +37,6 @@ import { OpenSheetMusicDisplay, OSMDOptions } from 'opensheetmusicdisplay';
             if(aspectRatioAsFloat > 0.0 && currentPlaceholder.offsetWidth){
                 height = (currentPlaceholder.offsetWidth / aspectRatioAsFloat).toString() + 'px';
             }
-            console.log("setting height to: " + height, aspectRatioAsFloat, aspectRatioElement.value);
             currentPlaceholder.style.height = height;
         };
         updateHeight();

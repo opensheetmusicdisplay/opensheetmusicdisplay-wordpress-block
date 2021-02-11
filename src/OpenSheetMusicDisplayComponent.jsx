@@ -5,14 +5,11 @@ export class OpenSheetMusicDisplayComponent extends PureComponent {
     constructor(props) {
       super(props);
       this.pendingLoad = undefined;
+      this.loadAttempts = 0;
+      this.maxReloadAttempts = this.props.maxReloadAttempts ? this.props.maxReloadAttempts : 3;
       this.osmd = undefined;
       this.osmdDivRef = React.createRef();
       this.loaderDivRef = React.createRef();
-      /*
-      const _self = this;
-      window.addEventListener('resize', function(){
-        _self.resize();
-      });*/
     }
 
     getOptionsObjectFromProps(props){
@@ -26,19 +23,38 @@ export class OpenSheetMusicDisplayComponent extends PureComponent {
       }
       return options;
     }
+
+    renderBehavior(){
+      this.osmd.Zoom = this.props.zoom;
+      this.osmd.render();
+      this.loaderDivRef.current.classList.remove('loader');
+    }
+
+    loadFileBehavior(){
+      const _self = this;
+      this.loadAttempts++;
+      this.pendingLoad = this.osmd.load(this.props.file);
+      this.pendingLoad.then(function(){
+        _self.loadAttempts = 0;
+        _self.pendingLoad = undefined;
+        _self.renderBehavior();
+      },
+      function(error){
+        console.warn(error);
+        if(_self.loadAttempts < _self.maxReloadAttempts){
+          console.log("Attempting to reload...");
+          _self.loadFileBehavior();
+        } else {
+          console.error("Max reload attempts reached. Failed to load file: " + _self.props.file);
+        }
+      });
+    }
   
     setupOsmd() {
       const options = this.getOptionsObjectFromProps(this.props);
       this.osmd = new OpenSheetMusicDisplay(this.osmdDivRef.current, options);
       if(this.props.file){
-        const _self = this;
-        this.pendingLoad = this.osmd.load(this.props.file);
-        this.pendingLoad.then(function(){
-          _self.pendingLoad = undefined;
-          _self.osmd.Zoom = _self.props.zoom;
-          _self.osmd.render();
-          _self.loaderDivRef.current.classList.remove('loader');
-        });
+        this.loadFileBehavior();
       }
     }
   
@@ -50,44 +66,15 @@ export class OpenSheetMusicDisplayComponent extends PureComponent {
       //console.log("componentWillUnmount");
       //window.removeEventListener('resize', this.resize);
     }
-  /*
-    shouldComponentUpdate(nextProps, nextState){
-      if(nextProps.file !== this.props.file){
-        return true;
-      }
 
-      const nextOptions = nextProps.options;
-      const currentOptions = this.props.options;
-      if(nextOptions === currentOptions){
-        return true;
-      }
-      const nextOptionsKVPairs = Object.entries(nextOptions);
-      const currentOptionsKVPairs = Object.entries(currentOptions);
-      const testKeys = Object.keys(IOSMDOptions);
-      for(let i = 0; i < testKeys.length; i++){
-        console.log(testKeys[i]);
-      }
-      return false;
-    }
-*/
     componentDidUpdate(prevProps) {
       this.loaderDivRef.current.classList.add('loader');
-
       const options = this.getOptionsObjectFromProps(this.props);
       this.osmd.setOptions(options);
       if (this.props.file !== prevProps.file) {
-        const _self = this;
-        this.pendingLoad = this.osmd.load(this.props.file);
-        this.pendingLoad.then(function(){
-          _self.pendingLoad = undefined;
-          _self.osmd.Zoom = _self.props.zoom;
-          _self.osmd.render();
-          _self.loaderDivRef.current.classList.remove('loader');
-        });
+        this.loadFileBehavior();
       }else{
-        this.osmd.Zoom = this.props.zoom;
-        this.osmd.render();
-        this.loaderDivRef.current.classList.remove('loader');
+        this.renderBehavior();
       }
     }
 

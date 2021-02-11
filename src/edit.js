@@ -1,5 +1,5 @@
 import { InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
-import { SelectControl, CheckboxControl, Button, PanelBody, __experimentalNumberControl as NumberControl } from '@wordpress/components';
+import { Card, CardBody, SelectControl, CheckboxControl, Button, PanelBody, __experimentalNumberControl as NumberControl } from '@wordpress/components';
 import { OpenSheetMusicDisplayComponent } from './OpenSheetMusicDisplayComponent.jsx';
 import { withSelect } from "@wordpress/data";
 import {useState} from 'react';
@@ -55,6 +55,46 @@ const Edit = ({attributes, setAttributes}) => {
 	const [drawMeasureNumbersOnlyAtSystemStart, setDrawMeasureNumbersOnlyAtSystemStart] = useState(attributes.drawMeasureNumbersOnlyAtSystemStart);
 	const [drawTimeSignatures, setDrawTimeSignatures] = useState(attributes.drawTimeSignatures);
 
+	const updateAttributes = () => {
+		setAttributes({
+			width: width,
+			zoom: zoom,
+			drawTitle: drawTitle,
+			drawSubtitle: drawSubtitle,
+			drawComposer: drawComposer,
+			drawLyricist: drawLyricist,
+			drawMetronomeMarks: drawMetronomeMarks,
+			drawPartNames: drawPartNames,
+			drawPartAbbreviations: drawPartAbbreviations,
+			drawMeasureNumbers: drawMeasureNumbers,
+			drawMeasureNumbersOnlyAtSystemStart: drawMeasureNumbersOnlyAtSystemStart,
+			drawTimeSignatures: drawTimeSignatures
+		});
+	};
+
+	let [autoRenderTimeoutObject, setAutoRenderTimeoutObject] = useState(undefined);
+
+	const updateState = (callback = undefined, delay = 0, value = undefined, name = undefined) => {
+		if(callback && value !== undefined && name !== undefined){
+			callback(value);
+			if(attributes.autoRender){
+				const newAtt = {};
+				newAtt[name] = value;
+				setAttributes(newAtt);
+			}
+		} else if(attributes.autoRender){
+			if(delay > 0){
+				clearTimeout(autoRenderTimeoutObject);
+				let timeoutReturnObject = setTimeout(function(){
+					updateAttributes();
+				}, delay);
+				setAutoRenderTimeoutObject(timeoutReturnObject);
+			} else {
+				updateAttributes();
+			}
+		}
+	};
+
 	let aspectRatioStringInit = '';
 	if(attributes.aspectRatio === 0.0){
 		aspectRatioStringInit = 'auto';
@@ -103,25 +143,28 @@ const Edit = ({attributes, setAttributes}) => {
 		<div { ...blockProps } style={{width: attributes.width + '%', height: translateAspectRatioToHeight(attributes.aspectRatio)}}>
 			{
 				<InspectorControls>
-					<Button 
-						isPrimary= {true}
-						onClick={() => setAttributes({
-							width: width,
-							zoom: zoom,
-							drawTitle: drawTitle,
-							drawSubtitle: drawSubtitle,
-							drawComposer: drawComposer,
-							drawLyricist: drawLyricist,
-							drawMetronomeMarks: drawMetronomeMarks,
-							drawPartNames: drawPartNames,
-							drawPartAbbreviations: drawPartAbbreviations,
-							drawMeasureNumbers: drawMeasureNumbers,
-							drawMeasureNumbersOnlyAtSystemStart: drawMeasureNumbersOnlyAtSystemStart,
-							drawTimeSignatures: drawTimeSignatures
-						})}
-					>
-						{__('Rerender')}
-					</Button>
+					<Card>
+					<CardBody>
+						<CheckboxControl
+							label="Automatically Rerender on Change"
+							checked={ attributes.autoRender }
+							onChange={ (val) => {
+								setAttributes( {autoRender: val } );
+								if(val){
+									updateAttributes();
+								}
+							} }
+						>
+						</CheckboxControl>
+							<Button
+								disabled={attributes.autoRender}
+								isPrimary= {true}
+								onClick={() => updateAttributes()}
+							>
+								{__('Rerender')}
+							</Button>
+						</CardBody>
+						</Card>
 					<PanelBody
 						title={__('Basic Options')}
 						initialOpen = { true }
@@ -158,7 +201,8 @@ const Edit = ({attributes, setAttributes}) => {
 						<NumberControl
 								label="Width (%)"
 								min={10.0}
-								onChange={ (val) => setWidth( parseInt(val, 10) ) }
+								max={100.0}
+								onChange={ (val) => updateState(setWidth( parseInt(val, 10) ), 500) }
 								value={ width }
 							>
 							</NumberControl>
@@ -181,7 +225,7 @@ const Edit = ({attributes, setAttributes}) => {
 							<NumberControl
 								label="Zoom (%)"
 								min={1}
-								onChange={ (val) => setZoom( val / 100.0 ) }
+								onChange={ (val) => updateState(setZoom( val / 100.0 ), 500) }
 								value={ zoom * 100 }
 							>
 							</NumberControl>
@@ -193,61 +237,61 @@ const Edit = ({attributes, setAttributes}) => {
 							<CheckboxControl
 								label="Draw Title"
 								checked={ drawTitle }
-								onChange={ (val) => setDrawTitle( val ) }
+								onChange={ (val) => updateState(setDrawTitle, 0, val, 'drawTitle') }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label="Draw Subtitle"
 								checked={ drawSubtitle }
-								onChange={ (val) => setDrawSubtitle( val ) }
+								onChange={ (val) => updateState(setDrawSubtitle, 0, val, 'drawSubtitle') }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label="Draw Composer"
 								checked={ drawComposer }
-								onChange={ (val) => setDrawComposer( val ) }
+								onChange={ (val) => updateState(setDrawComposer, 0, val, 'drawComposer') }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label="Draw Lyricist"
 								checked={ drawLyricist }
-								onChange={ (val) => setDrawLyricist( val ) }
+								onChange={ (val) => updateState(setDrawLyricist, 0, val, 'drawLyricist') }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label="Draw Metronome Marks"
 								checked={ drawMetronomeMarks }
-								onChange={ (val) => setDrawMetronomeMarks( val ) }
+								onChange={ (val) => updateState(setDrawMetronomeMarks, 0, val, 'drawMetronomeMarks') }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label="Draw Part Names"
 								checked={ drawPartNames }
-								onChange={ (val) => setDrawPartNames( val ) }
+								onChange={ (val) => updateState(setDrawPartNames, 0, val, 'drawPartNames') }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label="Draw Part Abbreviations"
 								checked={ drawPartAbbreviations }
-								onChange={ (val) => setDrawPartAbbreviations( val ) }
+								onChange={ (val) => updateState(setDrawPartAbbreviations, 0, val, 'drawPartAbbreviations') }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label="Draw Measure Numbers"
 								checked={ drawMeasureNumbers }
-								onChange={ (val) => setDrawMeasureNumbers( val ) }
+								onChange={ (val) => updateState(setDrawMeasureNumbers, 0, val, 'drawMeasureNumbers') }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label="Draw Measure Numbers Only at System Start"
 								checked={ drawMeasureNumbersOnlyAtSystemStart }
-								onChange={ (val) => setDrawMeasureNumbersOnlyAtSystemStart( val ) }
+								onChange={ (val) => updateState(setDrawMeasureNumbersOnlyAtSystemStart, 0, val, 'drawMeasureNumbersOnlyAtSystemStart') }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label="Draw Time Signatures"
 								checked={ drawTimeSignatures }
-								onChange={ (val) => setDrawTimeSignatures( val ) }
+								onChange={ (val) => updateState(setDrawTimeSignatures, 0, val, 'drawTimeSignatures') }
 							>
 							</CheckboxControl>
 						</PanelBody>
@@ -267,6 +311,7 @@ const Edit = ({attributes, setAttributes}) => {
 				drawMeasureNumbers= { attributes.drawMeasureNumbers }
 				drawMeasureNumbersOnlyAtSystemStart= { attributes.drawMeasureNumbersOnlyAtSystemStart }
 				drawTimeSignatures= { attributes.drawTimeSignatures }
+				maxReloadAttempts={5}
 			/>
 		</div>
 	);

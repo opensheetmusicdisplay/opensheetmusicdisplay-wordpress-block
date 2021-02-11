@@ -41,12 +41,11 @@ export default function save({attributes}) {
 					value = '{}';
 				}
 			}
-			if(key !== 'musicXmlUrl' || key !== 'zoom' || key !== 'width' || key !== 'aspectRatio'){
+			if(key !== 'musicXmlUrl' || key !== 'zoom' || key !== 'width' || key !== 'aspectRatio' || key != 'autoRender'){
 				items.push(<input type="hidden" attributeType={type} key={key} name={key} value={value} />);
 			}
 		}
 	}
-	console.log("saving aspect ratio", attributes.aspectRatio);
 	return (
 		<div { ...useBlockProps.save() }>
 			<div className="osmd-container-placeholder">
