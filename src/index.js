@@ -1,5 +1,3 @@
-import { OSMDOptions } from 'opensheetmusicdisplay';
-
 /**
  * Registers a new block provided a unique name and an object defining its behavior.
  *
@@ -28,6 +26,7 @@ import './style.scss';
  */
 import Edit from './edit';
 import save from './save';
+import icons from './icons';
 
 /**
  * Every block starts by registering a new block type definition.
@@ -65,7 +64,7 @@ registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 	 * An icon property should be specified to make it easier to identify a block.
 	 * These can be any of WordPress’ Dashicons, or a custom svg element.
 	 */
-	icon: 'playlist-audio',
+	icon: icons.osmd,
 
 	/**
 	 * Optional block extended support features.
