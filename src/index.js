@@ -322,6 +322,10 @@ registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 			type: 'number',
 			default: 100.0
 		},
+		aspectRatio: {
+			type: 'number',
+			default: 0.0
+		},
 		zoom: {
 			type: 'number',
 			default: 1.0

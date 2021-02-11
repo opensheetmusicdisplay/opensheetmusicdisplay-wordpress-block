@@ -6,5 +6,8 @@
 
 .wp-block-phonicscore-opensheetmusicdisplay {
 	border: 1px dotted #f00;
+	min-height: 100px;
 	max-width: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
 }

@@ -1,5 +1,5 @@
 import { InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
-import { CheckboxControl, Button, PanelBody, __experimentalNumberControl as NumberControl } from '@wordpress/components';
+import { SelectControl, CheckboxControl, Button, PanelBody, __experimentalNumberControl as NumberControl } from '@wordpress/components';
 import { OpenSheetMusicDisplayComponent } from './OpenSheetMusicDisplayComponent.jsx';
 import { withSelect } from "@wordpress/data";
 import {useState} from 'react';
@@ -42,7 +42,6 @@ const Edit = ({attributes, setAttributes}) => {
 			musicXmlTitle: media.title
 		});
 	}
-
 	const [width, setWidth] = useState(attributes.width);
 	const [zoom, setZoom] = useState(attributes.zoom);
 	const [drawTitle, setDrawTitle] = useState(attributes.drawTitle);
@@ -56,9 +55,52 @@ const Edit = ({attributes, setAttributes}) => {
 	const [drawMeasureNumbersOnlyAtSystemStart, setDrawMeasureNumbersOnlyAtSystemStart] = useState(attributes.drawMeasureNumbersOnlyAtSystemStart);
 	const [drawTimeSignatures, setDrawTimeSignatures] = useState(attributes.drawTimeSignatures);
 
-	//TODO: add button to batch update settings instead of live. since render is so expensive on larger scores
+	let aspectRatioStringInit = '';
+	if(attributes.aspectRatio === 0.0){
+		aspectRatioStringInit = 'auto';
+	} else if (attributes.aspectRatio === 1.5){
+		aspectRatioStringInit = 'landscape';
+	} else if (attributes.aspectRatio === 0.5625){
+		aspectRatioStringInit = 'portrait';
+	} else {
+		aspectRatioStringInit = 'custom';
+	}
+	const [aspectRatioString, setAspectRatioString] = useState(aspectRatioStringInit);
+
+	const setAspectRatio = (value) => {
+		switch(value){
+			case 'auto':
+				setAttributes({aspectRatio: 0.0});
+			break;
+			case 'landscape':
+				setAttributes({aspectRatio: 1.5});
+			break;
+			case 'portrait':
+				setAttributes({aspectRatio: 0.5625});
+			break;
+		}
+		setAspectRatioString(value);
+	};
+
+	const aspectRatioDropdownOptions = [
+		{label: "Auto (No Scrollbar)", value: "auto"},
+		{label: "Landscape", value: "landscape"},
+		{label: "Portrait", value: "portrait"},
+		{label: "Custom", value: "custom"}
+	];
+
+	const blockProps = useBlockProps();
+
+	const translateAspectRatioToHeight = (aspectRatio) => {
+		if(!blockProps.ref.current || aspectRatio === 0.0 || !blockProps.ref.current.offsetWidth){
+			return 'auto';
+		} else {
+			return (blockProps.ref.current.offsetWidth / aspectRatio).toString() + 'px';
+		}
+	};
+
 	return (
-		<div { ...useBlockProps() } style={{width: attributes.width + '%'}}>
+		<div { ...blockProps } style={{width: attributes.width + '%', height: translateAspectRatioToHeight(attributes.aspectRatio)}}>
 			{
 				<InspectorControls>
 					<Button 
@@ -120,6 +162,22 @@ const Edit = ({attributes, setAttributes}) => {
 								value={ width }
 							>
 							</NumberControl>
+							<SelectControl
+								label="Container Aspect Ratio"
+								value={ aspectRatioString }
+								onChange={ ( val ) => setAspectRatio( val ) }
+								options = { aspectRatioDropdownOptions }
+							>
+							</SelectControl>
+							{ aspectRatioString === 'custom' ?
+							<NumberControl
+								label="Custom Aspect Ratio"
+								min={0.1}
+								onChange={ (val) => setAttributes( {aspectRatio: val} ) }
+								value={ attributes.aspectRatio }
+							>
+							</NumberControl> : null
+							}
 							<NumberControl
 								label="Zoom (%)"
 								min={1}

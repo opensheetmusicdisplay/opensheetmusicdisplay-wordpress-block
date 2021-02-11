@@ -17,11 +17,30 @@ import { OpenSheetMusicDisplay, OSMDOptions } from 'opensheetmusicdisplay';
         let zoom: number = 1.0;
         if(zoomElement && zoomElement.value){
             zoom = parseFloat(zoomElement.value);
-            if(zoom === NaN){
+            if(zoom === NaN || zoom === undefined){
                 zoom = 1.0;
             }
         }
         zoomElement.remove();
+
+        const aspectRatioElement: HTMLInputElement = currentPlaceholder.getElementsByClassName('aspectRatio')[0] as HTMLInputElement;
+        let aspectRatioAsFloat: number = 0.0;
+        if(aspectRatioElement && aspectRatioElement.value){
+            aspectRatioAsFloat = parseFloat(aspectRatioElement.value);
+            if(aspectRatioAsFloat === NaN || aspectRatioAsFloat === undefined){
+                aspectRatioAsFloat = 0.0;
+            }
+        }
+        aspectRatioElement.remove();
+        const updateHeight: Function = () => {
+            let height: string = 'auto';
+            if(aspectRatioAsFloat > 0.0 && currentPlaceholder.offsetWidth){
+                height = (currentPlaceholder.offsetWidth / aspectRatioAsFloat).toString() + 'px';
+            }
+            console.log("setting height to: " + height, aspectRatioAsFloat, aspectRatioElement.value);
+            currentPlaceholder.style.height = height;
+        };
+        updateHeight();
 
         const attributeElementList: HTMLCollectionOf<HTMLInputElement> = currentPlaceholder.getElementsByTagName('input');
         let optionsObject: OSMDOptions = {};
@@ -85,6 +104,7 @@ import { OpenSheetMusicDisplay, OSMDOptions } from 'opensheetmusicdisplay';
             loader.classList.remove('hide');
             clearTimeout(timeoutObject);
             timeoutObject = setTimeout(function(){
+                updateHeight();
                 currentOsmd.Zoom = zoom;
                 currentOsmd.render();
                 loader.classList.add('hide');

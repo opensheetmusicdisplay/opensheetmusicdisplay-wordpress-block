@@ -41,11 +41,12 @@ export default function save({attributes}) {
 					value = '{}';
 				}
 			}
-			if(key !== 'musicXmlUrl' || key !== 'zoom' || key !== 'width'){
+			if(key !== 'musicXmlUrl' || key !== 'zoom' || key !== 'width' || key !== 'aspectRatio'){
 				items.push(<input type="hidden" attributeType={type} key={key} name={key} value={value} />);
 			}
 		}
 	}
+	console.log("saving aspect ratio", attributes.aspectRatio);
 	return (
 		<div { ...useBlockProps.save() }>
 			<div className="osmd-container-placeholder">
@@ -54,6 +55,7 @@ export default function save({attributes}) {
 				{items}
 				<input type="hidden" className="musicXmlUrl" name="musicXmlUrl" value={attributes.musicXmlUrl} />
 				<input type="hidden" className="zoom" name="zoom" value={attributes.zoom} />
+				<input type="hidden" className="aspectRatio" name="aspectRatio" value={attributes.aspectRatio} />
 			</div>
 		</div>
 	);

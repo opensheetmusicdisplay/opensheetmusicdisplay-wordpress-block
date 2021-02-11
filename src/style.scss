@@ -8,6 +8,9 @@
 .wp-block-phonicscore-opensheetmusicdisplay {
 	padding: 2px;
 	min-height: 100px;
+	max-width: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 
 .osmd-render-block{
