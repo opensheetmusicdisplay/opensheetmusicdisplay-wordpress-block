@@ -1,6 +1,6 @@
 import { InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import { Card, CardBody, SelectControl, CheckboxControl, Button, PanelBody, __experimentalNumberControl as NumberControl } from '@wordpress/components';
-import { OpenSheetMusicDisplayComponent } from './OpenSheetMusicDisplayComponent.jsx';
+import { OpenSheetMusicDisplay } from './OpenSheetMusicDisplay.jsx';
 import { withSelect } from "@wordpress/data";
 import {useState} from 'react';
 
@@ -297,7 +297,7 @@ const Edit = ({attributes, setAttributes}) => {
 						</PanelBody>
 				</InspectorControls>
 			}
-			<OpenSheetMusicDisplayComponent 
+			<OpenSheetMusicDisplay 
 				file={ attributes.musicXmlUrl }
 				width={ attributes.width }
 				zoom= { attributes.zoom }

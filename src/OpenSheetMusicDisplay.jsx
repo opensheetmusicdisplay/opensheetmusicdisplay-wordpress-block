@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
-import { OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
-
-export class OpenSheetMusicDisplayComponent extends PureComponent {
+import { OpenSheetMusicDisplay as OSMD } from 'opensheetmusicdisplay';
+//TODO: Combine with React repo, use as npm dependency.
+//TODO: Would be nice to use tsx and have typing on options
+export class OpenSheetMusicDisplay extends PureComponent {
     constructor(props) {
       super(props);
       this.pendingLoad = undefined;
@@ -52,7 +53,7 @@ export class OpenSheetMusicDisplayComponent extends PureComponent {
   
     setupOsmd() {
       const options = this.getOptionsObjectFromProps(this.props);
-      this.osmd = new OpenSheetMusicDisplay(this.osmdDivRef.current, options);
+      this.osmd = new OSMD(this.osmdDivRef.current, options);
       if(this.props.file){
         this.loadFileBehavior();
       }
