@@ -13,6 +13,15 @@ import { __ } from '@wordpress/i18n';
  */
 import { useBlockProps } from '@wordpress/block-editor';
 
+
+const nonSerializedAttributes = [
+	'musicXmlUrl',
+	'zoom',
+	'width',
+	'aspectRatio',
+	'autoRender',
+	'plugins'
+];
 /**
  * The save function defines the way in which the different attributes should
  * be combined into the final markup, which is then serialized by the block
@@ -41,7 +50,7 @@ export default function save({attributes}) {
 					value = '{}';
 				}
 			}
-			if(key !== 'musicXmlUrl' || key !== 'zoom' || key !== 'width' || key !== 'aspectRatio' || key != 'autoRender'){
+			if(!nonSerializedAttributes.contains(key)){
 				items.push(<input type="hidden" attributeType={type} key={key} name={key} value={value} />);
 			}
 		}

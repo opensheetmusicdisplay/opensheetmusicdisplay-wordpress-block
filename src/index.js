@@ -19,14 +19,14 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
-import './style.scss';
+import './block/style.scss';
 
 /**
  * Internal dependencies
  */
-import Edit from './edit';
-import save from './save';
-import icons from './icons';
+import Edit from './block/edit';
+import save from './block/save';
+import icons from './block/icons';
 
 /**
  * Every block starts by registering a new block type definition.
@@ -344,6 +344,10 @@ registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 		autoRender: {
 			type: 'boolean',
 			default: false
+		},
+		plugins: {
+			type: 'array',
+			default: []
 		}
 	}
 } );

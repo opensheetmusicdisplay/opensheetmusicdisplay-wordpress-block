@@ -1,6 +1,6 @@
 import { InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import { Card, CardBody, SelectControl, CheckboxControl, Button, PanelBody, __experimentalNumberControl as NumberControl } from '@wordpress/components';
-import { OpenSheetMusicDisplay } from './OpenSheetMusicDisplay.jsx';
+import { OpenSheetMusicDisplay } from '../Components/OpenSheetMusicDisplay.jsx';
 import { withSelect } from "@wordpress/data";
 import {useState} from 'react';
 
@@ -312,6 +312,7 @@ const Edit = ({attributes, setAttributes}) => {
 				drawMeasureNumbersOnlyAtSystemStart= { attributes.drawMeasureNumbersOnlyAtSystemStart }
 				drawTimeSignatures= { attributes.drawTimeSignatures }
 				maxReloadAttempts={5}
+				plugins={attributes.plugins}
 			/>
 		</div>
 	);

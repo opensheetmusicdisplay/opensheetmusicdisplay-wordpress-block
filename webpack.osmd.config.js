@@ -8,7 +8,8 @@ module.exports = [
     externalsType: 'umd'
   },
   entry: {
-            'osmd-loader': './src/osmd/osmd-loader.ts'
+            'osmd-loader': './src/frontend/osmd-loader.ts',
+            'OpenSheetMusicDisplayPluginTemplate': './src/Models/OpenSheetMusicDisplayPluginTemplate.js'
         },
   output: {
     filename: '[name].min.js',
