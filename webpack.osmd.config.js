@@ -1,7 +1,12 @@
 const path = require('path');
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = [
 {
+  externals: {
+    opensheetmusicdisplay: 'opensheetmusicdisplay',
+    externalsType: 'umd'
+  },
   entry: {
             'osmd-loader': './src/osmd/osmd-loader.ts'
         },
@@ -26,5 +31,12 @@ module.exports = [
     },
   optimization: {
     minimize: true
-  }
+  },
+  plugins: [
+    new CopyPlugin({
+      patterns: [
+        {from: 'node_modules/opensheetmusicdisplay/**/opensheetmusicdisplay.min.js', to: 'opensheetmusicdisplay.min.js'}
+      ]
+    })
+  ]
 }];

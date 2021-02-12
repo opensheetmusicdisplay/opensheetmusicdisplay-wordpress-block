@@ -19,7 +19,8 @@
 		"@wordpress/block-editor": "^5.2.2",
 		"@wordpress/blocks": "^6.25.2",
 		"@wordpress/i18n": "^3.17.0",
-		"opensheetmusicdisplay": "0.9.2"
+		"opensheetmusicdisplay": "^0.9.2",
+		"copy-webpack-plugin": "^6.4.0"
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^13.0.1",
