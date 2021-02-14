@@ -27,12 +27,15 @@ import './block/style.scss';
 import Edit from './block/edit';
 import save from './block/save';
 import icons from './block/icons';
-
 /**
  * Every block starts by registering a new block type definition.
  *
  * @see https://developer.wordpress.org/block-editor/developers/block-api/#registering-a-block
  */
+
+//wrapper to ensure filters that are registered elsewhere (extensions to this block) are fired
+wp.domReady(() => {
+
 registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 	/**
 	 * @see https://make.wordpress.org/core/2020/11/18/block-api-version-2/
@@ -351,3 +354,4 @@ registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 		}
 	}
 } );
+});

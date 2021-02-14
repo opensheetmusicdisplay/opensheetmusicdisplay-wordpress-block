@@ -91,6 +91,13 @@ function phonicscore_opensheetmusicdisplay_enqueue_admin_scripts(){
 		'0.9.2',
 		true
 	);
+	wp_enqueue_script(
+		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_exports',
+		esc_url( plugins_url( 'build/osmd/export.min.js', __FILE__ ) ),
+		array( ),
+		'0.1.0',
+		true
+	);
 }
 function phonicscore_opensheetmusicdisplay_musicxml_mime_types( $mimes ) {
 	$mimes['musicxml'] = 'application/vnd.recordare.musicxml+xml';

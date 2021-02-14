@@ -1,6 +1,31 @@
 export default class OpenSheetMusicDisplayPluginTemplate{
-    osmdSetupHook(osmdObject, props){
-        console.warn("osmdSetupHook not overridden.");
+    constructor(pluginName){
+        if(!pluginName){
+            throw 'Unique plugin name must be specified for Wordpress.';
+        }
+        //With how exporting/compilation works this is the best we can do for now instead of instanceof....
+        this._reflection = {
+            class : {
+                name : 'OpenSheetMusicDisplayPluginTemplate'
+            }
+        };
+        const _self = this;
+        // Adding the filter
+        wp.hooks.addFilter(
+            'blocks.getBlockAttributes',
+            pluginName,
+            (attributes, blockInformation) => {
+                if(blockInformation.name === 'phonicscore/opensheetmusicdisplay'){
+                    if(attributes && attributes.plugins && Array.isArray(attributes.plugins)){
+                        attributes.plugins.push(_self);
+                    }
+                }
+                return attributes;
+            }
+        );
+    }
+    postSetupHook(osmdObject, props){
+        console.warn("postSetupHook not overridden.");
     }
 
     preLoadFileHook(osmdObject, props){

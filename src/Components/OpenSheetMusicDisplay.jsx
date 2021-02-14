@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { OpenSheetMusicDisplay as OSMD } from 'opensheetmusicdisplay';
-import { OpenSheetMusicDisplayPluginTemplate } from '../Models/OpenSheetMusicDisplayPluginTemplate';
 //TODO: Combine with React repo, use as npm dependency.
 //TODO: Would be nice to use tsx and have typing on options
 export class OpenSheetMusicDisplay extends PureComponent {
@@ -15,7 +14,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
       this.plugins = [];
       if(props.plugins && props.plugins.length > 0){
         for(let i = 0; i < props.plugins.length; i++){
-          if(props.plugins[i] instanceof OpenSheetMusicDisplayPluginTemplate){
+          if(props.plugins[i]?._reflection?.class?.name === 'OpenSheetMusicDisplayPluginTemplate'){
             this.plugins.push(props.plugins[i]);
           }
         }
