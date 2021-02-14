@@ -1,10 +1,11 @@
 {
-	"name": "opensheetmusicdisplay",
+	"name": "opensheetmusicdisplay-wordpress-block",
 	"version": "0.1.0",
 	"description": "Block to render MusicXML in the browser as sheet music using OSMD.",
 	"author": "opensheetmusicdisplay, fredmeister77",
 	"license": "GPL-2.0-or-later",
-	"main": "build/index.js",
+	"module": "src/export.js",
+	"main": "build/osmd/export.min.js",
 	"scripts": {
 		"wp:build": "wp-scripts build",
 		"osmd:build": "webpack --progress --colors --config webpack.osmd.config.js",

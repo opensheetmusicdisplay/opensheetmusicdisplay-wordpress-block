@@ -1,0 +1,2 @@
+import OpenSheetMusicDisplayPluginTemplate from './Models/OpenSheetMusicDisplayPluginTemplate';
+export {OpenSheetMusicDisplayPluginTemplate};

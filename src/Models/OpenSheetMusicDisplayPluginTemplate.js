@@ -1,4 +1,4 @@
-export class OpenSheetMusicDisplayPluginTemplate{
+export default class OpenSheetMusicDisplayPluginTemplate{
     osmdSetupHook(osmdObject, props){
         console.warn("osmdSetupHook not overridden.");
     }

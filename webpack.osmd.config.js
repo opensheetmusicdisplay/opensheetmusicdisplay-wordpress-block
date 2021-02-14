@@ -9,11 +9,14 @@ module.exports = [
   },
   entry: {
             'osmd-loader': './src/frontend/osmd-loader.ts',
-            'OpenSheetMusicDisplayPluginTemplate': './src/Models/OpenSheetMusicDisplayPluginTemplate.js'
+            'export': './src/export.js',
+
         },
   output: {
     filename: '[name].min.js',
     path: path.resolve(__dirname, 'build/osmd'),
+    library: 'opensheetmusicdisplay-wordpress-block',
+    libraryTarget: 'umd'
   },
   resolve: {
     // Add '.ts' and '.tsx' as a resolvable extension.
