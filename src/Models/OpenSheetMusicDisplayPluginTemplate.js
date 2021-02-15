@@ -24,6 +24,12 @@ export default class OpenSheetMusicDisplayPluginTemplate{
             }
         );
     }
+
+    getOpenSheetMusicDisplayProps(props){
+        console.warn("registerOpenSheetMusicDisplayProps not overriden");
+        return {};
+    }
+
     postSetupHook(osmdObject, props){
         console.warn("postSetupHook not overridden.");
     }

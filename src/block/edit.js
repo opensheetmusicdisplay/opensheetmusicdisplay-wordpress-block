@@ -55,6 +55,7 @@ const Edit = ({attributes, setAttributes}) => {
 	const [drawMeasureNumbersOnlyAtSystemStart, setDrawMeasureNumbersOnlyAtSystemStart] = useState(attributes.drawMeasureNumbersOnlyAtSystemStart);
 	const [drawTimeSignatures, setDrawTimeSignatures] = useState(attributes.drawTimeSignatures);
 
+	//TODO: Need this model to be extensible
 	const updateAttributes = () => {
 		setAttributes({
 			width: width,
@@ -74,6 +75,7 @@ const Edit = ({attributes, setAttributes}) => {
 
 	let [autoRenderTimeoutObject, setAutoRenderTimeoutObject] = useState(undefined);
 
+	//TODO: Need this to be accessible in extended code
 	const updateState = (callback = undefined, delay = 0, value = undefined, name = undefined) => {
 		if(callback && value !== undefined && name !== undefined){
 			callback(value);
@@ -138,6 +140,20 @@ const Edit = ({attributes, setAttributes}) => {
 			return (blockProps.ref.current.offsetWidth / aspectRatio).toString() + 'px';
 		}
 	};
+
+	let pluginProps = {};
+
+	if(attributes.plugins && attributes.plugins.length > 0){
+		for(let i = 0; i < attributes.plugins.length; i++){
+			const currentPluginProps = attributes.plugins[i].getOpenSheetMusicDisplayProps(attributes);
+			if(typeof currentPluginProps === 'object'){
+				pluginProps = {
+					...pluginProps,
+					...currentPluginProps
+				};
+			}
+		}
+	}
 
 	return (
 		<div { ...blockProps } style={{width: attributes.width + '%', height: translateAspectRatioToHeight(attributes.aspectRatio)}}>
@@ -313,6 +329,7 @@ const Edit = ({attributes, setAttributes}) => {
 				drawTimeSignatures= { attributes.drawTimeSignatures }
 				maxReloadAttempts={5}
 				plugins={attributes.plugins}
+				{...pluginProps}
 			/>
 		</div>
 	);
