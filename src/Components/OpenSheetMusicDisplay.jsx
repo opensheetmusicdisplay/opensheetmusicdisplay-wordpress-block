@@ -45,13 +45,18 @@ export class OpenSheetMusicDisplay extends PureComponent {
         }
       }
       this.osmd.Zoom = this.props.zoom;
-      this.osmd.render();
-      if(this.plugins.length > 0){
-        for(let i = 0; i < this.plugins.length; i++){
-          this.plugins[i].postRenderHook(this.osmd, this.props);
+      //little bit of a hack so that the loader is actually rendered.
+      //Presently OSMD.render locks up the browser and by the time the loader would display, it's derendered
+      //Best solution, though very involved, is for osmd to use web workers for rendering
+      setTimeout(()=>{
+        this.osmd.render();
+        if(this.plugins.length > 0){
+          for(let i = 0; i < this.plugins.length; i++){
+            this.plugins[i].postRenderHook(this.osmd, this.props);
+          }
         }
-      }
-      this.loaderDivRef.current.classList.remove('loader');
+        this.loaderDivRef.current.classList.remove('loader');
+      },250);
     }
 
     loadFileBehavior(){
@@ -84,6 +89,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
           console.log("Attempting to reload...");
           _self.loadFileBehavior();
         } else {
+          this.loaderDivRef.current.classList.remove('loader');
           console.error("Max reload attempts reached. Failed to load file: " + _self.props.file);
         }
       });
@@ -94,7 +100,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
       this.osmd = new OSMD(this.osmdDivRef.current, options);
       if(this.plugins.length > 0){
         for(let i = 0; i < this.plugins.length; i++){
-          this.plugins[i].osmdSetupHook(this.osmd, this.props);
+          this.plugins[i].postSetupHook(this.osmd, this.props);
         }
       }
       if(this.props.file){
