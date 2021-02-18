@@ -1,8 +1,19 @@
-import { InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
-import { Card, CardBody, SelectControl, CheckboxControl, Button, PanelBody, __experimentalNumberControl as NumberControl } from '@wordpress/components';
-import { OpenSheetMusicDisplay } from '../Components/OpenSheetMusicDisplay.jsx';
-import { withSelect } from "@wordpress/data";
+/**
+ * External Dependencies
+ */
 import {useState} from 'react';
+
+/**
+ * Internal Dependencies
+ */
+import { OpenSheetMusicDisplay } from '../Components/OpenSheetMusicDisplay.jsx';
+
+/**
+ * Wordpress Dependencies
+ */
+import { InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
+import { Card, CardBody, SelectControl, CheckboxControl, Button, PanelBody, TextControl } from '@wordpress/components';
+import { withSelect } from '@wordpress/data';
 
 /**
  * Retrieves the translation of text.
@@ -87,7 +98,7 @@ const Edit = ({attributes, setAttributes}) => {
 		} else if(attributes.autoRender){
 			if(delay > 0){
 				clearTimeout(autoRenderTimeoutObject);
-				let timeoutReturnObject = setTimeout(function(){
+				let timeoutReturnObject = setTimeout(() =>{
 					updateAttributes();
 				}, delay);
 				setAutoRenderTimeoutObject(timeoutReturnObject);
@@ -125,10 +136,10 @@ const Edit = ({attributes, setAttributes}) => {
 	};
 
 	const aspectRatioDropdownOptions = [
-		{label: "Auto (No Scrollbar)", value: "auto"},
-		{label: "Landscape", value: "landscape"},
-		{label: "Portrait", value: "portrait"},
-		{label: "Custom", value: "custom"}
+		{label: __('Auto (No Scrollbar)'), value: 'auto'},
+		{label: __('Landscape'), value: 'landscape'},
+		{label: __('Portrait'), value: 'portrait'},
+		{label: __('Custom'), value: 'custom'}
 	];
 
 	const blockProps = useBlockProps();
@@ -137,7 +148,7 @@ const Edit = ({attributes, setAttributes}) => {
 		if(!blockProps.ref.current || aspectRatio === 0.0 || !blockProps.ref.current.offsetWidth){
 			return 'auto';
 		} else {
-			return (blockProps.ref.current.offsetWidth / aspectRatio).toString() + 'px';
+			return `${(blockProps.ref.current.offsetWidth / aspectRatio).toString()} px`;
 		}
 	};
 
@@ -154,7 +165,6 @@ const Edit = ({attributes, setAttributes}) => {
 			}
 		}
 	}
-
 	return (
 		<div { ...blockProps } style={{width: attributes.width + '%', height: translateAspectRatioToHeight(attributes.aspectRatio)}}>
 			{
@@ -162,7 +172,7 @@ const Edit = ({attributes, setAttributes}) => {
 					<Card>
 					<CardBody>
 						<CheckboxControl
-							label="Automatically Rerender on Change"
+							label={__('Automatically Rerender on Change')}
 							checked={ attributes.autoRender }
 							onChange={ (val) => {
 								setAttributes( {autoRender: val } );
@@ -185,7 +195,7 @@ const Edit = ({attributes, setAttributes}) => {
 						title={__('Basic Options')}
 						initialOpen = { true }
 						>
-						<div className="musicxml-selector">
+						<div className='musicxml-selector'>
 						<MediaUploadCheck>
 							<MediaUpload
 								allowedTypes={ ['application/vnd.recordare.musicxml',
@@ -199,7 +209,7 @@ const Edit = ({attributes, setAttributes}) => {
 									<div>
 										<sub>
 											<strong>
-											{attributes.musicXmlId > -1 ? 'Current Score: ' + attributes.musicXmlTitle : 'No MusicXML selected.'}
+											{ __(attributes.musicXmlId > -1 ? `Current Score: ${attributes.musicXmlTitle}` : 'No MusicXML selected.')}
 											</strong>
 										</sub>
 										<br/>
@@ -214,98 +224,108 @@ const Edit = ({attributes, setAttributes}) => {
 							/>
 						</MediaUploadCheck>
 						</div>
-						<NumberControl
-								label="Width (%)"
+							<TextControl
+								label={__('Width (%)')}
+								type='number'
 								min={10.0}
 								max={100.0}
+								step={1}
 								onChange={ (val) => updateState(setWidth( parseInt(val, 10) ), 500) }
 								value={ width }
 							>
-							</NumberControl>
+							</TextControl>
 							<SelectControl
-								label="Container Aspect Ratio"
+								label={__('Container Aspect Ratio')}
 								value={ aspectRatioString }
 								onChange={ ( val ) => setAspectRatio( val ) }
 								options = { aspectRatioDropdownOptions }
 							>
 							</SelectControl>
 							{ aspectRatioString === 'custom' ?
-							<NumberControl
-								label="Custom Aspect Ratio"
+							<TextControl
+								label={__('Custom Aspect Ratio')}
+								type='number'
 								min={0.1}
 								onChange={ (val) => setAttributes( {aspectRatio: val} ) }
 								value={ attributes.aspectRatio }
 							>
-							</NumberControl> : null
+							</TextControl> : null
 							}
-							<NumberControl
-								label="Zoom (%)"
+							<TextControl
+								label={__('Zoom (%)')}
+								type='number'
 								min={1}
-								onChange={ (val) => updateState(setZoom( val / 100.0 ), 500) }
-								value={ zoom * 100 }
+								onChange={ (val) => {
+									if(val){
+										updateState(setZoom( parseInt(val, 10) / 100.0 ), 500);
+									} else {
+										updateState(setZoom( 1 / 100.0 ), 500);
+									}
+								} }
+								value={ Math.floor(zoom * 100) }
 							>
-							</NumberControl>
+							</TextControl>
 					</PanelBody>
 					<PanelBody
 						title={__('Drawing Options')}
 						initialOpen = { false }
 						>
 							<CheckboxControl
-								label="Draw Title"
+								label={__('Draw Title')}
 								checked={ drawTitle }
 								onChange={ (val) => updateState(setDrawTitle, 0, val, 'drawTitle') }
 							>
 							</CheckboxControl>
 							<CheckboxControl
-								label="Draw Subtitle"
+								label={__('Draw Subtitle')}
 								checked={ drawSubtitle }
 								onChange={ (val) => updateState(setDrawSubtitle, 0, val, 'drawSubtitle') }
 							>
 							</CheckboxControl>
 							<CheckboxControl
-								label="Draw Composer"
+								label={__('Draw Composer')}
 								checked={ drawComposer }
 								onChange={ (val) => updateState(setDrawComposer, 0, val, 'drawComposer') }
 							>
 							</CheckboxControl>
 							<CheckboxControl
-								label="Draw Lyricist"
+								label={__('Draw Lyricist')}
 								checked={ drawLyricist }
 								onChange={ (val) => updateState(setDrawLyricist, 0, val, 'drawLyricist') }
 							>
 							</CheckboxControl>
 							<CheckboxControl
-								label="Draw Metronome Marks"
+								label={__('Draw Metronome Marks')}
 								checked={ drawMetronomeMarks }
 								onChange={ (val) => updateState(setDrawMetronomeMarks, 0, val, 'drawMetronomeMarks') }
 							>
 							</CheckboxControl>
 							<CheckboxControl
-								label="Draw Part Names"
+								label={__('Draw Part Names')}
 								checked={ drawPartNames }
 								onChange={ (val) => updateState(setDrawPartNames, 0, val, 'drawPartNames') }
 							>
 							</CheckboxControl>
 							<CheckboxControl
-								label="Draw Part Abbreviations"
+								label={__('Draw Part Abbreviations')}
 								checked={ drawPartAbbreviations }
 								onChange={ (val) => updateState(setDrawPartAbbreviations, 0, val, 'drawPartAbbreviations') }
 							>
 							</CheckboxControl>
 							<CheckboxControl
-								label="Draw Measure Numbers"
+								label={__('Draw Measure Numbers')}
 								checked={ drawMeasureNumbers }
 								onChange={ (val) => updateState(setDrawMeasureNumbers, 0, val, 'drawMeasureNumbers') }
 							>
 							</CheckboxControl>
 							<CheckboxControl
-								label="Draw Measure Numbers Only at System Start"
+								label={__('Draw Measure Numbers Only at System Start')}
 								checked={ drawMeasureNumbersOnlyAtSystemStart }
 								onChange={ (val) => updateState(setDrawMeasureNumbersOnlyAtSystemStart, 0, val, 'drawMeasureNumbersOnlyAtSystemStart') }
 							>
 							</CheckboxControl>
 							<CheckboxControl
-								label="Draw Time Signatures"
+								label={__('Draw Time Signatures')}
 								checked={ drawTimeSignatures }
 								onChange={ (val) => updateState(setDrawTimeSignatures, 0, val, 'drawTimeSignatures') }
 							>

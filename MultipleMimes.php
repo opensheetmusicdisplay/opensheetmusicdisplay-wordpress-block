@@ -1,5 +1,5 @@
 <?php
-class MultipleMimes {
+class phonicscore_opensheetmusicdisplay_MultipleMimes {
 
     public static function init() {
         add_filter( 'wp_check_filetype_and_ext', [self::class, 'add_multiple_mime_types'], 99, 3 );

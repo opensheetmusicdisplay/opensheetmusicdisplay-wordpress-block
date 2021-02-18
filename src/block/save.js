@@ -13,15 +13,6 @@ import { __ } from '@wordpress/i18n';
  */
 import { useBlockProps } from '@wordpress/block-editor';
 
-
-const nonSerializedAttributes = [
-	'musicXmlUrl',
-	'zoom',
-	'width',
-	'aspectRatio',
-	'autoRender',
-	'plugins'
-];
 /**
  * The save function defines the way in which the different attributes should
  * be combined into the final markup, which is then serialized by the block
@@ -32,6 +23,14 @@ const nonSerializedAttributes = [
  * @return {WPElement} Element to render.
  */
 export default function save({attributes}) {
+	const nonSerializedAttributes = [
+		'musicXmlUrl',
+		'zoom',
+		'width',
+		'aspectRatio',
+		'autoRender',
+		'plugins'
+	];
 	const items = [];
 	if(typeof attributes === 'object'){
 		for(let [key, value] of Object.entries(attributes)){
@@ -46,7 +45,7 @@ export default function save({attributes}) {
 				try{
 					value = JSON.stringify(value);
 				} catch(error){
-					console.warn("Error serializing value for key: " + key + " defaulting to '{}'.", error);
+					console.warn(`Error serializing value for key: ${key} defaulting to '{}'.`, error);
 					value = '{}';
 				}
 			}
@@ -57,9 +56,10 @@ export default function save({attributes}) {
 	}
 	return (
 		<div { ...useBlockProps.save() }>
-			<div className="osmd-container-placeholder">
-				<div className="loader" />
-				<div className="osmd-render-block" style={{width: attributes.width.toString() + '%'}}/>
+			<div className="phonicscore-opensheetmusicdisplay__placeholder">
+				<div></div>
+				<div className="phonicscore-opensheetmusicdisplay__loading-spinner hide" />
+				<div className="phonicscore-opensheetmusicdisplay__render-block" style={{width: `${attributes.width.toString()}%`}}/>
 				{items}
 				<input type="hidden" className="musicXmlUrl" name="musicXmlUrl" value={attributes.musicXmlUrl} />
 				<input type="hidden" className="zoom" name="zoom" value={attributes.zoom} />

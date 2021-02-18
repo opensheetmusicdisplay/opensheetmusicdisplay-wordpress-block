@@ -55,7 +55,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
             this.plugins[i].postRenderHook(this.osmd, this.props);
           }
         }
-        this.loaderDivRef.current.classList.remove('loader');
+        this.loaderDivRef.current.classList.add('hide');
       },250);
     }
 
@@ -86,11 +86,11 @@ export class OpenSheetMusicDisplay extends PureComponent {
         }
         console.warn(error);
         if(_self.loadAttempts < _self.maxReloadAttempts){
-          console.log("Attempting to reload...");
+          console.log('Attempting to reload...');
           _self.loadFileBehavior();
         } else {
-          this.loaderDivRef.current.classList.remove('loader');
-          console.error("Max reload attempts reached. Failed to load file: " + _self.props.file);
+          this.loaderDivRef.current.classList.add('hide');
+          console.error(`Max reload attempts reached. Failed to load file: ${_self.props.file}`);
         }
       });
     }
@@ -104,6 +104,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
         }
       }
       if(this.props.file){
+        this.loaderDivRef.current.classList.remove('hide');
         this.loadFileBehavior();
       }
     }
@@ -111,14 +112,9 @@ export class OpenSheetMusicDisplay extends PureComponent {
     resize() {
       this.osmd.render();
     }
-  
-    componentWillUnmount() {
-      //console.log("componentWillUnmount");
-      //window.removeEventListener('resize', this.resize);
-    }
 
     componentDidUpdate(prevProps) {
-      this.loaderDivRef.current.classList.add('loader');
+      this.loaderDivRef.current.classList.remove('hide');
       const options = this.getOptionsObjectFromProps(this.props);
       this.osmd.setOptions(options);
       if (this.props.file !== prevProps.file) {
@@ -135,9 +131,9 @@ export class OpenSheetMusicDisplay extends PureComponent {
   
     render() {
       return (
-        <div className="osmd-container">
-          <div className="loader" ref={this.loaderDivRef}></div>
-          <div className="osmd-render-block" ref={this.osmdDivRef} />
+        <div className="phonicscore-opensheetmusicdisplay">
+          <div className="phonicscore-opensheetmusicdisplay__loading-spinner hide" ref={this.loaderDivRef}></div>
+          <div className="phonicscore-opensheetmusicdisplay__render-block" ref={this.osmdDivRef} />
         </div>
         );
     }

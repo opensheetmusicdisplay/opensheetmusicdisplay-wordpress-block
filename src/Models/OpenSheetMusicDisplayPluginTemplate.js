@@ -16,6 +16,7 @@ export default class OpenSheetMusicDisplayPluginTemplate{
             pluginName,
             (attributes, blockInformation) => {
                 if(blockInformation.name === 'phonicscore/opensheetmusicdisplay'){
+                    //Register ourself as a plugin so we get the hook calls on the backend
                     if(attributes && attributes.plugins && Array.isArray(attributes.plugins)){
                         attributes.plugins.push(_self);
                     }
@@ -25,6 +26,7 @@ export default class OpenSheetMusicDisplayPluginTemplate{
         );
     }
 
+    //Return KV pairs of props that are provided to the OSMD react component (in the edit view)
     getOpenSheetMusicDisplayProps(props){
         return {};
     }

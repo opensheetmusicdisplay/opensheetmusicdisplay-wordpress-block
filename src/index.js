@@ -33,7 +33,7 @@ import icons from './block/icons';
  * @see https://developer.wordpress.org/block-editor/developers/block-api/#registering-a-block
  */
 
-//wrapper to ensure filters that are registered elsewhere (extensions to this block) are fired
+//wrapper to ensure filters that are registered elsewhere (extensions/plugins to this block) are fired
 wp.domReady(() => {
 
 registerBlockType( 'phonicscore/opensheetmusicdisplay', {

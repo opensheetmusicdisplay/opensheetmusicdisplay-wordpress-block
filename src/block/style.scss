@@ -5,7 +5,7 @@
  * Replace them with your own styles or remove the file completely.
  */
 body{
-  --loader-color: #eb6101;
+  --phonicscore-opensheetmusicdisplay__loading-spinner-color: #eb6101;
 }
 
 .wp-block-phonicscore-opensheetmusicdisplay {
@@ -16,7 +16,7 @@ body{
 	overflow-y: auto;
 }
 
-.osmd-render-block{
+.phonicscore-opensheetmusicdisplay__render-block{
   margin-left: auto;
   margin-right: auto;
 }
@@ -26,7 +26,7 @@ body{
 }
 
 /* Absolute Center Spinner */
-.loader {
+.phonicscore-opensheetmusicdisplay__loading-spinner {
   position: fixed;
   z-index: 999;
   height: 2em;
@@ -40,7 +40,7 @@ body{
 }
 
 /* Transparent Overlay */
-.loader:before {
+.phonicscore-opensheetmusicdisplay__loading-spinner:before {
   content: '';
   display: block;
   position: fixed;
@@ -52,8 +52,8 @@ body{
 }
 
 /* :not(:required) hides these rules from IE9 and below */
-.loader:not(:required) {
-  /* hide "loader..." text */
+.phonicscore-opensheetmusicdisplay__loading-spinner:not(:required) {
+  /* hide "phonicscore-opensheetmusicdisplay__loading-spinner..." text */
   font: 0/0 a;
   color: transparent;
   text-shadow: none;
@@ -61,7 +61,7 @@ body{
   border: 0;
 }
 
-.loader:not(:required):after {
+.phonicscore-opensheetmusicdisplay__loading-spinner:not(:required):after {
   content: '';
   display: block;
   font-size: 10px;
