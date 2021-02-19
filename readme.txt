@@ -161,11 +161,11 @@ We are planning to release a premium extension to this plugin for more exciting 
 - Audio player
 - Transpose
 - Annotations
-- Many more OSMD Rendering Options
+- Many OSMD Rendering Options
 - A lot more!
 
 Finally, this block has extensibility and plugin hooks (Currently not well documented, but will be). 
-If you are a Wordpress/javascript developer and are feeling bold and adventurous, you might be able to add the functionality yourself. 
+If you are a Wordpress/javascript developer and are feeling bold and adventurous, you might be able to add the functionality yourself.
 
 == Screenshots ==
 
