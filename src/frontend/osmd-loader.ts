@@ -108,16 +108,17 @@ for(let i = 0; i < placeholders.length; i++){
             currentOsmd.render();
         } catch(err){
             console.warn(err);
-            osmdRenderBlock.innerHTML = '<h4>Error rendering sheet music file: <br>' + err + '</h4>';
+            osmdRenderBlock.innerHTML = '<h4>Error loading sheet music file: ' + url + '</h4><p>' + err + '</p>';
         } finally {
             nextResolve();
         }
     },
     function(err){
         console.warn(err);
-        osmdRenderBlock.innerHTML = '<h4>Error loading sheet music file: ' + url + '</h4>';
+        osmdRenderBlock.innerHTML = '<h4>Error loading sheet music file: ' + url + '</h4><p>' + err + '</p>';
         nextResolve();
     });
+
     let timeoutObject: NodeJS.Timeout = undefined;
 
     window.addEventListener('resize', (event) =>{
@@ -130,7 +131,7 @@ for(let i = 0; i < placeholders.length; i++){
                 currentOsmd.render();
             } catch(err){
                 console.warn(err);
-                osmdRenderBlock.innerHTML = '<h4>Error rendering sheet music file: <br>' + err + '</h4>';
+                osmdRenderBlock.innerHTML = '<h4>Error loading sheet music file: ' + url + '</h4><p>' + err + '</p>';
             } finally {
                 loader.classList.add('hide');
             }

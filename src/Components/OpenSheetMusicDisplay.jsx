@@ -8,6 +8,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
       this.pendingLoad = undefined;
       this.loadAttempts = 0;
       this.maxReloadAttempts = this.props.maxReloadAttempts ? this.props.maxReloadAttempts : 3;
+      this.showErrorCallback = this.props.showErrorCallback ? this.props.showErrorCallback : this.defaultErrorCallback;
       this.osmd = undefined;
       this.osmdDivRef = React.createRef();
       this.loaderDivRef = React.createRef();
@@ -19,6 +20,10 @@ export class OpenSheetMusicDisplay extends PureComponent {
           }
         }
       }
+    }
+    
+    defaultErrorCallback(message, details){
+      this.osmdDivRef.current.innerHTML = `<p><strong>${message}</strong>: <code>${details}</code></p>`;
     }
 
     getOptionsObjectFromProps(props){
@@ -54,8 +59,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
           this.osmd.render();
         } catch(err){
           console.warn('Error rendering: ', err);
-          error = err;
-          this.osmdDivRef.current.innerHTML = `<h4>Error rendering: ${err}</h4>`;
+          this.showErrorCallback(`Error rendering file: ${this.props.file}`, err);
         } finally{
           if(this.plugins.length > 0){
             for(let i = 0; i < this.plugins.length; i++){
@@ -73,15 +77,15 @@ export class OpenSheetMusicDisplay extends PureComponent {
           this.plugins[i].preLoadFileHook(this.osmd, this.props);
         }
       }
-      const _self = this;
       this.loadAttempts++;
       this.pendingLoad = this.osmd.load(this.props.file);
+      const _self = this;
       this.pendingLoad.then(function(){
         _self.loadAttempts = 0;
         _self.pendingLoad = undefined;
         if(_self.plugins.length > 0){
           for(let i = 0; i < _self.plugins.length; i++){
-            _self.plugins[i].postLoadFileHook(_self.osmd, _self.props, undefined);
+            _self.plugins[i].postLoadFileHook(_self.osmd, _self.props);
           }
         }
         _self.renderBehavior();
@@ -97,14 +101,17 @@ export class OpenSheetMusicDisplay extends PureComponent {
           console.log('Attempting to reload...');
           _self.loadFileBehavior();
         } else {
-          this.loaderDivRef.current.classList.add('hide');
-          this.osmdDivRef.current.innerHTML = `<h4>Failed to load file: ${_self.props.file}</h4>`;
+          _self.loaderDivRef.current.classList.add('hide');
+          _self.loadAttempts = 0;
+          _self.pendingLoad = undefined;
+          _self.showErrorCallback(`Failed to load file: ${_self.props.file}`, error);
           console.error(`Max reload attempts reached. Failed to load file: ${_self.props.file}`);
         }
       });
     }
   
     setupOsmd() {
+      this.osmdDivRef.current.innerHTML = '';
       const options = this.getOptionsObjectFromProps(this.props);
       this.osmd = new OSMD(this.osmdDivRef.current, options);
       if(this.plugins.length > 0){
@@ -123,6 +130,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
     }
 
     componentDidUpdate(prevProps) {
+      this.osmdDivRef.current.innerHTML = '';
       this.loaderDivRef.current.classList.remove('hide');
       const options = this.getOptionsObjectFromProps(this.props);
       this.osmd.setOptions(options);
