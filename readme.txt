@@ -16,7 +16,7 @@ Block to render MusicXML in the browser as sheet music using OSMD.
 This Gutenberg block brings [OpenSheetMusicDisplay](https://github.com/opensheetmusicdisplay/opensheetmusicdisplay) seamlessly to your Wordpress site!
 This will allow you to render responsive MusicXML live in your visitors' browser.
 
-It enables uploading of .xml, .musicxml and .mxl files to your Wordpress Media, which can then be selected in the block for rendering.
+It enables uploading of .xml, .musicxml and .mxl files to your Wordpress Media Library, which can then be selected in the block for rendering.
 
 ## Options
 The block has a number of options in the sidebar (Inspector Controls) described here.
@@ -26,7 +26,8 @@ The section immediately below the block heading contains two controls related to
 
 #### Automatically Rerender on Change
 *Checkbox, Default: Off*
-When this is on, any change to the lower settings (exception for 'Container Aspect Ratio') will trigger a re-render of the sheet music in the editor.
+When this is on, any change to the lower settings (except for 'Container Aspect Ratio') will trigger a re-render of the sheet music in the editor.
+
 This is not recommended for larger pieces of sheet music, as rendering can take time.
 It is best to do 'batch' updates with the settings and use the 'Rerender' button to manually preview the changes.
 
@@ -34,17 +35,17 @@ It is best to do 'batch' updates with the settings and use the 'Rerender' button
 *Button*
 This button will be disabled if the above setting is turned on.
 This button is used to trigger a manual rerender of the sheet music in the currently selected OSMD block.
-This is particularly useful for larger pieces of sheet music.
+This is particularly useful for updating the settings of larger pieces of sheet music that take longer to render.
 
 ### Basic Options
-This section contains basic options for the block; the musicXML file to render as well as some display options.
+This section contains basic options for the block: the musicXML file to render as well as some display options.
 
 #### Select Media
 *Button/File Select, Default: None Selected*
 This control shows the currently selected score above it (if there is one).
-The button 'Select Media' opens your Wordpress Media browser window, which allows you to select previously uploaded music xml, or to upload one to select for rendering in the block.
+The button 'Select Media' opens your Wordpress Media Library in a modal window, which allows you to select previously uploaded MusicXML, or to upload one to select for rendering in the block.
 
-**NOTE:** Selecting a new file will always trigger a re-render of the new file, no matter if "Automatically Rerender on Change" is selected or not.
+**NOTE:** Selecting a new file will always trigger a render of the new file, no matter if "Automatically Rerender on Change" is selected or not.
 
 #### Width (%)
 *Number Input, Default: 100*
@@ -57,13 +58,13 @@ e.g.
 #### Container Aspect Ratio
 *Dropdown/Number Input, Default: Auto (No Scrollbar)*
 This dropdown sets the aspect ratio of the sheet music container - The height in relation to the width.
-What this does pratically is add a scrollbar, which is useful with very long pieces that you don't want to extend all the way down the page fully.
+What this does pratically is add a scrollbar, which is useful with very long pieces that you don't want to extend all the way down the page.
 - Auto (No Scrollbar) will render the full sheet music as-is, taking up as much room as needed.
 - Landscape makes the height 0.667x the width. Or, put another way, the width will be 1.5x the height (3:2)
 - Portrait sets the height to 1.778x the width. Width being 0.5625x the height (9:16)
 - Custom allows you to set your own value of what the width will be divided by to get the height.
 
-**NOTE:** This control does not trigger or require a re-render since it is merely a CSS property of the sheet music container.
+**NOTE:** This control does not trigger or require a re-render since it is merely a CSS property of the sheet music container. It will be reflected immediately.
 
 #### Zoom (%)
 *Number Input, Default: 100*
@@ -76,7 +77,7 @@ These are additional OSMD drawing options - Whether to render certain parts of t
 *Checkbox, Default: On*
 Whether to render the sheet music title.
 
-**NOTE:** Draw Subtitle must be off for this to be off as well.
+**NOTE:** Draw Subtitle must be off for this to be reflected in the sheet music (currently).
 
 #### Draw Subtitle
 *Checkbox, Default: On*
@@ -85,6 +86,8 @@ Whether to render the sheet music subtitle.
 #### Draw Composer
 *Checkbox, Default: On*
 Whether to render the sheet music composer.
+
+**NOTE:** There seem to be some rendering issues in OSMD with this option if 'Draw Lyricist' is not off as well. We are working on this.
 
 #### Draw Lyricist
 *Checkbox, Default: On*
@@ -116,8 +119,8 @@ Whether to render time signatures on the staves
 
 == About Us ==
 
-We have developed the open-source [Opensheetmusicdisplay](https://opensheetmusicdisplay.org/): A library for rendering MusicXML in the browser using Vexflow.
-We have developed this plugin to make it as easy as possible for Wordpress users to use our library to render sheet music on their site.
+We have developed the open-source [OpenSheetMusicDisplay](https://opensheetmusicdisplay.org/): A library for rendering MusicXML in the browser using Vexflow.
+We created this plugin to make it as easy as possible for Wordpress users to use our library to render sheet music on their site.
 We hope you find this plugin useful, and if so, please consider sponsoring us or donating at our link above.
 Thank you!
 
