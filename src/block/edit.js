@@ -86,24 +86,21 @@ const Edit = ({attributes, setAttributes}) => {
 
 	let [autoRenderTimeoutObject, setAutoRenderTimeoutObject] = useState(undefined);
 
-	//TODO: Need this to be accessible in extended code
-	const updateState = (callback = undefined, delay = 0, value = undefined, name = undefined) => {
-		if(callback && value !== undefined && name !== undefined){
-			callback(value);
+	const updateState = (attributeName, newValue, stateCallback, delay = 0 ) => {
+		stateCallback(newValue);
+		const newAttObject = {};
+		newAttObject[attributeName] = newValue;
+		if(delay > 0){
+			clearTimeout(autoRenderTimeoutObject);
+			const timeoutReturnObject = setTimeout(function(){
+				if(attributes.autoRender){
+					setAttributes(newAttObject);
+				}
+			}, delay);
+			setAutoRenderTimeoutObject(timeoutReturnObject);
+		} else {
 			if(attributes.autoRender){
-				const newAtt = {};
-				newAtt[name] = value;
-				setAttributes(newAtt);
-			}
-		} else if(attributes.autoRender){
-			if(delay > 0){
-				clearTimeout(autoRenderTimeoutObject);
-				let timeoutReturnObject = setTimeout(() =>{
-					updateAttributes();
-				}, delay);
-				setAutoRenderTimeoutObject(timeoutReturnObject);
-			} else {
-				updateAttributes();
+				setAttributes(newAttObject);
 			}
 		}
 	};
@@ -148,7 +145,7 @@ const Edit = ({attributes, setAttributes}) => {
 		if(!blockProps.ref.current || aspectRatio === 0.0 || !blockProps.ref.current.offsetWidth){
 			return 'auto';
 		} else {
-			return `${(blockProps.ref.current.offsetWidth / aspectRatio).toString()} px`;
+			return (blockProps.ref.current.offsetWidth / aspectRatio).toString() + 'px';
 		}
 	};
 
@@ -230,7 +227,7 @@ const Edit = ({attributes, setAttributes}) => {
 								min={10.0}
 								max={100.0}
 								step={1}
-								onChange={ (val) => updateState(setWidth( parseInt(val, 10) ), 500) }
+								onChange={ (val) => updateState('width', parseInt(val, 10), setWidth, 500) }
 								value={ width }
 							>
 							</TextControl>
@@ -254,14 +251,8 @@ const Edit = ({attributes, setAttributes}) => {
 							<TextControl
 								label={__('Zoom (%)')}
 								type='number'
-								min={1}
-								onChange={ (val) => {
-									if(val){
-										updateState(setZoom( parseInt(val, 10) / 100.0 ), 500);
-									} else {
-										updateState(setZoom( 1 / 100.0 ), 500);
-									}
-								} }
+								min={10}
+								onChange={ (val) => updateState('zoom', parseInt(val, 10) / 100.0, setZoom, 500)}
 								value={ Math.floor(zoom * 100) }
 							>
 							</TextControl>
@@ -273,84 +264,86 @@ const Edit = ({attributes, setAttributes}) => {
 							<CheckboxControl
 								label={__('Draw Title')}
 								checked={ drawTitle }
-								onChange={ (val) => updateState(setDrawTitle, 0, val, 'drawTitle') }
+								onChange={(val) => updateState('drawTitle', val, setDrawTitle, 0)}
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label={__('Draw Subtitle')}
 								checked={ drawSubtitle }
-								onChange={ (val) => updateState(setDrawSubtitle, 0, val, 'drawSubtitle') }
+								onChange={(val) => updateState('drawSubtitle', val, setDrawSubtitle, 0)}
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label={__('Draw Composer')}
 								checked={ drawComposer }
-								onChange={ (val) => updateState(setDrawComposer, 0, val, 'drawComposer') }
+								onChange={ (val) => updateState('drawComposer', val, setDrawComposer, 0) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label={__('Draw Lyricist')}
 								checked={ drawLyricist }
-								onChange={ (val) => updateState(setDrawLyricist, 0, val, 'drawLyricist') }
+								onChange={ (val) => updateState('drawLyricist', val, setDrawLyricist, 0) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label={__('Draw Metronome Marks')}
 								checked={ drawMetronomeMarks }
-								onChange={ (val) => updateState(setDrawMetronomeMarks, 0, val, 'drawMetronomeMarks') }
+								onChange={ (val) => updateState('drawMetronomeMarks', val, setDrawMetronomeMarks, 0) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label={__('Draw Part Names')}
 								checked={ drawPartNames }
-								onChange={ (val) => updateState(setDrawPartNames, 0, val, 'drawPartNames') }
+								onChange={ (val) => updateState('drawPartNames', val, setDrawPartNames, 0) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label={__('Draw Part Abbreviations')}
 								checked={ drawPartAbbreviations }
-								onChange={ (val) => updateState(setDrawPartAbbreviations, 0, val, 'drawPartAbbreviations') }
+								onChange={ (val) => updateState('drawPartAbbreviations', val, setDrawPartAbbreviations, 0) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label={__('Draw Measure Numbers')}
 								checked={ drawMeasureNumbers }
-								onChange={ (val) => updateState(setDrawMeasureNumbers, 0, val, 'drawMeasureNumbers') }
+								onChange={ (val) => updateState('drawMeasureNumbers', val, setDrawMeasureNumbers, 0) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label={__('Draw Measure Numbers Only at System Start')}
 								checked={ drawMeasureNumbersOnlyAtSystemStart }
-								onChange={ (val) => updateState(setDrawMeasureNumbersOnlyAtSystemStart, 0, val, 'drawMeasureNumbersOnlyAtSystemStart') }
+								onChange={ (val) => updateState('drawMeasureNumbersOnlyAtSystemStart', val, setDrawMeasureNumbersOnlyAtSystemStart, 0) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label={__('Draw Time Signatures')}
 								checked={ drawTimeSignatures }
-								onChange={ (val) => updateState(setDrawTimeSignatures, 0, val, 'drawTimeSignatures') }
+								onChange={ (val) => updateState('drawTimeSignatures', val, setDrawTimeSignatures, 0) }
 							>
 							</CheckboxControl>
 						</PanelBody>
 				</InspectorControls>
 			}
-			<OpenSheetMusicDisplay 
-				file={ attributes.musicXmlUrl }
-				width={ attributes.width }
-				zoom= { attributes.zoom }
-				drawTitle= { attributes.drawTitle }
-				drawSubtitle= { attributes.drawSubtitle }
-				drawComposer= { attributes.drawComposer }
-				drawLyricist= { attributes.drawLyricist }
-				drawMetronomeMarks= { attributes.drawMetronomeMarks }
-				drawPartNames= { attributes.drawPartNames }
-				drawPartAbbreviations= { attributes.drawPartAbbreviations }
-				drawMeasureNumbers= { attributes.drawMeasureNumbers }
-				drawMeasureNumbersOnlyAtSystemStart= { attributes.drawMeasureNumbersOnlyAtSystemStart }
-				drawTimeSignatures= { attributes.drawTimeSignatures }
-				maxReloadAttempts={5}
-				plugins={attributes.plugins}
-				{...pluginProps}
-			/>
+			{	attributes.musicXmlId > -1 ?
+				<OpenSheetMusicDisplay 
+					file={ attributes.musicXmlUrl }
+					width={ attributes.width }
+					zoom= { attributes.zoom }
+					drawTitle= { attributes.drawTitle }
+					drawSubtitle= { attributes.drawSubtitle }
+					drawComposer= { attributes.drawComposer }
+					drawLyricist= { attributes.drawLyricist }
+					drawMetronomeMarks= { attributes.drawMetronomeMarks }
+					drawPartNames= { attributes.drawPartNames }
+					drawPartAbbreviations= { attributes.drawPartAbbreviations }
+					drawMeasureNumbers= { attributes.drawMeasureNumbers }
+					drawMeasureNumbersOnlyAtSystemStart= { attributes.drawMeasureNumbersOnlyAtSystemStart }
+					drawTimeSignatures= { attributes.drawTimeSignatures }
+					maxReloadAttempts={5}
+					plugins={attributes.plugins}
+					{...pluginProps}
+				/> : <h4>{__('No MusicXML Selected.')}</h4>
+			}
 		</div>
 	);
 }

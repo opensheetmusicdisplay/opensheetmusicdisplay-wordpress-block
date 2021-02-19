@@ -40,7 +40,7 @@ export default class OpenSheetMusicDisplayPluginTemplate{
     postLoadFileHook(osmdObject, props, error){
     }
 
-    preRenderHook(osmdObject, props){
+    preRenderHook(osmdObject, props, error){
     }
 
     postRenderHook(osmdObject, props){

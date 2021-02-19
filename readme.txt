@@ -1,6 +1,7 @@
 === OpenSheetMusicDisplay ===
 Contributors:      opensheetmusicdisplay, fredmeister77
-Tags:              block
+Donate link:       https://OSMD.org/Donate
+Tags:              block,osmd,music,sheet music,musicxml,opensheetmusicdisplay
 Requires at least: 5.6.0
 Tested up to:      5.6.0
 Stable tag:        0.9.2
@@ -12,46 +13,167 @@ Block to render MusicXML in the browser as sheet music using OSMD.
 
 == Description ==
 
-This is the long description. No limit, and you can use Markdown (as well as in the following sections).
+This Gutenberg block brings [OpenSheetMusicDisplay](https://github.com/opensheetmusicdisplay/opensheetmusicdisplay) seamlessly to your Wordpress site!
+This will allow you to render responsive MusicXML live in your visitors' browser.
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+It enables uploading of .xml, .musicxml and .mxl files to your Wordpress Media, which can then be selected in the block for rendering.
+
+## Options
+The block has a number of options in the sidebar (Inspector Controls) described here.
+
+### Rendering
+The section immediately below the block heading contains two controls related to re-rendering the sheet music.
+
+#### Automatically Rerender on Change
+*Checkbox, Default: Off*
+When this is on, any change to the lower settings (exception for 'Container Aspect Ratio') will trigger a re-render of the sheet music in the editor.
+This is not recommended for larger pieces of sheet music, as rendering can take time.
+It is best to do 'batch' updates with the settings and use the 'Rerender' button to manually preview the changes.
+
+#### Rerender
+*Button*
+This button will be disabled if the above setting is turned on.
+This button is used to trigger a manual rerender of the sheet music in the currently selected OSMD block.
+This is particularly useful for larger pieces of sheet music.
+
+### Basic Options
+This section contains basic options for the block; the musicXML file to render as well as some display options.
+
+#### Select Media
+*Button/File Select, Default: None Selected*
+This control shows the currently selected score above it (if there is one).
+The button 'Select Media' opens your Wordpress Media browser window, which allows you to select previously uploaded music xml, or to upload one to select for rendering in the block.
+
+**NOTE:** Selecting a new file will always trigger a re-render of the new file, no matter if "Automatically Rerender on Change" is selected or not.
+
+#### Width (%)
+*Number Input, Default: 100*
+This control translates directly to the CSS width of the sheet music.
+What this means is that it controls the percentage of the *parent container* that the sheet music will take up.
+e.g.
+- If you have the OSMD block in a post set to 100%, it will fill the entire width of the post
+- If you have the OSMD block in a column layout of a post set to 100%, it will fill the entire width of that column
+
+#### Container Aspect Ratio
+*Dropdown/Number Input, Default: Auto (No Scrollbar)*
+This dropdown sets the aspect ratio of the sheet music container - The height in relation to the width.
+What this does pratically is add a scrollbar, which is useful with very long pieces that you don't want to extend all the way down the page fully.
+- Auto (No Scrollbar) will render the full sheet music as-is, taking up as much room as needed.
+- Landscape makes the height 0.667x the width. Or, put another way, the width will be 1.5x the height (3:2)
+- Portrait sets the height to 1.778x the width. Width being 0.5625x the height (9:16)
+- Custom allows you to set your own value of what the width will be divided by to get the height.
+
+**NOTE:** This control does not trigger or require a re-render since it is merely a CSS property of the sheet music container.
+
+#### Zoom (%)
+*Number Input, Default: 100*
+This input allows you to control the zoom level of the rendered sheet music.
+
+### Drawing Options
+These are additional OSMD drawing options - Whether to render certain parts of the sheet music.
+
+#### Draw Title
+*Checkbox, Default: On*
+Whether to render the sheet music title.
+
+**NOTE:** Draw Subtitle must be off for this to be off as well.
+
+#### Draw Subtitle
+*Checkbox, Default: On*
+Whether to render the sheet music subtitle.
+
+#### Draw Composer
+*Checkbox, Default: On*
+Whether to render the sheet music composer.
+
+#### Draw Lyricist
+*Checkbox, Default: On*
+Whether to render the sheet music Lyricist.
+
+#### Draw Metronome Marks
+*Checkbox, Default: On*
+Whether to render the tempo markings.
+
+#### Draw Part Names
+*Checkbox, Default: On*
+Whether to render the part names before each stave.
+
+#### Draw Part Abbreviations
+*Checkbox, Default: On*
+Whether to render the part abbreviations on subsequent music systems.
+
+#### Draw Measure Numbers
+*Checkbox, Default: On*
+Whether to render measure numbers
+
+#### Draw Measure Numbers Only at System Start
+*Checkbox, Default: Off*
+Whether to render measure numbers just at the start of new music systems.
+
+#### Draw Time Signatures
+*Checkbox, Default: On*
+Whether to render time signatures on the staves
+
+== About Us ==
+
+We have developed the open-source [Opensheetmusicdisplay](https://opensheetmusicdisplay.org/): A library for rendering MusicXML in the browser using Vexflow.
+We have developed this plugin to make it as easy as possible for Wordpress users to use our library to render sheet music on their site.
+We hope you find this plugin useful, and if so, please consider sponsoring us or donating at our link above.
+Thank you!
 
 == Installation ==
 
-This section describes how to install the plugin and get it working.
+1. Install the plugin via the Wordpress Plugin installer. 
+    1. In the Wordpress admin sidebar, navigate to Plugins -> Add New.
+    2. *Wordpress Automatic Installation*
+        1. Search for its listing near the top of this page: "OpenSheetMusicDisplay".
+        2. Review the plugin information, reviews, details, etc.
+        3. Click "Install Now" and Wordpress will automatically install it.
+    2. **or** *Manual Upload*
+        1. At the very top towards the left, select the "Upload Plugin" button. 
+        2. Select the zip file for this plugin.
+        3. Click "Install Now"
+2. Activate the Plugin
+    1. In the Wordpress admin sidebar, navigate to Plugins -> Installed Plugins
+    2. Locate the "OpenSheetMusicDisplay" plugin in this list
+    3. Select "Activate" beneath it
 
-e.g.
-
-1. Upload the plugin files to the `/wp-content/plugins/opensheetmusicdisplay` directory, or install the plugin through the WordPress plugins screen directly.
-1. Activate the plugin through the 'Plugins' screen in WordPress
+This plugin should also be available via the Gutenberg Block directory:
+1. Navigate to a post where you want to add sheet music.
+2. Click the "+" icon to add a new block
+3. Select "Browse all" at the bottom of the block selection pop-up
+4. in the search bar at the top of the side panel, type "OpenSheetMusicDisplay"
+5. Click "Add Block" on the "OpenSheetMusicDisplay" result
 
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+= Where can I receive support for this block? =
 
-An answer to that question.
+Please contact us at support@opensheetmusicdisplay.org
 
-= What about foo bar? =
+= Is feature x, y, or z available? Will it be available? =
 
-Answer to foo bar dilemma.
+We are planning to release a premium extension to this plugin for more exciting and advanced features such as:
+- Audio player
+- Transpose
+- Annotations
+- Many more OSMD Rendering Options
+- A lot more!
+
+This will also be made available to our Github sponsor as part of their sponsorship.
+
+Finally, this block has extensibility and plugin hooks (Currently not well documented, but will be). 
+If you are a Wordpress/javascript developer and are feeling bold and adventurous, you might be able to add the functionality yourself. 
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. This is a two-column post example with the OSMD block in the second column with zoom level set. Shows Basic options to the right.
+2. This shows the previous post on the public-facing side.
+3. This shows the media selector where you can choose MusicXML.
+4. This shows another post with various options set (75% width, no draw title, Portrait aspect ratio)
 
 == Changelog ==
 
-= 0.1.0 =
-* Release
-
-== Arbitrary section ==
-
-You may provide arbitrary sections, in the same format as the ones above. This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation." Arbitrary sections will be shown below the built-in sections outlined above.
+= 0.9.2 =
+* Initial Release

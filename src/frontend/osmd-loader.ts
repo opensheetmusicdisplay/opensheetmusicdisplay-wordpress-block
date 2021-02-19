@@ -104,11 +104,18 @@ for(let i = 0; i < placeholders.length; i++){
     const currentOsmd: OpenSheetMusicDisplay = new OpenSheetMusicDisplay(osmdRenderBlock, optionsObject);
     currentOsmd.load(url).then(() => {
         currentOsmd.Zoom = zoom;
-        currentOsmd.render();
-        nextResolve();
+        try {
+            currentOsmd.render();
+        } catch(err){
+            console.warn(err);
+            osmdRenderBlock.innerHTML = '<h4>Error rendering sheet music file: <br>' + err + '</h4>';
+        } finally {
+            nextResolve();
+        }
     },
     function(err){
         console.warn(err);
+        osmdRenderBlock.innerHTML = '<h4>Error loading sheet music file: ' + url + '</h4>';
         nextResolve();
     });
     let timeoutObject: NodeJS.Timeout = undefined;
@@ -119,8 +126,14 @@ for(let i = 0; i < placeholders.length; i++){
         timeoutObject = setTimeout(() =>{
             updateHeight();
             currentOsmd.Zoom = zoom;
-            currentOsmd.render();
-            loader.classList.add('hide');
+            try {
+                currentOsmd.render();
+            } catch(err){
+                console.warn(err);
+                osmdRenderBlock.innerHTML = '<h4>Error rendering sheet music file: <br>' + err + '</h4>';
+            } finally {
+                loader.classList.add('hide');
+            }
         }, 500);
     });
 }

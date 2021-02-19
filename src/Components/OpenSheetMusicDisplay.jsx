@@ -49,13 +49,21 @@ export class OpenSheetMusicDisplay extends PureComponent {
       //Presently OSMD.render locks up the browser and by the time the loader would display, it's derendered
       //Best solution, though very involved, is for osmd to use web workers for rendering
       setTimeout(()=>{
-        this.osmd.render();
-        if(this.plugins.length > 0){
-          for(let i = 0; i < this.plugins.length; i++){
-            this.plugins[i].postRenderHook(this.osmd, this.props);
+        let error = undefined;
+        try{
+          this.osmd.render();
+        } catch(err){
+          console.warn('Error rendering: ', err);
+          error = err;
+          this.osmdDivRef.current.innerHTML = `<h4>Error rendering: ${err}</h4>`;
+        } finally{
+          if(this.plugins.length > 0){
+            for(let i = 0; i < this.plugins.length; i++){
+              this.plugins[i].postRenderHook(this.osmd, this.props, error);
+            }
           }
+          this.loaderDivRef.current.classList.add('hide');
         }
-        this.loaderDivRef.current.classList.add('hide');
       },250);
     }
 
@@ -90,6 +98,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
           _self.loadFileBehavior();
         } else {
           this.loaderDivRef.current.classList.add('hide');
+          this.osmdDivRef.current.innerHTML = `<h4>Failed to load file: ${_self.props.file}</h4>`;
           console.error(`Max reload attempts reached. Failed to load file: ${_self.props.file}`);
         }
       });
@@ -115,6 +124,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
 
     componentDidUpdate(prevProps) {
       this.loaderDivRef.current.classList.remove('hide');
+      console.log("componentDidUpdate", prevProps.width, this.props.width);
       const options = this.getOptionsObjectFromProps(this.props);
       this.osmd.setOptions(options);
       if (this.props.file !== prevProps.file) {
