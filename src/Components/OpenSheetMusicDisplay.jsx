@@ -124,7 +124,6 @@ export class OpenSheetMusicDisplay extends PureComponent {
 
     componentDidUpdate(prevProps) {
       this.loaderDivRef.current.classList.remove('hide');
-      console.log("componentDidUpdate", prevProps.width, this.props.width);
       const options = this.getOptionsObjectFromProps(this.props);
       this.osmd.setOptions(options);
       if (this.props.file !== prevProps.file) {

@@ -164,8 +164,6 @@ We are planning to release a premium extension to this plugin for more exciting 
 - Many more OSMD Rendering Options
 - A lot more!
 
-This will also be made available to our Github sponsor as part of their sponsorship.
-
 Finally, this block has extensibility and plugin hooks (Currently not well documented, but will be). 
 If you are a Wordpress/javascript developer and are feeling bold and adventurous, you might be able to add the functionality yourself. 
 
