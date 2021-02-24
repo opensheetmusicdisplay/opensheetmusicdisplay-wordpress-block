@@ -1,9 +1,4 @@
 /**
- * External Dependencies
- */
-import {useState} from 'react';
-
-/**
  * Internal Dependencies
  */
 import { OpenSheetMusicDisplay } from '../Components/OpenSheetMusicDisplay.jsx';
@@ -14,6 +9,7 @@ import { OpenSheetMusicDisplay } from '../Components/OpenSheetMusicDisplay.jsx';
 import { InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import { Card, CardBody, SelectControl, CheckboxControl, Button, PanelBody, TextControl } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
+import { useState } from '@wordpress/element';
 
 /**
  * Retrieves the translation of text.
@@ -85,7 +81,7 @@ const Edit = ({attributes, setAttributes}) => {
 	};
 
 	let [autoRenderTimeoutObject, setAutoRenderTimeoutObject] = useState(undefined);
-
+	//TODO: Would be good to make this available to plugins from here
 	const updateState = (attributeName, newValue, stateCallback, delay = 0 ) => {
 		stateCallback(newValue);
 		const newAttObject = {};

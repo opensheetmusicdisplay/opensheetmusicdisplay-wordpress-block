@@ -16,6 +16,11 @@ export class OpenSheetMusicDisplay extends PureComponent {
       if(props.plugins && props.plugins.length > 0){
         for(let i = 0; i < props.plugins.length; i++){
           if(props.plugins[i]?._reflection?.class?.name === 'OpenSheetMusicDisplayPluginTemplate'){
+            if (i > 0) {
+              if(props.plugins[i-1]?._reflection?.pluginName === props.plugins[i]?._reflection?.pluginName){
+                continue;
+              }
+            }
             this.plugins.push(props.plugins[i]);
           }
         }
@@ -37,7 +42,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
       }
       if(this.plugins.length > 0){
         for(let i = 0; i < this.plugins.length; i++){
-          this.plugins[i].processOptionsHook(this.osmd, options);
+          this.plugins[i].processOptionsHook(this.osmd, options, this.osmdDivRef.current);
         }
       }
       return options;
@@ -46,7 +51,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
     renderBehavior(){
       if(this.plugins.length > 0){
         for(let i = 0; i < this.plugins.length; i++){
-          this.plugins[i].preRenderHook(this.osmd, this.props);
+          this.plugins[i].preRenderHook(this.osmd, this.props, this.osmdDivRef.current);
         }
       }
       this.osmd.Zoom = this.props.zoom;
@@ -63,7 +68,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
         } finally{
           if(this.plugins.length > 0){
             for(let i = 0; i < this.plugins.length; i++){
-              this.plugins[i].postRenderHook(this.osmd, this.props, error);
+              this.plugins[i].postRenderHook(this.osmd, this.props, this.osmdDivRef.current, error);
             }
           }
           this.loaderDivRef.current.classList.add('hide');
@@ -74,7 +79,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
     loadFileBehavior(){
       if(this.plugins.length > 0){
         for(let i = 0; i < this.plugins.length; i++){
-          this.plugins[i].preLoadFileHook(this.osmd, this.props);
+          this.plugins[i].preLoadFileHook(this.osmd, this.props, this.osmdDivRef.current);
         }
       }
       this.loadAttempts++;
@@ -85,7 +90,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
         _self.pendingLoad = undefined;
         if(_self.plugins.length > 0){
           for(let i = 0; i < _self.plugins.length; i++){
-            _self.plugins[i].postLoadFileHook(_self.osmd, _self.props);
+            _self.plugins[i].postLoadFileHook(_self.osmd, _self.props, _self.osmdDivRef.current);
           }
         }
         _self.renderBehavior();
@@ -93,7 +98,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
       function(error){
         if(_self.plugins.length > 0){
           for(let i = 0; i < _self.plugins.length; i++){
-            _self.plugins[i].postLoadFileHook(_self.osmd, _self.props, error);
+            _self.plugins[i].postLoadFileHook(_self.osmd, _self.props, _self.osmdDivRef.current, error);
           }
         }
         console.warn(error);
@@ -116,7 +121,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
       this.osmd = new OSMD(this.osmdDivRef.current, options);
       if(this.plugins.length > 0){
         for(let i = 0; i < this.plugins.length; i++){
-          this.plugins[i].postSetupHook(this.osmd, this.props);
+          this.plugins[i].postSetupHook(this.osmd, this.props, this.osmdDivRef.current);
         }
       }
       if(this.props.file){
@@ -147,11 +152,17 @@ export class OpenSheetMusicDisplay extends PureComponent {
     }
   
     render() {
-      return (
+      let renderResult = (
         <div className="phonicscore-opensheetmusicdisplay">
           <div className="phonicscore-opensheetmusicdisplay__loading-spinner hide" ref={this.loaderDivRef}></div>
           <div className="phonicscore-opensheetmusicdisplay__render-block" ref={this.osmdDivRef} />
         </div>
         );
+        if(this.plugins.length > 0){
+          for(let i = 0; i < this.plugins.length; i++){
+            renderResult = this.plugins[i].preReactRenderHook(this.osmd, this.props, this.osmdDivRef.current, renderResult);
+          }
+        }            
+      return renderResult;
     }
   }

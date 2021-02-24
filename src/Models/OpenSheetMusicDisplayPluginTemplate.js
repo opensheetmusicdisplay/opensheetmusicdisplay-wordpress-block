@@ -7,7 +7,8 @@ export default class OpenSheetMusicDisplayPluginTemplate{
         this._reflection = {
             class : {
                 name : 'OpenSheetMusicDisplayPluginTemplate'
-            }
+            },
+            pluginName
         };
         const _self = this;
         // Adding the filter
@@ -25,27 +26,30 @@ export default class OpenSheetMusicDisplayPluginTemplate{
             }
         );
     }
-
     //Return KV pairs of props that are provided to the OSMD react component (in the edit view)
     getOpenSheetMusicDisplayProps(props){
         return {};
     }
 
-    postSetupHook(osmdObject, props){
+    postSetupHook(osmdObject, props, osmdHtmlElement){
     }
 
-    preLoadFileHook(osmdObject, props){
+    preLoadFileHook(osmdObject, props, osmdHtmlElement){
     }
 
-    postLoadFileHook(osmdObject, props, error){
+    postLoadFileHook(osmdObject, props, osmdHtmlElement, error){
     }
 
-    preRenderHook(osmdObject, props, error){
+    preRenderHook(osmdObject, props, osmdHtmlElement, error){
     }
 
-    postRenderHook(osmdObject, props){
+    postRenderHook(osmdObject, props, osmdHtmlElement){
     }
 
-    processOptionsHook(osmdObject, options){
+    processOptionsHook(osmdObject, options, osmdHtmlElement){
+    }
+
+    preReactRenderHook(osmdObject, props, osmdHtmlElement, jsx){
+        return jsx;
     }
 }

@@ -21,7 +21,7 @@
 		"@wordpress/blocks": "^6.25.2",
 		"@wordpress/i18n": "^3.17.0",
 		"@wordpress/hooks": "^2.11.1",
-		"opensheetmusicdisplay": "^0.9.2"
+		"opensheetmusicdisplay": "file:../opensheetmusicdisplay"
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^13.0.1",
