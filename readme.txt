@@ -4,7 +4,7 @@ Donate link:       https://OSMD.org/Donate
 Tags:              block,osmd,music,sheet music,musicxml,opensheetmusicdisplay
 Requires at least: 5.6.0
 Tested up to:      5.6.0
-Stable tag:        0.9.2
+Stable tag:        0.9.4
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -175,6 +175,13 @@ If you are a Wordpress/javascript developer and are feeling bold and adventurous
 4. This shows another post with various options set (75% width, no draw title, Portrait aspect ratio)
 
 == Changelog ==
+
+= 0.9.4 =
+* Update to latest OSMD version
+* Fixes for user-facing loading spinner
+    * Will no longer take up whole Screen, just sheet music area
+* Fixes for re-render trigger
+    * Will only re-render when width of sheet music container is actually updated (fixes Chrome mobile issue on scroll)
 
 = 0.9.2 =
 * Initial Release

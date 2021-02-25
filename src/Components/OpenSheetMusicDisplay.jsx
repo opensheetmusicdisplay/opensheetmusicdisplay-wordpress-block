@@ -154,7 +154,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
     render() {
       let renderResult = (
         <div className="phonicscore-opensheetmusicdisplay">
-          <div className="phonicscore-opensheetmusicdisplay__loading-spinner hide" ref={this.loaderDivRef}></div>
+          <div className="phonicscore-opensheetmusicdisplay__full-loading-spinner hide" ref={this.loaderDivRef}></div>
           <div className="phonicscore-opensheetmusicdisplay__render-block" ref={this.osmdDivRef} />
         </div>
         );

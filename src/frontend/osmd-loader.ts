@@ -1,28 +1,61 @@
 import { OpenSheetMusicDisplay, OSMDOptions } from 'opensheetmusicdisplay';
 
+function FindOSMDCanvasElement(osmdRenderBlock: HTMLDivElement): ChildNode{
+    let renderCanvas: ChildNode = undefined;
+    for (const nextChild of osmdRenderBlock.getElementsByTagName('div')){
+        if(nextChild.id.startsWith('osmdCanvas')){
+            renderCanvas = nextChild;
+            break;
+        }
+    }
+    return renderCanvas;
+}
+
+function FindOrCreateMessageBlock(osmdRenderBlock: HTMLDivElement): HTMLDivElement{
+    let message: HTMLDivElement = osmdRenderBlock.getElementsByClassName('phonicscore-opensheetmusicdisplay__message-block')[0] as HTMLDivElement;
+    if(!message){
+        message = document.createElement('div');
+        message.classList.add('phonicscore-opensheetmusicdisplay__message-block');
+        const messageHeading: HTMLHeadingElement = document.createElement('h4');
+        message.appendChild(messageHeading);
+        const messageDetails: HTMLParagraphElement = document.createElement('p');
+        message.appendChild(messageDetails);
+        osmdRenderBlock.appendChild(message);
+    }
+
+    return message;
+}
+
+function DisplayError(osmdRenderBlock: HTMLDivElement, error: string, details: string){
+    const renderCanvas: ChildNode = FindOSMDCanvasElement(osmdRenderBlock);
+    const messageBlock: HTMLDivElement = FindOrCreateMessageBlock(osmdRenderBlock);
+    const messageHeading: HTMLHeadingElement = messageBlock.getElementsByTagName('h4')[0];
+    messageHeading.innerText = error;
+    const messageDetails: HTMLParagraphElement = messageBlock.getElementsByTagName('p')[0];
+    messageDetails.innerText = details;
+    if (renderCanvas) {
+        renderCanvas.remove();
+    } 
+}
+
+const MAX_RELOAD_ATTEMPTS: number = 5;
+
 const placeholders: HTMLCollectionOf<Element> = document.getElementsByClassName('phonicscore-opensheetmusicdisplay__placeholder');
-const loader = document.getElementsByClassName('phonicscore-opensheetmusicdisplay__loading-spinner')[0] as HTMLDivElement;
-let promiseList: Array<Promise<undefined>> = [];
-loader.classList.remove('hide');
 for(let i = 0; i < placeholders.length; i++){
-    let nextResolve: Function = undefined;
-    let nextPromise: Promise<undefined> = new Promise((resolve)=>{
-        nextResolve = resolve;
-    });
-    promiseList.push(nextPromise);
     const currentPlaceholder: HTMLDivElement = placeholders[i] as HTMLDivElement;
     const urlElement: HTMLInputElement = currentPlaceholder.getElementsByClassName('musicXmlUrl')[0] as HTMLInputElement;
     if(!urlElement || !urlElement.value){
-        nextResolve();
         continue;
     }
     const url: string = urlElement.value;
     urlElement.remove();
     const osmdRenderBlock: HTMLDivElement = currentPlaceholder.getElementsByClassName('phonicscore-opensheetmusicdisplay__render-block')[0] as HTMLDivElement;
     if(!osmdRenderBlock){
-        nextResolve();
         continue;
     }
+    
+    const loader = currentPlaceholder.getElementsByClassName('phonicscore-opensheetmusicdisplay__loading-spinner')[0] as HTMLDivElement;
+    loader.classList.remove('hide');
 
     const zoomElement: HTMLInputElement = currentPlaceholder.getElementsByClassName('zoom')[0] as HTMLInputElement;
     let zoom: number = 1.0;
@@ -102,46 +135,79 @@ for(let i = 0; i < placeholders.length; i++){
         optionsObject[attributeElementList[j].name] = value;
     }
     const currentOsmd: OpenSheetMusicDisplay = new OpenSheetMusicDisplay(osmdRenderBlock, optionsObject);
-    currentOsmd.load(url).then(() => {
-        currentOsmd.Zoom = zoom;
-        try {
-            currentOsmd.render();
-        } catch(err){
+
+    let loadAttempt: number = 0;
+    let loadFailed: boolean = false;
+
+    const loadBehavior = () => {
+        loadAttempt++;
+        currentOsmd.load(url).then(() => {
+            currentOsmd.Zoom = zoom;
+            try {
+                currentOsmd.render();
+            } catch(err){
+                console.warn(err);
+                DisplayError(osmdRenderBlock, 'Error loading sheet music file: ' + url, err);
+            } finally {
+                loader.classList.add('hide');
+                loadAttempt = 0;
+            }
+        },
+        function(err){
             console.warn(err);
-            osmdRenderBlock.innerHTML = '<h4>Error loading sheet music file: ' + url + '</h4><p>' + err + '</p>';
-        } finally {
-            nextResolve();
-        }
-    },
-    function(err){
-        console.warn(err);
-        osmdRenderBlock.innerHTML = '<h4>Error loading sheet music file: ' + url + '</h4><p>' + err + '</p>';
-        nextResolve();
-    });
+            if(loadAttempt < MAX_RELOAD_ATTEMPTS){
+                console.warn("Error loading. Attempting reload...");
+                loadBehavior();
+            } else {
+                DisplayError(osmdRenderBlock, 'Error loading sheet music file: ' + url, err);
+                loader.classList.add('hide');
+                loadAttempt = 0;
+                loadFailed = true;
+            }
+        });
+    };
+
+    loadBehavior();
+    let currentContainerWidth: number = osmdRenderBlock.offsetWidth;
 
     let timeoutObject: NodeJS.Timeout = undefined;
 
-    window.addEventListener('resize', (event) =>{
+    const resizeEvent: Function = () => {
+        if(loadFailed){
+            return;
+        }
+        const prevWidth: number = currentContainerWidth;
+        currentContainerWidth = osmdRenderBlock.offsetWidth;
+        if(currentContainerWidth === prevWidth){
+            return;
+        }
         loader.classList.remove('hide');
+        const renderCanvas: ChildNode = FindOSMDCanvasElement(osmdRenderBlock);
+        renderCanvas?.remove();
         clearTimeout(timeoutObject);
-        timeoutObject = setTimeout(() =>{
+        timeoutObject = setTimeout(() => {
             updateHeight();
             currentOsmd.Zoom = zoom;
             try {
                 currentOsmd.render();
             } catch(err){
                 console.warn(err);
-                osmdRenderBlock.innerHTML = '<h4>Error loading sheet music file: ' + url + '</h4><p>' + err + '</p>';
+                DisplayError(osmdRenderBlock, 'Error loading sheet music file: ' + url, err);
             } finally {
                 loader.classList.add('hide');
             }
         }, 500);
-    });
+    };
+    
+    if(ResizeObserver){
+        const resizeObserver: ResizeObserver = new ResizeObserver(entries => {
+            resizeEvent();       
+        });
+        resizeObserver.observe(osmdRenderBlock);
+    } else {
+        console.info("Browser doesn't support ResizeObserver, defaulting to window resize");
+        window.addEventListener('resize', (event) => {
+            resizeEvent();
+        });
+    }
 }
-Promise.all(promiseList).then((): void => {
-    loader.classList.add('hide');
-    promiseList = [];
-}).catch((): void => {
-    loader.classList.add('hide');
-    promiseList = [];
-});
