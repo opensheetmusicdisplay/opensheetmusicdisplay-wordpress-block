@@ -2,12 +2,13 @@
  * Internal Dependencies
  */
 import { OpenSheetMusicDisplay } from '../Components/OpenSheetMusicDisplay.jsx';
+import withAttributesQueue from '../QueueableAttributes/withAttributesQueue.jsx';
 
 /**
  * Wordpress Dependencies
  */
 import { InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
-import { Card, CardBody, SelectControl, CheckboxControl, Button, PanelBody, TextControl } from '@wordpress/components';
+import { withFilters, Card, CardBody, SelectControl, CheckboxControl, Button, PanelBody, TextControl } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 
@@ -33,6 +34,9 @@ import { useBlockProps } from '@wordpress/block-editor';
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import './editor.scss';
+
+const OpenSheetMusicDisplayWithFilters = withFilters( 'phonicscore/opensheetmusicdisplay/plugin' )( OpenSheetMusicDisplay );
+
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -41,7 +45,7 @@ import './editor.scss';
  *
  * @return {WPElement} Element to render.
  */
-const Edit = ({attributes, setAttributes}) => {
+const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, commitAttributes}) => {
 	const onSelectMedia = (media) => {
 		setAttributes({
 			musicXmlId: media.id,
@@ -49,57 +53,6 @@ const Edit = ({attributes, setAttributes}) => {
 			musicXmlTitle: media.title
 		});
 	}
-	const [width, setWidth] = useState(attributes.width);
-	const [zoom, setZoom] = useState(attributes.zoom);
-	const [drawTitle, setDrawTitle] = useState(attributes.drawTitle);
-	const [drawSubtitle, setDrawSubtitle] = useState(attributes.drawSubtitle);
-	const [drawComposer, setDrawComposer] = useState(attributes.drawComposer);
-	const [drawLyricist, setDrawLyricist] = useState(attributes.drawLyricist);
-	const [drawMetronomeMarks, setDrawMetronomeMarks] = useState(attributes.drawMetronomeMarks);
-	const [drawPartNames, setDrawPartNames] = useState(attributes.drawPartNames);
-	const [drawPartAbbreviations, setDrawPartAbbreviations] = useState(attributes.drawPartAbbreviations);
-	const [drawMeasureNumbers, setDrawMeasureNumbers] = useState(attributes.drawMeasureNumbers);
-	const [drawMeasureNumbersOnlyAtSystemStart, setDrawMeasureNumbersOnlyAtSystemStart] = useState(attributes.drawMeasureNumbersOnlyAtSystemStart);
-	const [drawTimeSignatures, setDrawTimeSignatures] = useState(attributes.drawTimeSignatures);
-
-	//TODO: Need this model to be extensible
-	const updateAttributes = () => {
-		setAttributes({
-			width: width,
-			zoom: zoom,
-			drawTitle: drawTitle,
-			drawSubtitle: drawSubtitle,
-			drawComposer: drawComposer,
-			drawLyricist: drawLyricist,
-			drawMetronomeMarks: drawMetronomeMarks,
-			drawPartNames: drawPartNames,
-			drawPartAbbreviations: drawPartAbbreviations,
-			drawMeasureNumbers: drawMeasureNumbers,
-			drawMeasureNumbersOnlyAtSystemStart: drawMeasureNumbersOnlyAtSystemStart,
-			drawTimeSignatures: drawTimeSignatures
-		});
-	};
-
-	let [autoRenderTimeoutObject, setAutoRenderTimeoutObject] = useState(undefined);
-	//TODO: Would be good to make this available to plugins from here
-	const updateState = (attributeName, newValue, stateCallback, delay = 0 ) => {
-		stateCallback(newValue);
-		const newAttObject = {};
-		newAttObject[attributeName] = newValue;
-		if(delay > 0){
-			clearTimeout(autoRenderTimeoutObject);
-			const timeoutReturnObject = setTimeout(function(){
-				if(attributes.autoRender){
-					setAttributes(newAttObject);
-				}
-			}, delay);
-			setAutoRenderTimeoutObject(timeoutReturnObject);
-		} else {
-			if(attributes.autoRender){
-				setAttributes(newAttObject);
-			}
-		}
-	};
 
 	let aspectRatioStringInit = '';
 	if(attributes.aspectRatio === 0.0){
@@ -166,19 +119,19 @@ const Edit = ({attributes, setAttributes}) => {
 					<CardBody>
 						<CheckboxControl
 							label={__('Automatically Rerender on Change')}
-							checked={ attributes.autoRender }
+							checked={ !attributes.queueAttributes }
 							onChange={ (val) => {
-								setAttributes( {autoRender: val } );
+								setAttributes( {queueAttributes: !val } );
 								if(val){
-									updateAttributes();
+									commitAttributes();
 								}
 							} }
 						>
 						</CheckboxControl>
 							<Button
-								disabled={attributes.autoRender}
+								disabled={!attributes.queueAttributes}
 								isPrimary= {true}
-								onClick={() => updateAttributes()}
+								onClick={() => commitAttributes()}
 							>
 								{__('Rerender')}
 							</Button>
@@ -223,8 +176,8 @@ const Edit = ({attributes, setAttributes}) => {
 								min={10.0}
 								max={100.0}
 								step={1}
-								onChange={ (val) => updateState('width', parseInt(val, 10), setWidth, 500) }
-								value={ width }
+								onChange={ (val) => queueAttribute('width', parseInt(val, 10), 500) }
+								value={ queueableAttributes.width.value }
 							>
 							</TextControl>
 							<SelectControl
@@ -248,8 +201,8 @@ const Edit = ({attributes, setAttributes}) => {
 								label={__('Zoom (%)')}
 								type='number'
 								min={10}
-								onChange={ (val) => updateState('zoom', parseInt(val, 10) / 100.0, setZoom, 500)}
-								value={ Math.floor(zoom * 100) }
+								onChange={ (val) => queueAttribute('zoom', parseInt(val, 10) / 100, 500)}
+								value={ Math.floor( queueableAttributes.zoom.value * 100) }
 							>
 							</TextControl>
 					</PanelBody>
@@ -259,69 +212,69 @@ const Edit = ({attributes, setAttributes}) => {
 						>
 							<CheckboxControl
 								label={__('Draw Title')}
-								checked={ drawTitle }
-								onChange={(val) => updateState('drawTitle', val, setDrawTitle, 0)}
+								checked={ queueableAttributes.drawTitle.value }
+								onChange={(val) => queueAttribute('drawTitle', val, 0)}
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label={__('Draw Subtitle')}
-								checked={ drawSubtitle }
-								onChange={(val) => updateState('drawSubtitle', val, setDrawSubtitle, 0)}
+								checked={ queueableAttributes.drawSubtitle.value }
+								onChange={(val) => queueAttribute('drawSubtitle', val, 0)}
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label={__('Draw Composer')}
-								checked={ drawComposer }
-								onChange={ (val) => updateState('drawComposer', val, setDrawComposer, 0) }
+								checked={ queueableAttributes.drawComposer.value }
+								onChange={ (val) => queueAttribute('drawComposer', val, 0) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label={__('Draw Lyricist')}
-								checked={ drawLyricist }
-								onChange={ (val) => updateState('drawLyricist', val, setDrawLyricist, 0) }
+								checked={ queueableAttributes.drawLyricist.value }
+								onChange={ (val) => queueAttribute('drawLyricist', val, 0) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label={__('Draw Metronome Marks')}
-								checked={ drawMetronomeMarks }
-								onChange={ (val) => updateState('drawMetronomeMarks', val, setDrawMetronomeMarks, 0) }
+								checked={ queueableAttributes.drawMetronomeMarks.value }
+								onChange={ (val) => queueAttribute('drawMetronomeMarks', val, 0) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label={__('Draw Part Names')}
-								checked={ drawPartNames }
-								onChange={ (val) => updateState('drawPartNames', val, setDrawPartNames, 0) }
+								checked={ queueableAttributes.drawPartNames.value }
+								onChange={ (val) => queueAttribute('drawPartNames', val, 0) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label={__('Draw Part Abbreviations')}
-								checked={ drawPartAbbreviations }
-								onChange={ (val) => updateState('drawPartAbbreviations', val, setDrawPartAbbreviations, 0) }
+								checked={ queueableAttributes.drawPartAbbreviations.value }
+								onChange={ (val) => queueAttribute('drawPartAbbreviations', val, 0) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label={__('Draw Measure Numbers')}
-								checked={ drawMeasureNumbers }
-								onChange={ (val) => updateState('drawMeasureNumbers', val, setDrawMeasureNumbers, 0) }
+								checked={ queueableAttributes.drawMeasureNumbers.value }
+								onChange={ (val) => queueAttribute('drawMeasureNumbers', val, 0) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label={__('Draw Measure Numbers Only at System Start')}
-								checked={ drawMeasureNumbersOnlyAtSystemStart }
-								onChange={ (val) => updateState('drawMeasureNumbersOnlyAtSystemStart', val, setDrawMeasureNumbersOnlyAtSystemStart, 0) }
+								checked={ queueableAttributes.drawMeasureNumbersOnlyAtSystemStart.value }
+								onChange={ (val) => queueAttribute('drawMeasureNumbersOnlyAtSystemStart', val, 0) }
 							>
 							</CheckboxControl>
 							<CheckboxControl
 								label={__('Draw Time Signatures')}
-								checked={ drawTimeSignatures }
-								onChange={ (val) => updateState('drawTimeSignatures', val, setDrawTimeSignatures, 0) }
+								checked={ queueableAttributes.drawTimeSignatures.value }
+								onChange={ (val) =>  queueAttribute('drawTimeSignatures', val, 0) }
 							>
 							</CheckboxControl>
 						</PanelBody>
 				</InspectorControls>
 			}
 			{	attributes.musicXmlId > -1 ?
-				<OpenSheetMusicDisplay 
+				<OpenSheetMusicDisplayWithFilters
 					file={ attributes.musicXmlUrl }
 					width={ attributes.width }
 					zoom= { attributes.zoom }
@@ -344,7 +297,7 @@ const Edit = ({attributes, setAttributes}) => {
 	);
 }
 
-export default withSelect( (select, props) => {
+export default withAttributesQueue(withSelect( (select, props) => {
 	const { getMedia } = select('core');
 	return { media: props.attributes.musicXmlId > -1 ? getMedia(props.attributes.musicXmlId) : undefined };
-} )(Edit);
+} )(Edit));

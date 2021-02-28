@@ -27,12 +27,14 @@ import './block/style.scss';
 import Edit from './block/edit';
 import save from './block/save';
 import icons from './block/icons';
+
+import OpenSheetMusicDisplayEdit from './Components/OpenSheetMusicDisplayEdit.jsx';
 /**
  * Every block starts by registering a new block type definition.
  *
  * @see https://developer.wordpress.org/block-editor/developers/block-api/#registering-a-block
  */
-
+console.log("factory would init here");
 //wrapper to ensure filters that are registered elsewhere (extensions/plugins to this block) are fired
 wp.domReady(() => {
 
@@ -77,6 +79,8 @@ registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 		html: false,
 	},
 
+	keywords: [__('musicxml'), __('sheet music'), __('osmd'), __('opensheetmusicdisplay')],
+
 	/**
 	 * @see ./edit.js
 	 */
@@ -90,11 +94,13 @@ registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 	attributes: {
 		alignRests: {
 			type: 'number',
-			default: 0
+			default: 0,
+			queueable: true
 		},
 		autoBeam: {
 			type: 'boolean',
-			default: false
+			default: false,
+			queueable: true
 		},
 		autoBeamOptions: {
 			type: 'object',
@@ -102,7 +108,8 @@ registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 				beam_middle_rests_only: false,
 				beam_rests: false,
 				maintain_stem_directions: false
-			}
+			},
+			queueable: true
 		},
 		autoResize: {
 			type: 'boolean',
@@ -110,55 +117,68 @@ registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 		},
 		backend: {
 			type: 'string',
-			default: 'svg'
+			default: 'svg',
+			queueable: true
 		},
 		coloringMode: {
 			type: 'number',
-			default: undefined
+			default: undefined,
+			queueable: true
 		},
 		coloringSetCustom: {
 			type: 'array',
-			default: undefined
+			default: undefined,
+			queueable: true
 		},
 		coloringEnabled: {
 			type: 'boolean',
-			default: true
+			default: true,
+			queueable: true
 		},
 		colorStemsLikeNoteheads: {
 			type: 'boolean',
-			default: false
+			default: false,
+			queueable: true
 		},
 		defaultColorNotehead: {
 			type: 'string',
-			default: undefined
+			default: undefined,
+			queueable: true
 		},
 		defaultColorStem: {
 			type: 'string',
-			default: undefined
+			default: undefined,
+			queueable: true
 		},
 		defaultColorRest: {
 			type: 'string',
-			default: undefined
+			default: undefined,
+			queueable: true
 		},
 		defaultColorLabel: {
 			type: 'string',
-			default: undefined
+			default: undefined,
+			queueable: true
 		},
 		defaultColorTitle: {
 			type: 'string',
-			default: undefined
+			default: undefined,
+			queueable: true
 		},
 		defaultFontFamily: {
 			type: 'string',
-			default: undefined
+			default: undefined,
+			queueable: true
 		},
 		defaultFontStyle: {
 			type: 'number',
-			default: 0
+			default: 0,
+			queueable: true
 		},
 		disableCursor: {
 			type: 'boolean',
-			default: true
+			default: true,
+			queueable: true
 		},
 		followCursor: {
 			type: 'boolean',
@@ -166,163 +186,203 @@ registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 		},
 		drawingParameters: {
 			type: 'string',
-			default: undefined
+			default: undefined,
+			queueable: true
 		},
 		drawCredits: {
 			type: 'boolean',
-			default: true
+			default: true,
+			queueable: true
 		},
 		drawTitle: {
 			type: 'boolean',
-			default: true
+			default: true,
+			queueable: true
 		},
 		drawSubtitle: {
 			type: 'boolean',
-			default: true
+			default: true,
+			queueable: true
 		},
 		drawComposer: {
 			type: 'boolean',
-			default: true
+			default: true,
+			queueable: true
 		},
 		drawLyricist: {
 			type: 'boolean',
-			default: true
+			default: true,
+			queueable: true
 		},
 		drawMetronomeMarks: {
 			type: 'boolean',
-			default: true
+			default: true,
+			queueable: true
 		},
 		drawPartNames: {
 			type: 'boolean',
-			default: true
+			default: true,
+			queueable: true
 		},
 		drawPartAbbreviations: {
 			type: 'boolean',
-			default: true
+			default: true,
+			queueable: true
 		},
 		drawMeasureNumbers: {
 			type: 'boolean',
-			default: true
+			default: true,
+			queueable: true
 		},
 		drawMeasureNumbersOnlyAtSystemStart: {
 			type: 'boolean',
-			default: false
+			default: false,
+			queueable: true
 		},
 		drawTimeSignatures: {
 			type: 'boolean',
-			default: true
+			default: true,
+			queueable: true
 		},
 		measureNumberInterval: {
 			type: 'number',
-			default: 2
+			default: 2,
+			queueable: true
 		},
 		useXMLMeasureNumbers: {
 			type: 'boolean',
-			default: true
+			default: true,
+			queueable: true
 		},
 		drawFingerings: {
 			type: 'boolean',
-			default: true
+			default: true,
+			queueable: true
 		},
 		fingeringPosition: {
 			type: 'string',
-			default: undefined
+			default: undefined,
+			queueable: true
 		},
 		fingeringInsideStafflines: {
 			type: 'boolean',
-			default: false
+			default: false,
+			queueable: true
 		},
 		drawLyrics: {
 			type: 'boolean',
-			default: true
+			default: true,
+			queueable: true
 		},
 		drawSlurs: {
 			type: 'boolean',
-			default: true
+			default: true,
+			queueable: true
 		},
 		drawUpToMeasureNumber: {
 			type: 'number',
-			default: undefined
+			default: undefined,
+			queueable: true
 		},
 		drawUpToSystemNumber: {
 			type: 'number',
-			default: undefined
+			default: undefined,
+			queueable: true
 		},
 		drawUpToPageNumber: {
 			type: 'number',
-			default: undefined
+			default: undefined,
+			queueable: true
 		},
 		drawFromMeasureNumber: {
 			type: 'number',
-			default: undefined
+			default: undefined,
+			queueable: true
 		},
 		fillEmptyMeasuresWithWholeRest: {
 			type: 'number',
-			default: 0
+			default: 0,
+			queueable: true
 		},
 		setWantedStemDirectionByXml: {
 			type: 'boolean',
-			default: true
+			default: true,
+			queueable: true
 		},
 		tupletsRatioed: {
 			type: 'boolean',
-			default: false
+			default: false,
+			queueable: true
 		},
 		tupletsBracketed: {
 			type: 'boolean',
-			default: false
+			default: false,
+			queueable: true
 		},
 		tripletsBracketed: {
 			type: 'boolean',
-			default: false
+			default: false,
+			queueable: true
 		},
 		pageFormat: {
 			type: 'string',
-			default: undefined
+			default: undefined,
+			queueable: true
 		},
 		pageBackgroundColor: {
 			type: 'string',
-			default: undefined
+			default: undefined,
+			queueable: true
 		},
 		renderSingleHorizontalStaffline: {
 			type: 'boolean',
-			default: false
+			default: false,
+			queueable: true
 		},
 		newSystemFromXML: {
 			type: 'boolean',
-			default: false
+			default: false,
+			queueable: true
 		},
 		newPageFromXML: {
 			type: 'boolean',
-			default: false
+			default: false,
+			queueable: true
 		},
 		percussionOneLineCutoff: {
 			type: 'number',
-			default: 4
+			default: 4,
+			queueable: true
 		},
 		percussionForceVoicesOneLineCutoff: {
 			type: 'number',
-			default: 3
+			default: 3,
+			queueable: true
 		},
 		spacingFactorSoftmax: {
 			type: 'number',
-			default: 5
+			default: 5,
+			queueable: true
 		},
 		spacingBetweenTextLines: {
 			type: 'number',
-			default: undefined
+			default: undefined,
+			queueable: true
 		},
 		stretchLastSystemLine: {
 			type: 'boolean',
-			default: false
+			default: false,
+			queueable: true
 		},
 		autoGenerateMutipleRestMeasuresFromRestMeasures: {
 			type: 'boolean',
-			default: true
+			default: true,
+			queueable: true
 		},
 		width: {
 			type: 'number',
-			default: 100.0
+			default: 100.0,
+			queueable: true
 		},
 		aspectRatio: {
 			type: 'number',
@@ -330,7 +390,8 @@ registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 		},
 		zoom: {
 			type: 'number',
-			default: 1.0
+			default: 1.0,
+			queueable: true
 		},
 		musicXmlId: {
 			type: 'number',
@@ -344,7 +405,7 @@ registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 			type: 'string',
 			default: ''
 		},
-		autoRender: {
+		queueAttributes: {
 			type: 'boolean',
 			default: false
 		},

@@ -21,6 +21,7 @@
 		"@wordpress/blocks": "^6.25.2",
 		"@wordpress/i18n": "^3.17.0",
 		"@wordpress/hooks": "^2.11.1",
+		"@wordpress/element": "^2.11.1",
 		"opensheetmusicdisplay": "file:../opensheetmusicdisplay"
 	},
 	"devDependencies": {
@@ -30,6 +31,10 @@
 		"typescript": "^4.1.3",
 		"@types/node": "^14.14.22",
 		"copy-webpack-plugin": "^6.4.0",
-		"@types/resize-observer-browser": "^0.1.5"
+		"@types/resize-observer-browser": "^0.1.5",
+		"babel-loader": "^8.2.2",
+		"@babel/core": "^7.12.16",
+		"@babel/preset-env": "^7.12.16",
+		"@babel/preset-react": "^7.12.13"
 	}
 }

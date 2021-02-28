@@ -182,6 +182,7 @@ If you are a Wordpress/javascript developer and are feeling bold and adventurous
     * Will no longer take up whole Screen, just sheet music area
 * Fixes for re-render trigger
     * Will only re-render when width of sheet music container is actually updated (fixes Chrome mobile issue on scroll)
+* Attempts to reload sheet music 5 times before showing user error
 
 = 0.9.2 =
 * Initial Release

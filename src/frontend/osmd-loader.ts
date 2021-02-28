@@ -1,4 +1,8 @@
 import { OpenSheetMusicDisplay, OSMDOptions } from 'opensheetmusicdisplay';
+import {createHooks } from "@wordpress/hooks";
+import { _Hooks } from '@wordpress/hooks/build-types/createHooks';
+
+var hooksApi: _Hooks = createHooks();
 
 function FindOSMDCanvasElement(osmdRenderBlock: HTMLDivElement): ChildNode{
     let renderCanvas: ChildNode = undefined;
@@ -27,6 +31,9 @@ function FindOrCreateMessageBlock(osmdRenderBlock: HTMLDivElement): HTMLDivEleme
 }
 
 function DisplayError(osmdRenderBlock: HTMLDivElement, error: string, details: string){
+    //TODO: Use filters for plugin callbacks instead of weirdo framework i use
+    hooksApi.applyFilters('phonicscore/opensheetmusicdisplay/display-error', error, details);
+
     const renderCanvas: ChildNode = FindOSMDCanvasElement(osmdRenderBlock);
     const messageBlock: HTMLDivElement = FindOrCreateMessageBlock(osmdRenderBlock);
     const messageHeading: HTMLHeadingElement = messageBlock.getElementsByTagName('h4')[0];
@@ -35,7 +42,7 @@ function DisplayError(osmdRenderBlock: HTMLDivElement, error: string, details: s
     messageDetails.innerText = details;
     if (renderCanvas) {
         renderCanvas.remove();
-    } 
+    }
 }
 
 const MAX_RELOAD_ATTEMPTS: number = 5;

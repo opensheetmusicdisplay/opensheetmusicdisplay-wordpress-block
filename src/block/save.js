@@ -29,11 +29,15 @@ export default function save({attributes}) {
 		'width',
 		'aspectRatio',
 		'autoRender',
-		'plugins'
+		'plugins',
+		'renderQueue'
 	];
 	const items = [];
 	if(typeof attributes === 'object'){
 		for(let [key, value] of Object.entries(attributes)){
+			if(nonSerializedAttributes.contains(key)){
+				continue;
+			}
 			let type = typeof value;
 			if(type === 'boolean'){
 				if(value){
@@ -49,15 +53,12 @@ export default function save({attributes}) {
 					value = '{}';
 				}
 			}
-			if(!nonSerializedAttributes.contains(key)){
-				items.push(<input type="hidden" attributeType={type} key={key} name={key} value={value} />);
-			}
+			items.push(<input type="hidden" attributeType={type} key={key} name={key} value={value} />);
 		}
 	}
 	return (
 		<div { ...useBlockProps.save() }>
 			<div className="phonicscore-opensheetmusicdisplay__placeholder">
-				<div></div>
 				<div className="phonicscore-opensheetmusicdisplay__loading-spinner hide" />
 				<div className="phonicscore-opensheetmusicdisplay__render-block" style={{width: `${attributes.width.toString()}%`}}/>
 				{items}

@@ -4,11 +4,16 @@ const CopyPlugin = require("copy-webpack-plugin");
 module.exports = [
 {
   externals: {
+    '@wordpress/block-editor': 'wp.blockEditor',
+    '@wordpress/components': 'wp.components',
+    '@wordpress/compose': 'wp.compose',
+    '@wordpress/i18n': 'wp.i18n',
     opensheetmusicdisplay: 'opensheetmusicdisplay',
     externalsType: 'umd'
   },
   entry: {
             'osmd-loader': './src/frontend/osmd-loader.ts',
+            'queueable_attributes': './src/QueueableAttributes/registerQueueableAttributes.jsx',
             'export': './src/export.js',
 
         },
@@ -20,7 +25,7 @@ module.exports = [
   },
   resolve: {
     // Add '.ts' and '.tsx' as a resolvable extension.
-    extensions: ['.ts', '.tsx', '.js']
+    extensions: ['.ts', '.tsx', '.js', '.jsx']
     },
     module: {
         rules: [
@@ -30,11 +35,21 @@ module.exports = [
                 loader: 'ts-loader',
                 // loader: 'awesome-typescript-loader',
                 exclude: /(node_modules|bower_components)/
+            },
+            {
+              test: /\.m?jsx$/,
+              exclude: /(node_modules|bower_components)/,
+              use: {
+                loader: 'babel-loader',
+                options: {
+                  presets: ['@babel/preset-env', '@babel/preset-react']
+                }
+              }
             }
         ]
     },
   optimization: {
-    minimize: true
+    minimize: false
   },
   plugins: [
     new CopyPlugin({

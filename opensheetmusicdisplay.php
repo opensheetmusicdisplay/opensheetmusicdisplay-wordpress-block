@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     OpenSheetMusicDisplay
  * Description:     Block to render MusicXML in the browser as sheet music using OSMD.
- * Version:         0.9.2
+ * Version:         0.9.4
  * Author:          opensheetmusicdisplay, fredmeister77
  * License:         GPL-2.0-or-later
  * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
@@ -31,6 +31,7 @@ function phonicscore_opensheetmusicdisplay_block_init() {
 	//Use default dependencies, add OSMD as one
 	if(array_key_exists('dependencies', $script_asset) && is_array($script_asset['dependencies'])){
 		$script_asset['dependencies'][] = 'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist';
+		$script_asset['dependencies'][] = 'fredmeister77_queueable_attributes_dist';
 	}
 	wp_register_script(
 		'phonicscore_opensheetmusicdisplay_block_editor',
@@ -62,17 +63,30 @@ function phonicscore_opensheetmusicdisplay_block_init() {
 			'editor_script' => 'phonicscore_opensheetmusicdisplay_block_editor',
 			'editor_style'  => 'phonicscore_opensheetmusicdisplay_block_editor',
 			'style'         => 'phonicscore_opensheetmusicdisplay_block',
+			'render_callback' => 'phonicscore_opensheetmusicdisplay_render_callback'
 		)
 	);
 }
 
+function phonicscore_opensheetmusicdisplay_render_callback($block_attributes, $content){
+	return sprintf(
+	'<div className="phonicscore-opensheetmusicdisplay__placeholder">
+	<div className="phonicscore-opensheetmusicdisplay__loading-spinner hide" />
+	<div className="phonicscore-opensheetmusicdisplay__render-block" style={{width: `${attributes.width.toString()}%`}}/>
+	{items}
+	<input type="hidden" className="musicXmlUrl" name="musicXmlUrl" value={attributes.musicXmlUrl} />
+	<input type="hidden" className="zoom" name="zoom" value={attributes.zoom} />
+	<input type="hidden" className="aspectRatio" name="aspectRatio" value={attributes.aspectRatio} />
+	</div>'
+);
+}
 
 function phonicscore_opensheetmusicdisplay_enqueue_scripts(){
 	wp_enqueue_script(
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist',
 		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay.min.js', __FILE__ ) ),
 		array( ),
-		'0.9.2',
+		'0.9.4',
 		true
 	);
 	wp_enqueue_script(
@@ -83,17 +97,27 @@ function phonicscore_opensheetmusicdisplay_enqueue_scripts(){
 		true
 	);
 }
-function phonicscore_opensheetmusicdisplay_enqueue_admin_scripts(){
+function phonicscore_opensheetmusicdisplay_enqueue_admin_scripts($hook){
+    if ( 'post.php' != $hook ) {
+        return;
+    }
 	wp_enqueue_script(
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist',
 		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay.min.js', __FILE__ ) ),
 		array( ),
-		'0.9.2',
+		'0.9.4',
 		true
 	);
 	wp_enqueue_script(
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_exports',
 		esc_url( plugins_url( 'build/osmd/export.min.js', __FILE__ ) ),
+		array( ),
+		'0.1.0',
+		true
+	);
+	wp_enqueue_script(
+		'fredmeister77_queueable_attributes_dist',
+		esc_url( plugins_url( 'build/osmd/queueable_attributes.min.js', __FILE__ ) ),
 		array( ),
 		'0.1.0',
 		true
