@@ -58,6 +58,266 @@ function phonicscore_opensheetmusicdisplay_block_init() {
 		filemtime( "$dir/$style_css" )
 	);
 
+	//Todo: filter
+	$attributes = array(
+		'alignRests' => [
+			'type' => 'number',
+			'default' => 0
+		],
+		'autoBeam' => [
+			'type' => 'boolean',
+			'default' => false
+		],
+		'autoBeamOptions' => [
+			'type' => 'object',
+			'default' => [
+				'beam_middle_rests_only' => false,
+				'beam_rests' => false,
+				'maintain_stem_directions' => false
+			]
+		],
+		'autoResize' => [
+			'type' => 'boolean',
+			'default' => true
+		],
+		'backend' => [
+			'type' => 'string',
+			'default' => 'svg'
+		],
+		'coloringMode' => [
+			'type' => 'number',
+			'default' => null
+		],
+		'coloringSetCustom' => [
+			'type' => 'array',
+			'default' => null
+		],
+		'coloringEnabled' => [
+			'type' => 'boolean',
+			'default' => true
+		],
+		'colorStemsLikeNoteheads' => [
+			'type' => 'boolean',
+			'default' => false
+		],
+		'defaultColorNotehead' => [
+			'type' => 'string',
+			'default' => null
+		],
+		'defaultColorStem' => [
+			'type' => 'string',
+			'default' => null
+		],
+		'defaultColorRest' => [
+			'type' => 'string',
+			'default' => null
+		],
+		'defaultColorLabel' => [
+			'type' => 'string',
+			'default' => null
+		],
+		'defaultColorTitle' => [
+			'type' => 'string',
+			'default' => null
+		],
+		'defaultFontFamily' => [
+			'type' => 'string',
+			'default' => null
+		],
+		'defaultFontStyle' => [
+			'type' => 'number',
+			'default' => 0
+		],
+		'disableCursor' => [
+			'type' => 'boolean',
+			'default' => true
+		],
+		'followCursor' => [
+			'type' => 'boolean',
+			'default' => false
+		],
+		'drawingParameters' => [
+			'type' => 'string',
+			'default' => null
+		],
+		'drawCredits' => [
+			'type' => 'boolean',
+			'default' => true
+		],
+		'drawTitle' => [
+			'type' => 'boolean',
+			'default' => true
+		],
+		'drawSubtitle' => [
+			'type' => 'boolean',
+			'default' => true
+		],
+		'drawComposer' => [
+			'type' => 'boolean',
+			'default' => true
+		],
+		'drawLyricist' => [
+			'type' => 'boolean',
+			'default' => true
+		],
+		'drawMetronomeMarks' => [
+			'type' => 'boolean',
+			'default' => true
+		],
+		'drawPartNames' => [
+			'type' => 'boolean',
+			'default' => true
+		],
+		'drawPartAbbreviations' => [
+			'type' => 'boolean',
+			'default' => true
+		],
+		'drawMeasureNumbers' => [
+			'type' => 'boolean',
+			'default' => true
+		],
+		'drawMeasureNumbersOnlyAtSystemStart' => [
+			'type' => 'boolean',
+			'default' => false
+		],
+		'drawTimeSignatures' => [
+			'type' => 'boolean',
+			'default' => true
+		],
+		'measureNumberInterval' => [
+			'type' => 'number',
+			'default' => 2
+		],
+		'useXMLMeasureNumbers' => [
+			'type' => 'boolean',
+			'default' => true
+		],
+		'drawFingerings' => [
+			'type' => 'boolean',
+			'default' => true
+		],
+		'fingeringPosition' => [
+			'type' => 'string',
+			'default' => null
+		],
+		'fingeringInsideStafflines' => [
+			'type' => 'boolean',
+			'default' => false
+		],
+		'drawLyrics' => [
+			'type' => 'boolean',
+			'default' => true
+		],
+		'drawSlurs' => [
+			'type' => 'boolean',
+			'default' => true
+		],
+		'drawUpToMeasureNumber' => [
+			'type' => 'number',
+			'default' => null
+		],
+		'drawUpToSystemNumber' => [
+			'type' => 'number',
+			'default' => null
+		],
+		'drawUpToPageNumber' => [
+			'type' => 'number',
+			'default' => null
+		],
+		'drawFromMeasureNumber' => [
+			'type' => 'number',
+			'default' => null
+		],
+		'fillEmptyMeasuresWithWholeRest' => [
+			'type' => 'number',
+			'default' => 0
+		],
+		'setWantedStemDirectionByXml' => [
+			'type' => 'boolean',
+			'default' => true
+		],
+		'tupletsRatioed' => [
+			'type' => 'boolean',
+			'default' => false
+		],
+		'tupletsBracketed' => [
+			'type' => 'boolean',
+			'default' => false
+		],
+		'tripletsBracketed' => [
+			'type' => 'boolean',
+			'default' => false
+		],
+		'pageFormat' => [
+			'type' => 'string',
+			'default' => null
+		],
+		'pageBackgroundColor' => [
+			'type' => 'string',
+			'default' => null
+		],
+		'renderSingleHorizontalStaffline' => [
+			'type' => 'boolean',
+			'default' => false
+		],
+		'newSystemFromXML' => [
+			'type' => 'boolean',
+			'default' => false
+		],
+		'newPageFromXML' => [
+			'type' => 'boolean',
+			'default' => false
+		],
+		'percussionOneLineCutoff' => [
+			'type' => 'number',
+			'default' => 4
+		],
+		'percussionForceVoicesOneLineCutoff' => [
+			'type' => 'number',
+			'default' => 3
+		],
+		'spacingFactorSoftmax' => [
+			'type' => 'number',
+			'default' => 5
+		],
+		'spacingBetweenTextLines' => [
+			'type' => 'number',
+			'default' => null
+		],
+		'stretchLastSystemLine' => [
+			'type' => 'boolean',
+			'default' => false
+		],
+		'autoGenerateMutipleRestMeasuresFromRestMeasures' => [
+			'type' => 'boolean',
+			'default' => true
+		],
+		'width' => [
+			'type' => 'number',
+			'default' => 100.0
+		],
+		'aspectRatio' => [
+			'type' => 'number',
+			'default' => 0.0
+		],
+		'zoom' => [
+			'type' => 'number',
+			'default' => 1.0
+		],
+		'musicXmlId' => [
+			'type' => 'number',
+			'default' => -1
+		],
+		'musicXmlUrl' => [
+			'type' => 'string',
+			'default' => ''
+		],
+		'musicXmlTitle' => [
+			'type' => 'string',
+			'default' => ''
+		]
+	);
+
 	register_block_type(
 		'phonicscore/opensheetmusicdisplay',
 		array(
@@ -65,281 +325,21 @@ function phonicscore_opensheetmusicdisplay_block_init() {
 			'editor_style'  => 'phonicscore_opensheetmusicdisplay_block_editor',
 			'style'         => 'phonicscore_opensheetmusicdisplay_block',
 			'render_callback' => 'phonicscore_opensheetmusicdisplay_render_callback',
-			'attributes' => [
-				'alignRests' => [
-					'type' => 'number',
-					'default' => 0
-				],
-				'autoBeam' => [
-					'type' => 'boolean',
-					'default' => false
-				],
-				'autoBeamOptions' => [
-					'type' => 'object',
-					'default' => [
-						'beam_middle_rests_only' => false,
-						'beam_rests' => false,
-						'maintain_stem_directions' => false
-					]
-				],
-				'autoResize' => [
-					'type' => 'boolean',
-					'default' => true
-				],
-				'backend' => [
-					'type' => 'string',
-					'default' => 'svg'
-				],
-				'coloringMode' => [
-					'type' => 'number',
-					'default' => null
-				],
-				'coloringSetCustom' => [
-					'type' => 'array',
-					'default' => null
-				],
-				'coloringEnabled' => [
-					'type' => 'boolean',
-					'default' => true
-				],
-				'colorStemsLikeNoteheads' => [
-					'type' => 'boolean',
-					'default' => false
-				],
-				'defaultColorNotehead' => [
-					'type' => 'string',
-					'default' => null
-				],
-				'defaultColorStem' => [
-					'type' => 'string',
-					'default' => null
-				],
-				'defaultColorRest' => [
-					'type' => 'string',
-					'default' => null
-				],
-				'defaultColorLabel' => [
-					'type' => 'string',
-					'default' => null
-				],
-				'defaultColorTitle' => [
-					'type' => 'string',
-					'default' => null
-				],
-				'defaultFontFamily' => [
-					'type' => 'string',
-					'default' => null
-				],
-				'defaultFontStyle' => [
-					'type' => 'number',
-					'default' => 0
-				],
-				'disableCursor' => [
-					'type' => 'boolean',
-					'default' => true
-				],
-				'followCursor' => [
-					'type' => 'boolean',
-					'default' => false
-				],
-				'drawingParameters' => [
-					'type' => 'string',
-					'default' => null
-				],
-				'drawCredits' => [
-					'type' => 'boolean',
-					'default' => true
-				],
-				'drawTitle' => [
-					'type' => 'boolean',
-					'default' => true
-				],
-				'drawSubtitle' => [
-					'type' => 'boolean',
-					'default' => true
-				],
-				'drawComposer' => [
-					'type' => 'boolean',
-					'default' => true
-				],
-				'drawLyricist' => [
-					'type' => 'boolean',
-					'default' => true
-				],
-				'drawMetronomeMarks' => [
-					'type' => 'boolean',
-					'default' => true
-				],
-				'drawPartNames' => [
-					'type' => 'boolean',
-					'default' => true
-				],
-				'drawPartAbbreviations' => [
-					'type' => 'boolean',
-					'default' => true
-				],
-				'drawMeasureNumbers' => [
-					'type' => 'boolean',
-					'default' => true
-				],
-				'drawMeasureNumbersOnlyAtSystemStart' => [
-					'type' => 'boolean',
-					'default' => false
-				],
-				'drawTimeSignatures' => [
-					'type' => 'boolean',
-					'default' => true
-				],
-				'measureNumberInterval' => [
-					'type' => 'number',
-					'default' => 2
-				],
-				'useXMLMeasureNumbers' => [
-					'type' => 'boolean',
-					'default' => true
-				],
-				'drawFingerings' => [
-					'type' => 'boolean',
-					'default' => true
-				],
-				'fingeringPosition' => [
-					'type' => 'string',
-					'default' => null
-				],
-				'fingeringInsideStafflines' => [
-					'type' => 'boolean',
-					'default' => false
-				],
-				'drawLyrics' => [
-					'type' => 'boolean',
-					'default' => true
-				],
-				'drawSlurs' => [
-					'type' => 'boolean',
-					'default' => true
-				],
-				'drawUpToMeasureNumber' => [
-					'type' => 'number',
-					'default' => null
-				],
-				'drawUpToSystemNumber' => [
-					'type' => 'number',
-					'default' => null
-				],
-				'drawUpToPageNumber' => [
-					'type' => 'number',
-					'default' => null
-				],
-				'drawFromMeasureNumber' => [
-					'type' => 'number',
-					'default' => null
-				],
-				'fillEmptyMeasuresWithWholeRest' => [
-					'type' => 'number',
-					'default' => 0
-				],
-				'setWantedStemDirectionByXml' => [
-					'type' => 'boolean',
-					'default' => true
-				],
-				'tupletsRatioed' => [
-					'type' => 'boolean',
-					'default' => false
-				],
-				'tupletsBracketed' => [
-					'type' => 'boolean',
-					'default' => false
-				],
-				'tripletsBracketed' => [
-					'type' => 'boolean',
-					'default' => false
-				],
-				'pageFormat' => [
-					'type' => 'string',
-					'default' => null
-				],
-				'pageBackgroundColor' => [
-					'type' => 'string',
-					'default' => null
-				],
-				'renderSingleHorizontalStaffline' => [
-					'type' => 'boolean',
-					'default' => false
-				],
-				'newSystemFromXML' => [
-					'type' => 'boolean',
-					'default' => false
-				],
-				'newPageFromXML' => [
-					'type' => 'boolean',
-					'default' => false
-				],
-				'percussionOneLineCutoff' => [
-					'type' => 'number',
-					'default' => 4
-				],
-				'percussionForceVoicesOneLineCutoff' => [
-					'type' => 'number',
-					'default' => 3
-				],
-				'spacingFactorSoftmax' => [
-					'type' => 'number',
-					'default' => 5
-				],
-				'spacingBetweenTextLines' => [
-					'type' => 'number',
-					'default' => null
-				],
-				'stretchLastSystemLine' => [
-					'type' => 'boolean',
-					'default' => false
-				],
-				'autoGenerateMutipleRestMeasuresFromRestMeasures' => [
-					'type' => 'boolean',
-					'default' => true
-				],
-				'width' => [
-					'type' => 'number',
-					'default' => 100.0
-				],
-				'aspectRatio' => [
-					'type' => 'number',
-					'default' => 0.0
-				],
-				'zoom' => [
-					'type' => 'number',
-					'default' => 1.0
-				],
-				'musicXmlId' => [
-					'type' => 'number',
-					'default' => -1
-				],
-				'musicXmlUrl' => [
-					'type' => 'string',
-					'default' => ''
-				],
-				'musicXmlTitle' => [
-					'type' => 'string',
-					'default' => ''
-				]
-			]
+			'attributes' => $attributes
 		)
 	);
 }
 
 function phonicscore_opensheetmusicdisplay_render_callback($block_attributes, $content){
-	$asJson = wp_json_encode($block_attributes);
-	var_dump($asJson);
-	return $asJson;
-	
-	
-	/*<<<EOT
+	$asJson = wp_json_encode($block_attributes, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
+	return
+		<<<EOT
 		<div class="phonicscore-opensheetmusicdisplay__placeholder">
 			<div class="phonicscore-opensheetmusicdisplay__loading-spinner hide"></div>
 			<div class="phonicscore-opensheetmusicdisplay__render-block"></div>
-			<div style="display:none;" class="attributesAsJson">$asJson</div>
+			<code style="display:none;" class="attributesAsJson">$asJson</code>
 		</div>
-	EOT;*/
+		EOT;
 }
 
 function phonicscore_opensheetmusicdisplay_enqueue_scripts(){

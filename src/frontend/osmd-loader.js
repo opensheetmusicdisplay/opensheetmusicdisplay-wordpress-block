@@ -1,43 +1,5 @@
-import { OpenSheetMusicDisplay, OSMDOptions } from 'opensheetmusicdisplay';
+import { OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
 import {OpenSheetMusicDisplayGlobalHooks} from 'opensheetmusicdisplay-wordpress-block';
-/*
-<div className="phonicscore-opensheetmusicdisplay__placeholder">
-<div className="phonicscore-opensheetmusicdisplay__loading-spinner hide"></div>
-<div className="phonicscore-opensheetmusicdisplay__render-block"></div>
-<div style="display:none;" className="attributesAsJson" name="attributesAsJson">$asJson</div>
-</div> 
-
-
-    postSetupHook(osmdObject, props, osmdHtmlElement){
-        this.hooks.didAction('phonicscore_opensheetmusicdisplay_setup');
-        this.hooks.applyFilters('phonicscore_opensheetmusicdisplay_setup', osmdObject, props, osmdHtmlElement);
-    }
-
-    preLoadFileHook(osmdObject, props, osmdHtmlElement){
-        this.hooks.applyFilters('phonicscore_opensheetmusicdisplay_load', osmdObject, props, osmdHtmlElement);
-    }
-
-    postLoadFileHook(osmdObject, props, osmdHtmlElement, error){
-        this.hooks.didAction('phonicscore_opensheetmusicdisplay_load');
-    }
-
-    preRenderHook(osmdObject, props, osmdHtmlElement){
-        this.hooks.applyFilters('phonicscore_opensheetmusicdisplay_render', osmdObject, props, osmdHtmlElement);
-    }
-
-    postRenderHook(osmdObject, props, osmdHtmlElement, error){
-        this.hooks.didAction('phonicscore_opensheetmusicdisplay_render');
-    }
-
-    processOptionsHook(osmdObject, options, osmdHtmlElement){
-        this.hooks.applyFilters('phonicscore_opensheetmusicdisplay_options', osmdObject, options, osmdHtmlElement);
-    }
-
-    preReactRenderHook(osmdObject, props, osmdHtmlElement, jsx){
-        this.hooks.applyFilters('phonicscore_opensheetmusicdisplay_react-render', osmdObject, props, osmdHtmlElement, jsx);
-    }
-
-*/
 
 function FindOSMDCanvasElement(osmdRenderBlock){
     let renderCanvas = undefined;
@@ -80,10 +42,8 @@ function DisplayError(osmdRenderBlock, error, details){
 const MAX_RELOAD_ATTEMPTS = 5;
 
 const placeholders = document.getElementsByClassName('phonicscore-opensheetmusicdisplay__placeholder');
-console.log('0', placeholders);
 for(let i = 0; i < placeholders.length; i++){
     const currentPlaceholder = placeholders[i];
-    console.log('1');
     const loader = currentPlaceholder.getElementsByClassName('phonicscore-opensheetmusicdisplay__loading-spinner')[0];
     loader.classList.remove('hide');
 
@@ -92,12 +52,10 @@ for(let i = 0; i < placeholders.length; i++){
         loader.classList.add('hide');
         continue;
     }
-    console.log('2');
     const attributesElement = currentPlaceholder.getElementsByClassName('attributesAsJson')[0];
     if(!attributesElement || !attributesElement.innerText){
         continue;
     }
-    console.log('3');
     let attributesMap = undefined;
     try {
         attributesMap = JSON.parse(attributesElement.innerText);
@@ -106,18 +64,15 @@ for(let i = 0; i < placeholders.length; i++){
         DisplayError(osmdRenderBlock, 'Invalid attributes provided.', err);
         continue;
     }
-    console.log('4');
     if(!attributesMap){
         loader.classList.add('hide');
         continue;
     }
-    console.log('5');
     const url = attributesMap.musicXmlUrl;
     if(!url || url.length < 1){
         loader.classList.add('hide');
         continue;
     }
-    console.log('6');
     delete attributesMap.musicXmlUrl;
 
     let zoom = 1.0;
@@ -146,27 +101,36 @@ for(let i = 0; i < placeholders.length; i++){
         currentPlaceholder.style.height = height;
     };
     updateHeight();
+    OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_options', undefined, attributesMap, osmdRenderBlock);
 
     const currentOsmd = new OpenSheetMusicDisplay(osmdRenderBlock, attributesMap);
+
+    OpenSheetMusicDisplayGlobalHooks.didAction('phonicscore_opensheetmusicdisplay_setup');
+    OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_setup', currentOsmd, attributesMap, osmdRenderBlock);
 
     let loadAttempt = 0;
     let loadFailed = false;
 
     const loadBehavior = () => {
         loadAttempt++;
+        OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_load', currentOsmd, attributesMap, osmdRenderBlock);
         currentOsmd.load(url).then(() => {
+            OpenSheetMusicDisplayGlobalHooks.didAction('phonicscore_opensheetmusicdisplay_load');
             currentOsmd.Zoom = zoom;
             try {
+                OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_render', currentOsmd, attributesMap, osmdRenderBlock);
                 currentOsmd.render();
             } catch(err){
                 console.warn(err);
                 DisplayError(osmdRenderBlock, 'Error loading sheet music file: ' + url, err);
             } finally {
+                OpenSheetMusicDisplayGlobalHooks.didAction('phonicscore_opensheetmusicdisplay_render');
                 loader.classList.add('hide');
                 loadAttempt = 0;
             }
         },
         function(err){
+            OpenSheetMusicDisplayGlobalHooks.didAction('phonicscore_opensheetmusicdisplay_load');
             console.warn(err);
             if(loadAttempt < MAX_RELOAD_ATTEMPTS){
                 console.warn("Error loading. Attempting reload...");
@@ -182,7 +146,6 @@ for(let i = 0; i < placeholders.length; i++){
 
     loadBehavior();
     let currentContainerWidth = osmdRenderBlock.offsetWidth;
-    console.log('7');
     let timeoutObject = undefined;
 
     const resizeEvent = () => {
@@ -203,11 +166,13 @@ for(let i = 0; i < placeholders.length; i++){
             updateHeight();
             currentOsmd.Zoom = zoom;
             try {
+                OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_render', currentOsmd, attributesMap, osmdRenderBlock);
                 currentOsmd.render();
             } catch(err){
                 console.warn(err);
                 DisplayError(osmdRenderBlock, 'Error loading sheet music file: ' + url, err);
             } finally {
+                OpenSheetMusicDisplayGlobalHooks.didAction('phonicscore_opensheetmusicdisplay_render');
                 loader.classList.add('hide');
             }
         }, 500);
