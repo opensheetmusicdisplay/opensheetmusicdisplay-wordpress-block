@@ -12,18 +12,9 @@ export class OpenSheetMusicDisplay extends PureComponent {
       this.osmd = undefined;
       this.osmdDivRef = React.createRef();
       this.loaderDivRef = React.createRef();
-      this.plugins = [];
-      if(props.plugins && props.plugins.length > 0){
-        for(let i = 0; i < props.plugins.length; i++){
-          if(props.plugins[i]?._reflection?.class?.name === 'OpenSheetMusicDisplayPluginTemplate'){
-            if (i > 0) {
-              if(props.plugins[i-1]?._reflection?.pluginName === props.plugins[i]?._reflection?.pluginName){
-                continue;
-              }
-            }
-            this.plugins.push(props.plugins[i]);
-          }
-        }
+      this.pluginManager = undefined;
+      if(props.pluginManager?._reflection?.class?.name === 'OpenSheetMusicDisplayReactPluginManager'){
+        this.pluginManager = props.pluginManager;
       }
     }
     
@@ -40,18 +31,18 @@ export class OpenSheetMusicDisplay extends PureComponent {
           options[key] = props[key];
         }
       }
-      if(this.plugins.length > 0){
-        for(let i = 0; i < this.plugins.length; i++){
-          this.plugins[i].processOptionsHook(this.osmd, options, this.osmdDivRef.current);
+      if(this.pluginManager?.getPlugins()?.length > 0){
+        for(let i = 0; i < this.pluginManager.getPlugins().length; i++){
+          this.pluginManager.getPlugins()[i].processOptionsHook(this.osmd, options, this.osmdDivRef.current);
         }
       }
       return options;
     }
 
     renderBehavior(){
-      if(this.plugins.length > 0){
-        for(let i = 0; i < this.plugins.length; i++){
-          this.plugins[i].preRenderHook(this.osmd, this.props, this.osmdDivRef.current);
+      if(this.pluginManager?.getPlugins()?.length > 0){
+        for(let i = 0; i < this.pluginManager.getPlugins().length; i++){
+          this.pluginManager.getPlugins()[i].preRenderHook(this.osmd, this.props, this.osmdDivRef.current);
         }
       }
       this.osmd.Zoom = this.props.zoom;
@@ -66,9 +57,9 @@ export class OpenSheetMusicDisplay extends PureComponent {
           console.warn('Error rendering: ', err);
           this.showErrorCallback(`Error rendering file: ${this.props.file}`, err);
         } finally{
-          if(this.plugins.length > 0){
-            for(let i = 0; i < this.plugins.length; i++){
-              this.plugins[i].postRenderHook(this.osmd, this.props, this.osmdDivRef.current, error);
+          if(this.pluginManager?.getPlugins()?.length > 0){
+            for(let i = 0; i < this.pluginManager.getPlugins().length; i++){
+              this.pluginManager.getPlugins()[i].postRenderHook(this.osmd, this.props, this.osmdDivRef.current, error);
             }
           }
           this.loaderDivRef.current.classList.add('hide');
@@ -77,9 +68,9 @@ export class OpenSheetMusicDisplay extends PureComponent {
     }
 
     loadFileBehavior(){
-      if(this.plugins.length > 0){
-        for(let i = 0; i < this.plugins.length; i++){
-          this.plugins[i].preLoadFileHook(this.osmd, this.props, this.osmdDivRef.current);
+      if(this.pluginManager?.getPlugins()?.length > 0){
+        for(let i = 0; i < this.pluginManager.getPlugins().length; i++){
+          this.pluginManager.getPlugins()[i].preLoadFileHook(this.osmd, this.props, this.osmdDivRef.current);
         }
       }
       this.loadAttempts++;
@@ -88,17 +79,17 @@ export class OpenSheetMusicDisplay extends PureComponent {
       this.pendingLoad.then(function(){
         _self.loadAttempts = 0;
         _self.pendingLoad = undefined;
-        if(_self.plugins.length > 0){
-          for(let i = 0; i < _self.plugins.length; i++){
-            _self.plugins[i].postLoadFileHook(_self.osmd, _self.props, _self.osmdDivRef.current);
+        if(_self.pluginManager?.getPlugins()?.length > 0){
+          for(let i = 0; i < _self.pluginManager.getPlugins().length; i++){
+            _self.pluginManager.getPlugins()[i].postLoadFileHook(_self.osmd, _self.props, _self.osmdDivRef.current);
           }
         }
         _self.renderBehavior();
       },
       function(error){
-        if(_self.plugins.length > 0){
-          for(let i = 0; i < _self.plugins.length; i++){
-            _self.plugins[i].postLoadFileHook(_self.osmd, _self.props, _self.osmdDivRef.current, error);
+        if(_self.pluginManager?.getPlugins()?.length > 0){
+          for(let i = 0; i < _self.pluginManager.getPlugins().length; i++){
+            _self.pluginManager.getPlugins()[i].postLoadFileHook(_self.osmd, _self.props, _self.osmdDivRef.current, error);
           }
         }
         console.warn(error);
@@ -119,9 +110,9 @@ export class OpenSheetMusicDisplay extends PureComponent {
       this.osmdDivRef.current.innerHTML = '';
       const options = this.getOptionsObjectFromProps(this.props);
       this.osmd = new OSMD(this.osmdDivRef.current, options);
-      if(this.plugins.length > 0){
-        for(let i = 0; i < this.plugins.length; i++){
-          this.plugins[i].postSetupHook(this.osmd, this.props, this.osmdDivRef.current);
+      if(this.pluginManager?.getPlugins()?.length > 0){
+        for(let i = 0; i < this.pluginManager.getPlugins().length; i++){
+          this.pluginManager.getPlugins()[i].postSetupHook(this.osmd, this.props, this.osmdDivRef.current);
         }
       }
       if(this.props.file){
@@ -158,9 +149,9 @@ export class OpenSheetMusicDisplay extends PureComponent {
           <div className="phonicscore-opensheetmusicdisplay__render-block" ref={this.osmdDivRef} />
         </div>
         );
-        if(this.plugins.length > 0){
-          for(let i = 0; i < this.plugins.length; i++){
-            renderResult = this.plugins[i].preReactRenderHook(this.osmd, this.props, this.osmdDivRef.current, renderResult);
+        if(this.pluginManager?.getPlugins()?.length > 0){
+          for(let i = 0; i < this.pluginManager.getPlugins().length; i++){
+            this.pluginManager.getPlugins()[i].preReactRenderHook(this.osmd, this.props, this.osmdDivRef.current, renderResult);
           }
         }            
       return renderResult;

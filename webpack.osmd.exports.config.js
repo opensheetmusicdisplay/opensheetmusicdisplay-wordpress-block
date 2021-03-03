@@ -1,24 +1,20 @@
 const path = require('path');
-const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = [
 {
   externals: {
-    '@wordpress/block-editor': 'wp.blockEditor',
-    '@wordpress/components': 'wp.components',
-    '@wordpress/compose': 'wp.compose',
-    '@wordpress/i18n': 'wp.i18n',
-    opensheetmusicdisplay: 'opensheetmusicdisplay',
     'opensheetmusicdisplay-wordpress-block': 'window["opensheetmusicdisplay-wordpress-block"]',
+    opensheetmusicdisplay: 'opensheetmusicdisplay',
     externalsType: 'umd'
   },
   entry: {
-            'queueable_attributes': './src/QueueableAttributes/registerQueueableAttributes.jsx',
-            'osmd-loader': './src/frontend/osmd-loader.js'
+            'opensheetmusicdisplay-wordpress-block': './src/opensheetmusicdisplay-wordpress-block.js',
         },
   output: {
     filename: '[name].min.js',
-    path: path.resolve(__dirname, 'build/osmd')
+    path: path.resolve(__dirname, 'build/osmd'),
+    library: 'opensheetmusicdisplay-wordpress-block',
+    libraryTarget: 'umd'
   },
   resolve: {
     // Add '.ts' and '.tsx' as a resolvable extension.
@@ -47,12 +43,5 @@ module.exports = [
     },
   optimization: {
     minimize: true
-  },
-  plugins: [
-    new CopyPlugin({
-      patterns: [
-        {from: 'node_modules/opensheetmusicdisplay/**/opensheetmusicdisplay.min.js', to: 'opensheetmusicdisplay.min.js'}
-      ]
-    })
-  ]
+  }
 }];

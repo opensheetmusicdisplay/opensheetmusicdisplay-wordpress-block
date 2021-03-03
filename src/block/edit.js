@@ -2,7 +2,8 @@
  * Internal Dependencies
  */
 import { OpenSheetMusicDisplay } from '../Components/OpenSheetMusicDisplay.jsx';
-import withAttributesQueue from '../QueueableAttributes/withAttributesQueue.jsx';
+import OpenSheetMusicDisplayReactPluginManager from '../Models/OpenSheetMusicDisplayReactPluginManager';
+import {OpenSheetMusicDisplayGlobalHooks, OpenSheetMusicDisplayWordpressPlugin} from 'opensheetmusicdisplay-wordpress-block';
 
 /**
  * Wordpress Dependencies
@@ -35,7 +36,11 @@ import { useBlockProps } from '@wordpress/block-editor';
  */
 import './editor.scss';
 
-const OpenSheetMusicDisplayWithFilters = withFilters( 'phonicscore/opensheetmusicdisplay/plugin' )( OpenSheetMusicDisplay );
+//Process custom filters (we have a filter registered to add a plugin)
+const OpenSheetMusicDisplayWithFilters = withFilters( 'phonicscore_opensheetmusicdisplay_plugin' )( OpenSheetMusicDisplay );
+const pluginManager = new OpenSheetMusicDisplayReactPluginManager();
+const wpPlugin = new OpenSheetMusicDisplayWordpressPlugin('phonicscore/opensheetmusicdisplay/wordpress-plugin-hooks', OpenSheetMusicDisplayGlobalHooks);
+pluginManager.registerPlugin(wpPlugin);
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -98,18 +103,9 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 		}
 	};
 
-	let pluginProps = {};
-
-	if(attributes.plugins && attributes.plugins.length > 0){
-		for(let i = 0; i < attributes.plugins.length; i++){
-			const currentPluginProps = attributes.plugins[i].getOpenSheetMusicDisplayProps(attributes);
-			if(typeof currentPluginProps === 'object'){
-				pluginProps = {
-					...pluginProps,
-					...currentPluginProps
-				};
-			}
-		}
+	let pluginProps = OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_block-props', attributes, queueableAttributes);
+	if(!pluginProps){
+		pluginProps = {};
 	}
 	return (
 		<div { ...blockProps } style={{width: attributes.width + '%', height: translateAspectRatioToHeight(attributes.aspectRatio)}}>
@@ -289,7 +285,7 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 					drawMeasureNumbersOnlyAtSystemStart= { attributes.drawMeasureNumbersOnlyAtSystemStart }
 					drawTimeSignatures= { attributes.drawTimeSignatures }
 					maxReloadAttempts={5}
-					plugins={attributes.plugins}
+					pluginManager={pluginManager}
 					{...pluginProps}
 				/> : <h4>{__('No MusicXML Selected.')}</h4>
 			}
@@ -297,7 +293,7 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 	);
 }
 
-export default withAttributesQueue(withSelect( (select, props) => {
+export default withSelect( (select, props) => {
 	const { getMedia } = select('core');
 	return { media: props.attributes.musicXmlId > -1 ? getMedia(props.attributes.musicXmlId) : undefined };
-} )(Edit));
+} )(Edit);
