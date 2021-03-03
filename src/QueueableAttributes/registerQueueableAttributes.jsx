@@ -46,7 +46,6 @@ const withAttributesQueue = wp.compose.createHigherOrderComponent((WrappedCompon
                 }
             }
         };
-        console.log('rendering with attributes queue');
         return (<WrappedComponent {...props} queueAttribute={queueAttribute} commitAttributes={commitAttributes} queueableAttributes={stateMap}></WrappedComponent>);
     };
 }, "withAttributesQueue");

@@ -2,9 +2,9 @@
 Contributors:      opensheetmusicdisplay, fredmeister77
 Donate link:       https://OSMD.org/Donate
 Tags:              block,osmd,music,sheet music,musicxml,opensheetmusicdisplay
-Requires at least: 5.6.0
-Tested up to:      5.6.0
-Stable tag:        0.9.4
+Requires at least: 5.5.0
+Tested up to:      5.7.4
+Stable tag:        1.0.0
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -148,6 +148,8 @@ This plugin should also be available via the Gutenberg Block directory:
 4. in the search bar at the top of the side panel, type "OpenSheetMusicDisplay"
 5. Click "Add Block" on the "OpenSheetMusicDisplay" result
 
+**NOTE:** If updating to version 1.0.0 from previous versions, you will need to "Attempt Recovery" on anywhere the block has been included.
+We have switched to server-side rendering, and this should now not happen with future updates.
 
 == Frequently Asked Questions ==
 
@@ -175,6 +177,16 @@ If you are a Wordpress/javascript developer and are feeling bold and adventurous
 4. This shows another post with various options set (75% width, no draw title, Portrait aspect ratio)
 
 == Changelog ==
+
+= 1.0.0 =
+**Updates to this version may require all OSMD blocks to be 'Attempt Recovery'.  This will not cause any issues and it is fine to recover the blocks.**
+* Refactor code to include WP filters
+    * Allows plugin extensions easily
+* Switch to dynamic server-side rendering
+    * When new attributes are added in updates/plugins, won't flag the block as invalid
+* Do no include scripts on other admin pages
+    * Now checks page before including OSMD Javascript to prevent conflicts on other admin pages
+* Fix bug for width not changing with certain themes
 
 = 0.9.4 =
 * Update to latest OSMD version

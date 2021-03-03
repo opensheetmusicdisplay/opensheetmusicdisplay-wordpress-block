@@ -1,6 +1,6 @@
 {
 	"name": "opensheetmusicdisplay-wordpress-block",
-	"version": "0.9.4",
+	"version": "1.0.0",
 	"description": "Block to render MusicXML in the browser as sheet music using OSMD.",
 	"author": "opensheetmusicdisplay, fredmeister77",
 	"license": "GPL-2.0-or-later",

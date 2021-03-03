@@ -103,12 +103,30 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 		}
 	};
 
-	let pluginProps = OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_block-props', attributes, queueableAttributes);
+	let OSMDProps = {
+		file:  attributes.musicXmlUrl ,
+		width:  attributes.width ,
+		zoom:  attributes.zoom ,
+		drawTitle:  attributes.drawTitle ,
+		drawSubtitle:  attributes.drawSubtitle ,
+		drawComposer:  attributes.drawComposer ,
+		drawLyricist:  attributes.drawLyricist ,
+		drawMetronomeMarks:  attributes.drawMetronomeMarks ,
+		drawPartNames:  attributes.drawPartNames ,
+		drawPartAbbreviations:  attributes.drawPartAbbreviations ,
+		drawMeasureNumbers:  attributes.drawMeasureNumbers ,
+		drawMeasureNumbersOnlyAtSystemStart:  attributes.drawMeasureNumbersOnlyAtSystemStart ,
+		drawTimeSignatures:  attributes.drawTimeSignatures ,
+		maxReloadAttempts: 5,
+		pluginManager: pluginManager
+	};
+	
+	let pluginProps = OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_block-props', OSMDProps, attributes, queueableAttributes);
 	if(!pluginProps){
 		pluginProps = {};
 	}
 	return (
-		<div { ...blockProps } style={{width: attributes.width + '%', height: translateAspectRatioToHeight(attributes.aspectRatio)}}>
+		<div { ...blockProps } style={{width: attributes.width + '%', maxWidth: attributes.width + '%', height: translateAspectRatioToHeight(attributes.aspectRatio)}}>
 			{
 				<InspectorControls>
 					<Card>
@@ -271,21 +289,6 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 			}
 			{	attributes.musicXmlId > -1 ?
 				<OpenSheetMusicDisplayWithFilters
-					file={ attributes.musicXmlUrl }
-					width={ attributes.width }
-					zoom= { attributes.zoom }
-					drawTitle= { attributes.drawTitle }
-					drawSubtitle= { attributes.drawSubtitle }
-					drawComposer= { attributes.drawComposer }
-					drawLyricist= { attributes.drawLyricist }
-					drawMetronomeMarks= { attributes.drawMetronomeMarks }
-					drawPartNames= { attributes.drawPartNames }
-					drawPartAbbreviations= { attributes.drawPartAbbreviations }
-					drawMeasureNumbers= { attributes.drawMeasureNumbers }
-					drawMeasureNumbersOnlyAtSystemStart= { attributes.drawMeasureNumbersOnlyAtSystemStart }
-					drawTimeSignatures= { attributes.drawTimeSignatures }
-					maxReloadAttempts={5}
-					pluginManager={pluginManager}
 					{...pluginProps}
 				/> : <h4>{__('No MusicXML Selected.')}</h4>
 			}

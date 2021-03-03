@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     OpenSheetMusicDisplay
  * Description:     Block to render MusicXML in the browser as sheet music using OSMD.
- * Version:         0.9.4
+ * Version:         1.0.0
  * Author:          opensheetmusicdisplay, fredmeister77
  * License:         GPL-2.0-or-later
  * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
@@ -332,11 +332,15 @@ function phonicscore_opensheetmusicdisplay_block_init() {
 
 function phonicscore_opensheetmusicdisplay_render_callback($block_attributes, $content){
 	$asJson = wp_json_encode($block_attributes, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
+	$width = '100%';
+	if(is_array($block_attributes) && array_key_exists('width', $block_attributes)){
+		$width = $block_attributes['width'] . '%';
+	}
 	return
 		<<<EOT
-		<div class="phonicscore-opensheetmusicdisplay__placeholder">
+		<div class="phonicscore-opensheetmusicdisplay__placeholder" style="width: $width !important; max-width: $width !important;">
 			<div class="phonicscore-opensheetmusicdisplay__loading-spinner hide"></div>
-			<div class="phonicscore-opensheetmusicdisplay__render-block"></div>
+			<div class="phonicscore-opensheetmusicdisplay__render-block" style="width: $width !important; max-width: $width !important;"></div>
 			<code style="display:none;" class="attributesAsJson">$asJson</code>
 		</div>
 		EOT;
@@ -366,7 +370,7 @@ function phonicscore_opensheetmusicdisplay_enqueue_scripts(){
 	);
 }
 function phonicscore_opensheetmusicdisplay_enqueue_admin_scripts($hook){
-    if ( 'post.php' != $hook ) {
+    if ( 'post.php' != $hook && 'post-new.php' != $hook ) {
         return;
     }
 	wp_enqueue_script(
