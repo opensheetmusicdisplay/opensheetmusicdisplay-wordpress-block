@@ -17,6 +17,7 @@ export default class OpenSheetMusicDisplayWordpressPlugin extends OpenSheetMusic
 
     postLoadFileHook(osmdObject, props, osmdHtmlElement, error){
         this.hooks.didAction('phonicscore_opensheetmusicdisplay_load');
+        this.hooks.applyFilters('phonicscore_opensheetmusicdisplay_post-load', osmdObject, props, osmdHtmlElement, error);
     }
 
     preRenderHook(osmdObject, props, osmdHtmlElement){
@@ -25,6 +26,7 @@ export default class OpenSheetMusicDisplayWordpressPlugin extends OpenSheetMusic
 
     postRenderHook(osmdObject, props, osmdHtmlElement, error){
         this.hooks.didAction('phonicscore_opensheetmusicdisplay_render');
+        this.hooks.applyFilters('phonicscore_opensheetmusicdisplay_post-render', osmdObject, props, osmdHtmlElement, error);
     }
 
     processOptionsHook(osmdObject, options, osmdHtmlElement){

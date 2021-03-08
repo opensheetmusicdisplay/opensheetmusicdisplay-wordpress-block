@@ -120,10 +120,6 @@ export class OpenSheetMusicDisplay extends PureComponent {
         this.loadFileBehavior();
       }
     }
-  
-    resize() {
-      this.osmd.render();
-    }
 
     componentDidUpdate(prevProps) {
       this.osmdDivRef.current.innerHTML = '';
@@ -137,9 +133,37 @@ export class OpenSheetMusicDisplay extends PureComponent {
       }
     }
 
+    resize(){
+      const prevWidth = this.currentWidth;
+      this.currentWidth = this.osmdDivRef.current.offsetWidth;
+      if(this.currentWidth === prevWidth){
+          return;
+      }
+      this.loaderDivRef.current.classList.remove('hide');
+      clearTimeout(this.timeoutObject);
+      const self = this;
+      this.timeoutObject = setTimeout(() => {
+        self.renderBehavior();
+      }, 500);
+    }
+
     // Called after render
     componentDidMount() {
       this.setupOsmd();
+      this.currentWidth = this.osmdDivRef.current.offsetWidth;
+      this.timeoutObject = undefined;
+      const self = this;
+      if(ResizeObserver){
+        const resizeObserver = new ResizeObserver(entries => {
+          self.resize();
+        });
+        resizeObserver.observe(this.osmdDivRef.current);
+      } else {
+          console.info("Browser doesn't support ResizeObserver, defaulting to window resize");
+          window.addEventListener('resize', (event) => {
+            self.resize();
+          });
+      }
     }
   
     render() {
