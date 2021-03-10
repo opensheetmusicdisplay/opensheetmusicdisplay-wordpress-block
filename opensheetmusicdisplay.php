@@ -318,6 +318,8 @@ function phonicscore_opensheetmusicdisplay_block_init() {
 		]
 	);
 
+	$attributes = apply_filters('phonicscore/opensheetmusicdisplay/block-attributes', $attributes);
+
 	register_block_type(
 		'phonicscore/opensheetmusicdisplay',
 		array(

@@ -22,7 +22,7 @@ body{
 }
 
 .hide{
-  display: none;
+  display: none !important;
 }
 
 .phonicscore-opensheetmusicdisplay__loading-spinner {

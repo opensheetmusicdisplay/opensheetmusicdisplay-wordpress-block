@@ -102,7 +102,6 @@ for(let i = 0; i < placeholders.length; i++){
     };
     updateHeight();
     OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_options', undefined, attributesMap, osmdRenderBlock);
-
     const currentOsmd = new OpenSheetMusicDisplay(osmdRenderBlock, attributesMap);
 
     OpenSheetMusicDisplayGlobalHooks.didAction('phonicscore_opensheetmusicdisplay_setup');
@@ -116,6 +115,7 @@ for(let i = 0; i < placeholders.length; i++){
         OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_load', currentOsmd, attributesMap, osmdRenderBlock);
         currentOsmd.load(url).then(() => {
             OpenSheetMusicDisplayGlobalHooks.didAction('phonicscore_opensheetmusicdisplay_load');
+            OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_post-load', currentOsmd, attributesMap, osmdRenderBlock);
             currentOsmd.Zoom = zoom;
             try {
                 OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_render', currentOsmd, attributesMap, osmdRenderBlock);
@@ -130,6 +130,7 @@ for(let i = 0; i < placeholders.length; i++){
             }
         },
         function(err){
+            OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_post-load', currentOsmd, attributesMap, osmdRenderBlock, err);
             OpenSheetMusicDisplayGlobalHooks.didAction('phonicscore_opensheetmusicdisplay_load');
             console.warn(err);
             if(loadAttempt < MAX_RELOAD_ATTEMPTS){

@@ -27,9 +27,16 @@ const withAttributesQueue = wp.compose.createHigherOrderComponent((WrappedCompon
 
         const [autoRenderTimeoutObject, setAutoRenderTimeoutObject] = wp.element.useState(undefined);
         const queueAttribute = (attributeName, newValue, debounce = 0 ) => {
-            stateMap[attributeName].setter(newValue);
             const newAttObj = {};
-            newAttObj[attributeName] = newValue;
+            if(Array.isArray(attributeName) && Array.isArray(newValue)){
+                for(let i = 0; i < attributeName.length; i++){
+                    stateMap[attributeName[i]].setter(newValue[i]);
+                    newAttObj[attributeName[i]] = newValue[i];
+                }
+            } else {
+                stateMap[attributeName].setter(newValue);
+                newAttObj[attributeName] = newValue;
+            }
             if(debounce > 0){
                 clearTimeout(autoRenderTimeoutObject);
                 const timeoutReturnObject = setTimeout(function(){
@@ -46,6 +53,7 @@ const withAttributesQueue = wp.compose.createHigherOrderComponent((WrappedCompon
                 }
             }
         };
+
         return (<WrappedComponent {...props} queueAttribute={queueAttribute} commitAttributes={commitAttributes} queueableAttributes={stateMap}></WrappedComponent>);
     };
 }, "withAttributesQueue");
