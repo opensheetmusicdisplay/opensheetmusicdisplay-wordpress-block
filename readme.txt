@@ -4,7 +4,7 @@ Donate link:       https://OSMD.org/Donate
 Tags:              block,osmd,music,sheet music,musicxml,opensheetmusicdisplay
 Requires at least: 5.5.0
 Tested up to:      5.7.4
-Stable tag:        1.0.0
+Stable tag:        1.0.1
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -177,6 +177,12 @@ If you are a Wordpress/javascript developer and are feeling bold and adventurous
 4. This shows another post with various options set (75% width, no draw title, Portrait aspect ratio)
 
 == Changelog ==
+
+= 1.0.1 =
+**Minor updates for plugin extensions**
+* Allow more than one queueable attribute at a time
+* Add additional filter hooks
+* Fixes for resize on block editor
 
 = 1.0.0 =
 **Updates to this version may require all OSMD blocks to be 'Attempt Recovery'.  This will not cause any issues and it is fine to recover the blocks.**
