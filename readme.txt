@@ -145,7 +145,7 @@ This plugin should also be available via the Gutenberg Block directory:
 1. Navigate to a post where you want to add sheet music.
 2. Click the "+" icon to add a new block
 3. Select "Browse all" at the bottom of the block selection pop-up
-4. in the search bar at the top of the side panel, type "OpenSheetMusicDisplay"
+4. in the search bar at the top of the side panel, type "musicxml"
 5. Click "Add Block" on the "OpenSheetMusicDisplay" result
 
 **NOTE:** If updating to version 1.0.0 from previous versions, you will need to "Attempt Recovery" on anywhere the block has been included.
