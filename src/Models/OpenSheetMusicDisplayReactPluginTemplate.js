@@ -32,4 +32,7 @@ export default class OpenSheetMusicDisplayReactPluginTemplate{
 
     preReactRenderHook(osmdObject, props, osmdHtmlElement, jsx){
     }
+
+    nonRenderUpdateReactHook(osmdObject, newProps, osmdHtmlElement){
+    }
 }

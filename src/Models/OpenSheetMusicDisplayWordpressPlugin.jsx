@@ -36,4 +36,8 @@ export default class OpenSheetMusicDisplayWordpressPlugin extends OpenSheetMusic
     preReactRenderHook(osmdObject, props, osmdHtmlElement, jsx){
         this.hooks.applyFilters('phonicscore_opensheetmusicdisplay_react-render', osmdObject, props, osmdHtmlElement, jsx);
     }
+
+    nonRenderUpdateReactHook(osmdObject, newProps, osmdHtmlElement){
+        this.hooks.applyFilters('phonicscore_opensheetmusicdisplay_react-non-render-update', osmdObject, newProps, osmdHtmlElement);
+    }
 }

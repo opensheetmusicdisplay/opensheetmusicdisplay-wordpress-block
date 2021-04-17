@@ -121,6 +121,24 @@ export class OpenSheetMusicDisplay extends PureComponent {
       }
     }
 
+    //TODO: Use nonrenderable atts list here to determine if we need a re-render
+    /*
+    shouldComponentUpdate(nextProps, nextState) {
+      if(!nextProps || typeof nextProps !== 'object'){
+        return false;
+      }
+      if(this.props === undefined){
+        return true;
+      }
+      for(const key of Object.keys(nextProps)){
+        if(this.props[key] !== nextProps[key]){
+          return true;
+        }
+      }
+      console.log(nextProps, nextState);
+      return false;
+    }*/
+
     componentDidUpdate(prevProps) {
       this.osmdDivRef.current.innerHTML = '';
       this.loaderDivRef.current.classList.remove('hide');
