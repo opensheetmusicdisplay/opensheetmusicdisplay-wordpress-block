@@ -58,7 +58,20 @@ function phonicscore_opensheetmusicdisplay_block_init() {
 		filemtime( "$dir/$style_css" )
 	);
 
-	//Todo: filter
+	$attributes = phonicscore_opensheetmusicdisplay_get_attributes_list();
+	register_block_type(
+		'phonicscore/opensheetmusicdisplay',
+		array(
+			'editor_script' => 'phonicscore_opensheetmusicdisplay_block_editor',
+			'editor_style'  => 'phonicscore_opensheetmusicdisplay_block_editor',
+			'style'         => 'phonicscore_opensheetmusicdisplay_block',
+			'render_callback' => 'phonicscore_opensheetmusicdisplay_render_callback',
+			'attributes' => $attributes
+		)
+	);
+}
+
+function phonicscore_opensheetmusicdisplay_get_attributes_list() {
 	$attributes = array(
 		'alignRests' => [
 			'type' => 'number',
@@ -317,19 +330,8 @@ function phonicscore_opensheetmusicdisplay_block_init() {
 			'default' => ''
 		]
 	);
-
 	$attributes = apply_filters('phonicscore/opensheetmusicdisplay/block-attributes', $attributes);
-
-	register_block_type(
-		'phonicscore/opensheetmusicdisplay',
-		array(
-			'editor_script' => 'phonicscore_opensheetmusicdisplay_block_editor',
-			'editor_style'  => 'phonicscore_opensheetmusicdisplay_block_editor',
-			'style'         => 'phonicscore_opensheetmusicdisplay_block',
-			'render_callback' => 'phonicscore_opensheetmusicdisplay_render_callback',
-			'attributes' => $attributes
-		)
-	);
+	return $attributes;
 }
 
 function phonicscore_opensheetmusicdisplay_render_callback($block_attributes, $content){
@@ -346,6 +348,44 @@ function phonicscore_opensheetmusicdisplay_render_callback($block_attributes, $c
 			<code style="display:none;" class="attributesAsJson">$asJson</code>
 		</div>
 		EOT;
+}
+
+function phonicscore_opensheetmusicdisplay_shortcode_callback($shortCodeAtts, $content, $name) {
+	$availableAtts = phonicscore_opensheetmusicdisplay_get_attributes_list();
+	foreach ($availableAtts as $key => $value) {
+		//Shortcode have their atts automatically lower cased. We can't do that though because of omsd option names.
+		//Find them in the shortcode atts and adapt them before passing to render function.
+		$keyLowerCase = strtolower($key);
+		if(array_key_exists($keyLowerCase, $shortCodeAtts) ) {
+			switch ($value['type']) {
+				case 'number':
+					$shortCodeAtts[$key] = floatval($shortCodeAtts[$keyLowerCase]);
+				break;
+				case 'boolean':
+					if($shortCodeAtts[$keyLowerCase] == 'true'){
+						$shortCodeAtts[$key] = true;
+					} else {
+						$shortCodeAtts[$key] = false;
+					}
+				break;
+				case 'array':
+				case 'object':
+					$shortCodeAtts[$key] = json_decode($shortCodeAtts[$keyLowerCase]);
+				break;
+				default:
+					$shortCodeAtts[$key] = $shortCodeAtts[$keyLowerCase];
+				break;
+			}
+			if($key != $keyLowerCase) {
+				unset($shortCodeAtts[$keyLowerCase]);
+			}
+		}
+	}
+	return phonicscore_opensheetmusicdisplay_render_callback($shortCodeAtts, $content);
+}
+
+function phonicscore_opensheetmusicdisplay_shortcode_init(){
+	add_shortcode('opensheetmusicdisplay', 'phonicscore_opensheetmusicdisplay_shortcode_callback');
 }
 
 function phonicscore_opensheetmusicdisplay_enqueue_scripts(){
@@ -409,9 +449,14 @@ include_once 'MultipleMimes.php';
 phonicscore_opensheetmusicdisplay_MultipleMimes::init();
 
 function phonicscore_opensheetmusicdisplay_activate_plugin(){
-	add_action( 'init', 'phonicscore_opensheetmusicdisplay_block_init' );
+	if(function_exists("register_block_type")){
+		add_action( 'init', 'phonicscore_opensheetmusicdisplay_block_init' );
+	}
+	add_action( 'init', 'phonicscore_opensheetmusicdisplay_shortcode_init' );
 	add_action( 'wp_enqueue_scripts', 'phonicscore_opensheetmusicdisplay_enqueue_scripts' );
-	add_action( 'admin_enqueue_scripts', 'phonicscore_opensheetmusicdisplay_enqueue_admin_scripts' );
+	if(function_exists("register_block_type")){
+		add_action( 'admin_enqueue_scripts', 'phonicscore_opensheetmusicdisplay_enqueue_admin_scripts' );
+	}
 }
 
 add_action('plugins_loaded', 'phonicscore_opensheetmusicdisplay_activate_plugin', 10);
