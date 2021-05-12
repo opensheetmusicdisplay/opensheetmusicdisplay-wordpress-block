@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     OpenSheetMusicDisplay
  * Description:     Block to render MusicXML in the browser as sheet music using OSMD.
- * Version:         1.0.1
+ * Version:         1.1.0
  * Author:          opensheetmusicdisplay, fredmeister77
  * License:         GPL-2.0-or-later
  * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
@@ -393,7 +393,7 @@ function phonicscore_opensheetmusicdisplay_enqueue_scripts(){
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist',
 		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay.min.js', __FILE__ ) ),
 		array( ),
-		'0.9.4',
+		'1.0.0',
 		true
 	);
 	wp_enqueue_script(
@@ -419,7 +419,7 @@ function phonicscore_opensheetmusicdisplay_enqueue_admin_scripts($hook){
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist',
 		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay.min.js', __FILE__ ) ),
 		array( ),
-		'0.9.4',
+		'1.0.0',
 		true
 	);
 	wp_enqueue_script(

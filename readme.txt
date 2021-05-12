@@ -1,15 +1,15 @@
 === OpenSheetMusicDisplay ===
 Contributors:      opensheetmusicdisplay, fredmeister77
 Donate link:       https://OSMD.org/Donate
-Tags:              block,osmd,music,sheet music,musicxml,opensheetmusicdisplay
+Tags:              block,shortcode,osmd,music,sheet music,musicxml,opensheetmusicdisplay
 Requires at least: 5.5.0
 Tested up to:      5.7.4
-Stable tag:        1.0.1
+Stable tag:        1.1.0
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
-Block to render MusicXML in the browser as sheet music using OSMD.
+Block or shortcode to render MusicXML in the browser as sheet music using OSMD.
 
 == Description ==
 
@@ -18,7 +18,9 @@ This will allow you to render responsive MusicXML live in your visitors' browser
 
 It enables uploading of .xml, .musicxml and .mxl files to your Wordpress Media Library, which can then be selected in the block for rendering.
 
-## Options
+We have also added a shortcode in this plugin for those who do not use the Gutenberg editor.
+
+## Block Options
 The block has a number of options in the sidebar (Inspector Controls) described here.
 
 ### Rendering
@@ -116,6 +118,22 @@ Whether to render measure numbers just at the start of new music systems.
 #### Draw Time Signatures
 *Checkbox, Default: On*
 Whether to render time signatures on the staves
+
+##Shortcode Options
+
+The shortcode has the same options as above, though as attributes written in camelCase.
+
+In the shortcode any checkbox attribute values are specified with true or false.
+Numeric values can be specified as float or integers.
+
+The shortcode is "opensheetmusicdisplay". Example given with full set of attributes:
+```
+[opensheetmusicdisplay musicXmlUrl="http://url.com/wp-content/uploads/sites/2/2021/02/Beethoven_AnDieFerneGeliebte.xml" zoom="0.75" width="75" 
+    drawTitle="false" drawSubtitle="false" drawComposer="true" drawLyricist="true" drawMetronomeMarks="false" drawPartNames="false" drawPartAbbreviations="false"
+    drawMeasureNumbers="true" drawMeasureNumbersOnlyAtSystemStart="true" drawTimeSignatures="true"]
+```
+
+It's important to note that zoom is out of 1: so 1 = 100%, 0.75 = 75%, 2 = 200%, etc.
 
 == About Us ==
 
