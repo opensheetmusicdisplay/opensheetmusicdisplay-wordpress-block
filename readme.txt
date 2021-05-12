@@ -126,6 +126,8 @@ The shortcode has the same options as above, though as attributes written in cam
 In the shortcode any checkbox attribute values are specified with true or false.
 Numeric values can be specified as float or integers.
 
+To specify the musicXML you need to provide a URL; This can be copied from your Media center in Wordpress when viewing the details of a file.
+
 The shortcode is "opensheetmusicdisplay". Example given with full set of attributes:
 ```
 [opensheetmusicdisplay musicXmlUrl="http://url.com/wp-content/uploads/sites/2/2021/02/Beethoven_AnDieFerneGeliebte.xml" zoom="0.75" width="75" 
