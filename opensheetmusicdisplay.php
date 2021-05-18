@@ -73,262 +73,262 @@ function phonicscore_opensheetmusicdisplay_block_init() {
 
 function phonicscore_opensheetmusicdisplay_get_attributes_list() {
 	$attributes = array(
-		'alignRests' => [
+		'alignRests' => array(
 			'type' => 'number',
 			'default' => 0
-		],
-		'autoBeam' => [
+		),
+		'autoBeam' => array(
 			'type' => 'boolean',
 			'default' => false
-		],
-		'autoBeamOptions' => [
+		),
+		'autoBeamOptions' => array(
 			'type' => 'object',
-			'default' => [
+			'default' => array(
 				'beam_middle_rests_only' => false,
 				'beam_rests' => false,
 				'maintain_stem_directions' => false
-			]
-		],
-		'autoResize' => [
+			)
+		),
+		'autoResize' => array(
 			'type' => 'boolean',
 			'default' => true
-		],
-		'backend' => [
+		),
+		'backend' => array(
 			'type' => 'string',
 			'default' => 'svg'
-		],
-		'coloringMode' => [
+		),
+		'coloringMode' => array(
 			'type' => 'number',
 			'default' => null
-		],
-		'coloringSetCustom' => [
+		),
+		'coloringSetCustom' => array(
 			'type' => 'array',
 			'default' => null
-		],
-		'coloringEnabled' => [
+		),
+		'coloringEnabled' => array(
 			'type' => 'boolean',
 			'default' => true
-		],
-		'colorStemsLikeNoteheads' => [
+		),
+		'colorStemsLikeNoteheads' => array(
 			'type' => 'boolean',
 			'default' => false
-		],
-		'defaultColorNotehead' => [
+		),
+		'defaultColorNotehead' => array(
 			'type' => 'string',
 			'default' => null
-		],
-		'defaultColorStem' => [
+		),
+		'defaultColorStem' => array(
 			'type' => 'string',
 			'default' => null
-		],
-		'defaultColorRest' => [
+		),
+		'defaultColorRest' => array(
 			'type' => 'string',
 			'default' => null
-		],
-		'defaultColorLabel' => [
+		),
+		'defaultColorLabel' => array(
 			'type' => 'string',
 			'default' => null
-		],
-		'defaultColorTitle' => [
+		),
+		'defaultColorTitle' => array(
 			'type' => 'string',
 			'default' => null
-		],
-		'defaultFontFamily' => [
+		),
+		'defaultFontFamily' => array(
 			'type' => 'string',
 			'default' => null
-		],
-		'defaultFontStyle' => [
+		),
+		'defaultFontStyle' => array(
 			'type' => 'number',
 			'default' => 0
-		],
-		'disableCursor' => [
+		),
+		'disableCursor' => array(
 			'type' => 'boolean',
 			'default' => true
-		],
-		'followCursor' => [
+		),
+		'followCursor' => array(
 			'type' => 'boolean',
 			'default' => false
-		],
-		'drawingParameters' => [
+		),
+		'drawingParameters' => array(
 			'type' => 'string',
 			'default' => null
-		],
-		'drawCredits' => [
+		),
+		'drawCredits' => array(
 			'type' => 'boolean',
 			'default' => true
-		],
-		'drawTitle' => [
+		),
+		'drawTitle' => array(
 			'type' => 'boolean',
 			'default' => true
-		],
-		'drawSubtitle' => [
+		),
+		'drawSubtitle' => array(
 			'type' => 'boolean',
 			'default' => true
-		],
-		'drawComposer' => [
+		),
+		'drawComposer' => array(
 			'type' => 'boolean',
 			'default' => true
-		],
-		'drawLyricist' => [
+		),
+		'drawLyricist' => array(
 			'type' => 'boolean',
 			'default' => true
-		],
-		'drawMetronomeMarks' => [
+		),
+		'drawMetronomeMarks' => array(
 			'type' => 'boolean',
 			'default' => true
-		],
-		'drawPartNames' => [
+		),
+		'drawPartNames' => array(
 			'type' => 'boolean',
 			'default' => true
-		],
-		'drawPartAbbreviations' => [
+		),
+		'drawPartAbbreviations' => array(
 			'type' => 'boolean',
 			'default' => true
-		],
-		'drawMeasureNumbers' => [
+		),
+		'drawMeasureNumbers' => array(
 			'type' => 'boolean',
 			'default' => true
-		],
-		'drawMeasureNumbersOnlyAtSystemStart' => [
+		),
+		'drawMeasureNumbersOnlyAtSystemStart' => array(
 			'type' => 'boolean',
 			'default' => false
-		],
-		'drawTimeSignatures' => [
+		),
+		'drawTimeSignatures' => array(
 			'type' => 'boolean',
 			'default' => true
-		],
-		'measureNumberInterval' => [
+		),
+		'measureNumberInterval' => array(
 			'type' => 'number',
 			'default' => 2
-		],
-		'useXMLMeasureNumbers' => [
+		),
+		'useXMLMeasureNumbers' => array(
 			'type' => 'boolean',
 			'default' => true
-		],
-		'drawFingerings' => [
+		),
+		'drawFingerings' => array(
 			'type' => 'boolean',
 			'default' => true
-		],
-		'fingeringPosition' => [
+		),
+		'fingeringPosition' => array(
 			'type' => 'string',
 			'default' => null
-		],
-		'fingeringInsideStafflines' => [
+		),
+		'fingeringInsideStafflines' => array(
 			'type' => 'boolean',
 			'default' => false
-		],
-		'drawLyrics' => [
+		),
+		'drawLyrics' => array(
 			'type' => 'boolean',
 			'default' => true
-		],
-		'drawSlurs' => [
+		),
+		'drawSlurs' => array(
 			'type' => 'boolean',
 			'default' => true
-		],
-		'drawUpToMeasureNumber' => [
+		),
+		'drawUpToMeasureNumber' => array(
 			'type' => 'number',
 			'default' => null
-		],
-		'drawUpToSystemNumber' => [
+		),
+		'drawUpToSystemNumber' => array(
 			'type' => 'number',
 			'default' => null
-		],
-		'drawUpToPageNumber' => [
+		),
+		'drawUpToPageNumber' => array(
 			'type' => 'number',
 			'default' => null
-		],
-		'drawFromMeasureNumber' => [
+		),
+		'drawFromMeasureNumber' => array(
 			'type' => 'number',
 			'default' => null
-		],
-		'fillEmptyMeasuresWithWholeRest' => [
+		),
+		'fillEmptyMeasuresWithWholeRest' => array(
 			'type' => 'number',
 			'default' => 0
-		],
-		'setWantedStemDirectionByXml' => [
+		),
+		'setWantedStemDirectionByXml' => array(
 			'type' => 'boolean',
 			'default' => true
-		],
-		'tupletsRatioed' => [
+		),
+		'tupletsRatioed' => array(
 			'type' => 'boolean',
 			'default' => false
-		],
-		'tupletsBracketed' => [
+		),
+		'tupletsBracketed' => array(
 			'type' => 'boolean',
 			'default' => false
-		],
-		'tripletsBracketed' => [
+		),
+		'tripletsBracketed' => array(
 			'type' => 'boolean',
 			'default' => false
-		],
-		'pageFormat' => [
+		),
+		'pageFormat' => array(
 			'type' => 'string',
 			'default' => null
-		],
-		'pageBackgroundColor' => [
+		),
+		'pageBackgroundColor' => array(
 			'type' => 'string',
 			'default' => null
-		],
-		'renderSingleHorizontalStaffline' => [
+		),
+		'renderSingleHorizontalStaffline' => array(
 			'type' => 'boolean',
 			'default' => false
-		],
-		'newSystemFromXML' => [
+		),
+		'newSystemFromXML' => array(
 			'type' => 'boolean',
 			'default' => false
-		],
-		'newPageFromXML' => [
+		),
+		'newPageFromXML' => array(
 			'type' => 'boolean',
 			'default' => false
-		],
-		'percussionOneLineCutoff' => [
+		),
+		'percussionOneLineCutoff' => array(
 			'type' => 'number',
 			'default' => 4
-		],
-		'percussionForceVoicesOneLineCutoff' => [
+		),
+		'percussionForceVoicesOneLineCutoff' => array(
 			'type' => 'number',
 			'default' => 3
-		],
-		'spacingFactorSoftmax' => [
+		),
+		'spacingFactorSoftmax' => array(
 			'type' => 'number',
 			'default' => 5
-		],
-		'spacingBetweenTextLines' => [
+		),
+		'spacingBetweenTextLines' => array(
 			'type' => 'number',
 			'default' => null
-		],
-		'stretchLastSystemLine' => [
+		),
+		'stretchLastSystemLine' => array(
 			'type' => 'boolean',
 			'default' => false
-		],
-		'autoGenerateMutipleRestMeasuresFromRestMeasures' => [
+		),
+		'autoGenerateMutipleRestMeasuresFromRestMeasures' => array(
 			'type' => 'boolean',
 			'default' => true
-		],
-		'width' => [
+		),
+		'width' => array(
 			'type' => 'number',
 			'default' => 100.0
-		],
-		'aspectRatio' => [
+		),
+		'aspectRatio' => array(
 			'type' => 'number',
 			'default' => 0.0
-		],
-		'zoom' => [
+		),
+		'zoom' => array(
 			'type' => 'number',
 			'default' => 1.0
-		],
-		'musicXmlId' => [
+		),
+		'musicXmlId' =>array(
 			'type' => 'number',
 			'default' => -1
-		],
-		'musicXmlUrl' => [
+		),
+		'musicXmlUrl' => array(
 			'type' => 'string',
-			'default' => ''
-		],
-		'musicXmlTitle' => [
+			'default' => null
+		),
+		'musicXmlTitle' => array(
 			'type' => 'string',
-			'default' => ''
-		]
+			'default' => null
+		)
 	);
 	$attributes = apply_filters('phonicscore/opensheetmusicdisplay/block-attributes', $attributes);
 	return $attributes;
@@ -347,7 +347,7 @@ function phonicscore_opensheetmusicdisplay_render_callback($block_attributes, $c
 			<div class="phonicscore-opensheetmusicdisplay__render-block" style="width: $width !important; max-width: $width !important;"></div>
 			<code style="display:none;" class="attributesAsJson">$asJson</code>
 		</div>
-		EOT;
+EOT;
 }
 
 function phonicscore_opensheetmusicdisplay_shortcode_callback($shortCodeAtts, $content, $name) {
@@ -449,14 +449,16 @@ include_once 'MultipleMimes.php';
 phonicscore_opensheetmusicdisplay_MultipleMimes::init();
 
 function phonicscore_opensheetmusicdisplay_activate_plugin(){
-	if(function_exists("register_block_type")){
+	if(function_exists('register_block_type')){
 		add_action( 'init', 'phonicscore_opensheetmusicdisplay_block_init' );
 	}
 	add_action( 'init', 'phonicscore_opensheetmusicdisplay_shortcode_init' );
 	add_action( 'wp_enqueue_scripts', 'phonicscore_opensheetmusicdisplay_enqueue_scripts' );
-	if(function_exists("register_block_type")){
+	if(function_exists('register_block_type')){
 		add_action( 'admin_enqueue_scripts', 'phonicscore_opensheetmusicdisplay_enqueue_admin_scripts' );
 	}
 }
 
 add_action('plugins_loaded', 'phonicscore_opensheetmusicdisplay_activate_plugin', 10);
+
+?>
