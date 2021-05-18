@@ -201,6 +201,7 @@ If you are a Wordpress/javascript developer and are feeling bold and adventurous
 = 1.1.0 =
 * Update to OSMD release 1.0.0. All changes here: https://github.com/opensheetmusicdisplay/opensheetmusicdisplay/discussions/1021
 * Added shortcode functionality
+* Bugfixes for quote syntax issues
 
 = 1.0.1 =
 **Minor updates for plugin extensions**
