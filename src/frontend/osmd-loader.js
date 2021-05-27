@@ -1,6 +1,34 @@
 import { OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
 import {OpenSheetMusicDisplayGlobalHooks} from 'opensheetmusicdisplay-wordpress-block';
 
+//Fix for incompatibility with Prototype.JS.
+//Prototype overrides the reduce method (among many other things) of Array
+//This causes an Vexflow error
+const tempFrame = document.createElement('iframe');
+tempFrame.style.display = 'none';
+document.body.appendChild(tempFrame);
+let originalArrayReduce = undefined;
+let extendedArrayReduce = undefined;
+if(tempFrame && tempFrame.contentWindow && tempFrame.contentWindow.Array &&
+    tempFrame.contentWindow.Array.prototype && tempFrame.contentWindow.Array.prototype.reduce) {
+    originalArrayReduce = tempFrame.contentWindow.Array.prototype.reduce;
+}
+if(Array && Array.prototype && Array.prototype.reduce) {
+    extendedArrayReduce = Array.prototype.reduce;
+}
+
+function RestoreArrayPrototype() {
+    if(originalArrayReduce && extendedArrayReduce) {
+        Array.prototype.reduce = originalArrayReduce;
+    }
+}
+
+function ExtendArrayPrototype() {
+    if(originalArrayReduce && extendedArrayReduce) {
+        Array.prototype.reduce = extendedArrayReduce;
+    }
+}
+tempFrame.remove();
 function FindOSMDCanvasElement(osmdRenderBlock){
     let renderCanvas = undefined;
     for (const nextChild of osmdRenderBlock.getElementsByTagName('div')){
@@ -118,8 +146,10 @@ for(let i = 0; i < placeholders.length; i++){
             OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_post-load', currentOsmd, attributesMap, osmdRenderBlock);
             currentOsmd.Zoom = zoom;
             try {
+                RestoreArrayPrototype();
                 OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_render', currentOsmd, attributesMap, osmdRenderBlock);
                 currentOsmd.render();
+                ExtendArrayPrototype();
             } catch(err){
                 console.warn(err);
                 DisplayError(osmdRenderBlock, 'Error loading sheet music file: ' + url, err);
@@ -167,8 +197,10 @@ for(let i = 0; i < placeholders.length; i++){
             updateHeight();
             currentOsmd.Zoom = zoom;
             try {
+                RestoreArrayPrototype();
                 OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_render', currentOsmd, attributesMap, osmdRenderBlock);
                 currentOsmd.render();
+                ExtendArrayPrototype();
             } catch(err){
                 console.warn(err);
                 DisplayError(osmdRenderBlock, 'Error loading sheet music file: ' + url, err);

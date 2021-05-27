@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:     OpenSheetMusicDisplay
- * Description:     Block to render MusicXML in the browser as sheet music using OSMD.
+ * Description:     Block (and shortcode) to render MusicXML in the browser as sheet music using OSMD.
  * Version:         1.1.0
  * Author:          opensheetmusicdisplay, fredmeister77
  * License:         GPL-2.0-or-later
