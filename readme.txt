@@ -2,9 +2,9 @@
 Contributors:      opensheetmusicdisplay, fredmeister77
 Donate link:       https://OSMD.org/Donate
 Tags:              block,shortcode,osmd,music,sheet music,musicxml,opensheetmusicdisplay
-Requires at least: 5.5.0
+Requires at least: 5.6.0
 Tested up to:      5.7.4
-Stable tag:        1.1.0
+Stable tag:        1.1.1
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -197,6 +197,9 @@ If you are a Wordpress/javascript developer and are feeling bold and adventurous
 4. This shows another post with various options set (75% width, no draw title, Portrait aspect ratio)
 
 == Changelog ==
+
+= 1.1.1 =
+* Bugfix for Vexflow incompatibility with PrototypeJS (Made plugin incomaptible with jTab plugin)
 
 = 1.1.0 =
 * Update to OSMD release 1.0.0. All changes here: https://github.com/opensheetmusicdisplay/opensheetmusicdisplay/discussions/1021
