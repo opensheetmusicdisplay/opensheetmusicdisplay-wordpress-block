@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     OpenSheetMusicDisplay
  * Description:     Block (and shortcode) to render MusicXML in the browser as sheet music using OSMD.
- * Version:         1.1.1
+ * Version:         1.1.2
  * Author:          opensheetmusicdisplay, fredmeister77
  * License:         GPL-2.0-or-later
  * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
@@ -400,14 +400,14 @@ function phonicscore_opensheetmusicdisplay_enqueue_scripts(){
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_exports',
 		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay-wordpress-block.min.js', __FILE__ ) ),
 		array( ),
-		'0.1.0',
+		'0.1.1',
 		true
 	);
 	wp_enqueue_script(
 		'phonicscore_opensheetmusicdisplay_frontend_script',
 		esc_url( plugins_url( 'build/osmd/osmd-loader.min.js', __FILE__ ) ),
 		array( 'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist', 'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_exports' ),
-		'1.1.1',
+		'1.1.2',
 		true
 	);
 }
@@ -419,21 +419,21 @@ function phonicscore_opensheetmusicdisplay_enqueue_admin_scripts($hook){
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist',
 		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay.min.js', __FILE__ ) ),
 		array( ),
-		'1.0.0',
+		'1.0.1',
 		true
 	);
 	wp_enqueue_script(
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_exports',
 		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay-wordpress-block.min.js', __FILE__ ) ),
 		array( ),
-		'0.1.0',
+		'0.1.1',
 		true
 	);
 	wp_enqueue_script(
 		'fredmeister77_queueable_attributes_dist',
 		esc_url( plugins_url( 'build/osmd/queueable_attributes.min.js', __FILE__ ) ),
 		array( ),
-		'0.1.0',
+		'0.1.1',
 		true
 	);
 }
