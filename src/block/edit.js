@@ -118,6 +118,7 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 		drawMeasureNumbersOnlyAtSystemStart:  attributes.drawMeasureNumbersOnlyAtSystemStart ,
 		drawTimeSignatures:  attributes.drawTimeSignatures ,
 		maxReloadAttempts: 5,
+		newSystemFromXML: attributes.newSystemFromXML,
 		pluginManager: pluginManager
 	};
 	
@@ -282,6 +283,12 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 								label={__('Draw Time Signatures')}
 								checked={ queueableAttributes.drawTimeSignatures.value }
 								onChange={ (val) =>  queueAttribute('drawTimeSignatures', val, 0) }
+							>
+							</CheckboxControl>
+							<CheckboxControl
+								label={__('New Systems From XML')}
+								checked={ queueableAttributes.newSystemFromXML.value }
+								onChange={ (val) =>  queueAttribute('newSystemFromXML', val, 0) }
 							>
 							</CheckboxControl>
 						</PanelBody>
