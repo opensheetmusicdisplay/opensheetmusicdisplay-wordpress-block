@@ -348,6 +348,10 @@ registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 			type: 'boolean',
 			default: false
 		},
+		rerenderOnEditorResize: {
+			type: 'boolean',
+			default: false
+		},
 		queueableAttributes: {
 			type: 'array',
 			default: [

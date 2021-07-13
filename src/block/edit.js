@@ -9,7 +9,7 @@ import {OpenSheetMusicDisplayGlobalHooks, OpenSheetMusicDisplayWordpressPlugin} 
  * Wordpress Dependencies
  */
 import { InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
-import { withFilters, Card, CardBody, SelectControl, CheckboxControl, Button, PanelBody, TextControl } from '@wordpress/components';
+import { withFilters, Card, CardBody, SelectControl, CheckboxControl, Button, PanelBody, TextControl, Tooltip, Icon } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 
@@ -107,6 +107,7 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 		file:  attributes.musicXmlUrl ,
 		width:  attributes.width ,
 		zoom:  attributes.zoom ,
+		rerenderOnEditorResize: attributes.rerenderOnEditorResize,
 		drawTitle:  attributes.drawTitle ,
 		drawSubtitle:  attributes.drawSubtitle ,
 		drawComposer:  attributes.drawComposer ,
@@ -132,6 +133,17 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 				<InspectorControls>
 					<Card>
 					<CardBody>
+						<CheckboxControl
+								label={__('Rerender on Editor Resize')}
+								checked={ attributes.rerenderOnEditorResize }
+								onChange={ (val) => {
+									setAttributes( {rerenderOnEditorResize: val } );
+								} }
+							>
+						</CheckboxControl>
+						<Tooltip text={__('This only applies for the Gutenberg editor. Your post will always re-render on resize for end-users.')}>
+							<Icon icon="dashicons-info-outline"></Icon>
+						</Tooltip>
 						<CheckboxControl
 							label={__('Automatically Rerender on Change')}
 							checked={ !attributes.queueAttributes }
