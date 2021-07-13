@@ -134,18 +134,31 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 					<Card>
 					<CardBody>
 						<CheckboxControl
-								label={__('Rerender on Editor Resize')}
+								label={
+									<span>
+										{__('Rerender on Editor Resize')}
+										&nbsp;
+										<Tooltip text={__('This only applies for the Gutenberg editor. This block will always re-render in the user-facing post.')}>
+											<Icon icon="info-outline" className="phonicscore-opensheetmusicdisplay__tooltip-icon"></Icon>
+										</Tooltip>
+									</span>
+								}
 								checked={ attributes.rerenderOnEditorResize }
 								onChange={ (val) => {
 									setAttributes( {rerenderOnEditorResize: val } );
 								} }
 							>
 						</CheckboxControl>
-						<Tooltip text={__('This only applies for the Gutenberg editor. Your post will always re-render on resize for end-users.')}>
-							<Icon icon="dashicons-info-outline"></Icon>
-						</Tooltip>
 						<CheckboxControl
-							label={__('Automatically Rerender on Change')}
+							label={
+								<span>
+									{__('Automatically Rerender on Change')}
+									&nbsp;
+									<Tooltip text={__('When any of the Options below change, re-render the block. If disabled, you must use the Rerender button below.')}>
+										<Icon icon="info-outline" className="phonicscore-opensheetmusicdisplay__tooltip-icon"></Icon>
+									</Tooltip>
+								</span>
+							}
 							checked={ !attributes.queueAttributes }
 							onChange={ (val) => {
 								setAttributes( {queueAttributes: !val } );
@@ -165,7 +178,15 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 						</CardBody>
 						</Card>
 					<PanelBody
-						title={__('Basic Options')}
+						title={
+							<span>
+								{__('Basic Options')}
+								&nbsp;
+								<Tooltip text={__('Basic rendering options for the block. MusicXML file, width, aspect ration and zoom.')}>
+									<Icon icon="info-outline" className="phonicscore-opensheetmusicdisplay__tooltip-icon"></Icon>
+								</Tooltip>
+							</span>
+						}
 						initialOpen = { true }
 						>
 						<div className='musicxml-selector'>
