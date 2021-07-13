@@ -109,6 +109,8 @@ export class OpenSheetMusicDisplay extends PureComponent {
     setupOsmd() {
       this.osmdDivRef.current.innerHTML = '';
       const options = this.getOptionsObjectFromProps(this.props);
+      //We always want to manage resizing from here. Turn off autoresize
+      options.autoResize = false;
       this.osmd = new OSMD(this.osmdDivRef.current, options);
       if(this.pluginManager?.getPlugins()?.length > 0){
         for(let i = 0; i < this.pluginManager.getPlugins().length; i++){
@@ -125,6 +127,8 @@ export class OpenSheetMusicDisplay extends PureComponent {
       this.osmdDivRef.current.innerHTML = '';
       this.loaderDivRef.current.classList.remove('hide');
       const options = this.getOptionsObjectFromProps(this.props);
+      //We always want to manage resizing from here. Turn off autoresize
+      options.autoResize = false;
       this.osmd.setOptions(options);
       if (this.props.file !== prevProps.file) {
         this.loadFileBehavior();
@@ -138,7 +142,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
       this.currentWidth = this.osmdDivRef.current.offsetWidth;
       //The gutenberg editor pane does little resizes when changed block selections, etc. 
       //Need this threshold to prevent annoying resizes
-      if(!this.props.rerenderOnEditorResize || Math.abs(this.currentWidth - prevWidth) < 32){
+      if(Math.abs(this.currentWidth - prevWidth) < 32){
         return;
     }
       this.loaderDivRef.current.classList.remove('hide');
