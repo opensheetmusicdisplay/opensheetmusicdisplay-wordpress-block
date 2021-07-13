@@ -136,9 +136,11 @@ export class OpenSheetMusicDisplay extends PureComponent {
     resize(){
       const prevWidth = this.currentWidth;
       this.currentWidth = this.osmdDivRef.current.offsetWidth;
-      if(this.currentWidth === prevWidth){
-          return;
-      }
+      //The gutenberg editor pane does little resizes when changed block selections, etc. 
+      //Need this threshold to prevent annoying resizes
+      if(!this.props.rerenderOnEditorResize || Math.abs(this.currentWidth - prevWidth) < 32){
+        return;
+    }
       this.loaderDivRef.current.classList.remove('hide');
       clearTimeout(this.timeoutObject);
       const self = this;
