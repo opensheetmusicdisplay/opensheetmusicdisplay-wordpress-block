@@ -159,6 +159,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
       this.currentWidth = this.osmdDivRef.current.offsetWidth;
       this.timeoutObject = undefined;
       const self = this;
+      /* We do not want to re-render in edit mode at all
       if(ResizeObserver){
         const resizeObserver = new ResizeObserver(entries => {
           self.resize();
@@ -169,7 +170,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
           window.addEventListener('resize', (event) => {
             self.resize();
           });
-      }
+      }*/
     }
   
     render() {

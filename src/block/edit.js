@@ -119,7 +119,8 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 		drawTimeSignatures:  attributes.drawTimeSignatures ,
 		maxReloadAttempts: 5,
 		newSystemFromXML: attributes.newSystemFromXML,
-		pluginManager: pluginManager
+		pluginManager: pluginManager,
+		rerenderDummy: attributes.rerenderDummy
 	};
 	
 	let pluginProps = OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_block-props', OSMDProps, attributes, queueableAttributes);
@@ -144,9 +145,8 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 						>
 						</CheckboxControl>
 							<Button
-								disabled={!attributes.queueAttributes}
 								isPrimary= {true}
-								onClick={() => commitAttributes()}
+								onClick={() => {queueAttribute('rerenderDummy', {}, 0); commitAttributes();}}
 							>
 								{__('Rerender')}
 							</Button>

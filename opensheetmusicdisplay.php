@@ -2,8 +2,9 @@
 /**
  * Plugin Name:     OpenSheetMusicDisplay
  * Description:     Block (and shortcode) to render MusicXML in the browser as sheet music using OSMD.
- * Version:         1.1.4
- * Author:          opensheetmusicdisplay, fredmeister77
+ * Version:         1.1.5
+ * Author:          opensheetmusicdisplay.org
+ * Author URI:		https://opensheetmusicdisplay.org
  * License:         GPL-2.0-or-later
  * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:     opensheetmusicdisplay
@@ -337,12 +338,18 @@ function phonicscore_opensheetmusicdisplay_get_attributes_list() {
 function phonicscore_opensheetmusicdisplay_render_callback($block_attributes, $content){
 	$asJson = wp_json_encode($block_attributes, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
 	$width = '100%';
-	if(is_array($block_attributes) && array_key_exists('width', $block_attributes)){
-		$width = $block_attributes['width'] . '%';
+	$className = '';
+	if(is_array($block_attributes)){
+		if(array_key_exists('width', $block_attributes)){
+			$width = $block_attributes['width'] . '%';
+		}
+		if(array_key_exists('className', $block_attributes)){
+			$className = $block_attributes['className'];
+		}
 	}
 	return
 		<<<EOT
-		<div class="phonicscore-opensheetmusicdisplay__placeholder" style="width: $width !important; max-width: $width !important;">
+		<div class="phonicscore-opensheetmusicdisplay__placeholder $className" style="width: $width !important; max-width: $width !important;">
 			<div class="phonicscore-opensheetmusicdisplay__loading-spinner hide"></div>
 			<div class="phonicscore-opensheetmusicdisplay__render-block" style="width: $width !important; max-width: $width !important;"></div>
 			<code style="display:none;" class="attributesAsJson">$asJson</code>
@@ -448,6 +455,14 @@ add_filter( 'upload_mimes', 'phonicscore_opensheetmusicdisplay_musicxml_mime_typ
 include_once 'MultipleMimes.php';
 phonicscore_opensheetmusicdisplay_MultipleMimes::init();
 
+function phonicscore_opensheetmusicdisplay_admin_notices() {
+    ?>
+    <div class="notice notice-warning is-dismissible">
+        <p><?php _e( '<strong>Heads up!</strong> The OpenSheetMusicDisplay Block will no longer automatically rerender on resize in the editor. It will still automatically resize for the frontend.', 'phonicscore_opensheetmusicdisplay' ); ?></p>
+    </div>
+    <?php
+}
+
 function phonicscore_opensheetmusicdisplay_activate_plugin(){
 	if(function_exists('register_block_type')){
 		add_action( 'init', 'phonicscore_opensheetmusicdisplay_block_init' );
@@ -456,6 +471,13 @@ function phonicscore_opensheetmusicdisplay_activate_plugin(){
 	add_action( 'wp_enqueue_scripts', 'phonicscore_opensheetmusicdisplay_enqueue_scripts' );
 	if(function_exists('register_block_type')){
 		add_action( 'admin_enqueue_scripts', 'phonicscore_opensheetmusicdisplay_enqueue_admin_scripts' );
+		if (current_user_can('edit_posts') && is_admin()){
+			$resizeUpdateMessageViewed = get_user_meta(get_current_user_id(), 'phonicscore_opensheetmusicdisplay_resize_update_message_viewed', true);
+			if($resizeUpdateMessageViewed === '' || $resizeUpdateMessageViewed == false){
+				add_action( 'admin_notices', 'phonicscore_opensheetmusicdisplay_admin_notices' );
+				update_user_meta(get_current_user_id(), 'phonicscore_opensheetmusicdisplay_resize_update_message_viewed', true);
+			}
+		}
 	}
 }
 

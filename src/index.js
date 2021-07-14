@@ -348,6 +348,10 @@ registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 			type: 'boolean',
 			default: false
 		},
+		rerenderDummy: {
+			type: 'object',
+			default: {}
+		},
 		queueableAttributes: {
 			type: 'array',
 			default: [
@@ -407,7 +411,8 @@ registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 				"stretchLastSystemLine",
 				"autoGenerateMutipleRestMeasuresFromRestMeasures",
 				"width",
-				"zoom"			
+				"zoom",
+				"rerenderDummy"
 			]
 		}
 	}

@@ -4,7 +4,7 @@ Donate link:       https://OSMD.org/Donate
 Tags:              block,shortcode,osmd,music,sheet music,musicxml,opensheetmusicdisplay
 Requires at least: 5.6.0
 Tested up to:      5.8.0
-Stable tag:        1.1.4
+Stable tag:        1.1.5
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -197,6 +197,12 @@ If you are a Wordpress/javascript developer and are feeling bold and adventurous
 4. This shows another post with various options set (75% width, no draw title, Portrait aspect ratio)
 
 == Changelog ==
+
+= 1.1.5 =
+** A notice will appear once for each editing user in the admin section for this - After this update the Gutenberg block will no longer re-render automatically on resize. **
+* Remove rerender on resize from editor completely. The block will no longer automatically rerender on resize. This is because opening other panes in the editor would trigger a resize, making it very annoying to work with.
+* Update rerender button to always be available. Since automatic resizing is disabled, you can now re-render anytime you choose with the rerender button.
+* Add support for additional CSS classes: Will now allow other plugins/the user to add CSS classes to the block.
 
 = 1.1.4 =
 * Add resize threshold - Fixes some of the issue with re-rendering too often.
