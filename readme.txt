@@ -35,7 +35,6 @@ It is best to do 'batch' updates with the settings and use the 'Rerender' button
 
 #### Rerender
 *Button*
-This button will be disabled if the above setting is turned on.
 This button is used to trigger a manual rerender of the sheet music in the currently selected OSMD block.
 This is particularly useful for updating the settings of larger pieces of sheet music that take longer to render.
 
