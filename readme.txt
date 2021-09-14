@@ -3,7 +3,7 @@ Contributors:      opensheetmusicdisplay, fredmeister77
 Donate link:       https://OSMD.org/Donate
 Tags:              block,shortcode,osmd,music,sheet music,musicxml,opensheetmusicdisplay
 Requires at least: 5.6.0
-Tested up to:      5.8.0
+Tested up to:      5.8.1
 Stable tag:        1.1.5
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
