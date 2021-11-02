@@ -4,7 +4,7 @@ Donate link:       https://OSMD.org/Donate
 Tags:              block,shortcode,osmd,music,sheet music,musicxml,opensheetmusicdisplay
 Requires at least: 5.6.0
 Tested up to:      5.8.1
-Stable tag:        1.1.5
+Stable tag:        1.1.6
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -196,6 +196,10 @@ If you are a Wordpress/javascript developer and are feeling bold and adventurous
 4. This shows another post with various options set (75% width, no draw title, Portrait aspect ratio)
 
 == Changelog ==
+
+= 1.1.6 =
+* Updated to the latest OSMD version (1.2.+)
+* Process options filters before render on the front-end (already occurred for the admin facing block)
 
 = 1.1.5 =
 ** A notice will appear once for each editing user in the admin section for this - After this update the Gutenberg block will no longer re-render automatically on resize. **

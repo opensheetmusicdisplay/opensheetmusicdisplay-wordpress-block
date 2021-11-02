@@ -154,6 +154,7 @@ for(let i = 0; i < placeholders.length; i++){
                 console.warn(err);
                 DisplayError(osmdRenderBlock, 'Error loading sheet music file: ' + url, err);
             } finally {
+                OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_post-render', currentOsmd, attributesMap, osmdRenderBlock);
                 OpenSheetMusicDisplayGlobalHooks.didAction('phonicscore_opensheetmusicdisplay_render');
                 loader.classList.add('hide');
                 loadAttempt = 0;
@@ -205,6 +206,7 @@ for(let i = 0; i < placeholders.length; i++){
                 console.warn(err);
                 DisplayError(osmdRenderBlock, 'Error loading sheet music file: ' + url, err);
             } finally {
+                OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_post-render', currentOsmd, attributesMap, osmdRenderBlock);
                 OpenSheetMusicDisplayGlobalHooks.didAction('phonicscore_opensheetmusicdisplay_render');
                 loader.classList.add('hide');
             }
