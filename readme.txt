@@ -196,6 +196,8 @@ If you are a Wordpress/javascript developer and are feeling bold and adventurous
 4. This shows another post with various options set (75% width, no draw title, Portrait aspect ratio)
 
 == Changelog ==
+
+= 1.1.7 =
 *Updated to latest OSMD Version (1.4.3)
 
 = 1.1.6 =
