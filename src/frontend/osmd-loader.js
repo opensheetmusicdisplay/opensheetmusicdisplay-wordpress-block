@@ -137,6 +137,7 @@ for(let i = 0; i < placeholders.length; i++){
 
     let loadAttempt = 0;
     let loadFailed = false;
+    let resizeThreshold = 0;
 
     const loadBehavior = () => {
         loadAttempt++;
@@ -148,7 +149,9 @@ for(let i = 0; i < placeholders.length; i++){
             try {
                 RestoreArrayPrototype();
                 OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_render', currentOsmd, attributesMap, osmdRenderBlock);
+                let beforeWidth = osmdRenderBlock.offsetWidth;
                 currentOsmd.render();
+                resizeThreshold = Math.abs(beforeWidth - osmdRenderBlock.offsetWidth);
                 ExtendArrayPrototype();
             } catch(err){
                 console.warn(err);
@@ -186,7 +189,7 @@ for(let i = 0; i < placeholders.length; i++){
         }
         const prevWidth = currentContainerWidth;
         currentContainerWidth = osmdRenderBlock.offsetWidth;
-        if(currentContainerWidth === prevWidth){
+        if(Math.abs(currentContainerWidth - prevWidth) <= resizeThreshold){
             return;
         }
         loader.classList.remove('hide');
@@ -200,7 +203,9 @@ for(let i = 0; i < placeholders.length; i++){
             try {
                 RestoreArrayPrototype();
                 OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_render', currentOsmd, attributesMap, osmdRenderBlock);
+                let beforeWidth = osmdRenderBlock.offsetWidth;
                 currentOsmd.render();
+                resizeThreshold = Math.abs(beforeWidth - osmdRenderBlock.offsetWidth);
                 ExtendArrayPrototype();
             } catch(err){
                 console.warn(err);
