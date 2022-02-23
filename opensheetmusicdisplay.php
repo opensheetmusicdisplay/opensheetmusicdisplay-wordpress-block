@@ -18,6 +18,35 @@
  *
  * @see https://developer.wordpress.org/block_editor/tutorials/block_tutorial/applying_styles_with_stylesheets/
  */
+include_once 'settings.php';
+
+define("phonicscore_opensheetmusicdisplay_processed_attributes", phonicscore_opensheetmusicdisplay_get_attributes_list());
+
+function phonicscore_opensheetmusicdisplay_generate_client_attributes(){
+	$jsonDefaults = wp_json_encode(phonicscore_opensheetmusicdisplay_processed_attributes, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
+	return <<<EOT
+	(function(){
+		const atts = ${jsonDefaults};
+		console.log(atts);
+		function registerAttributes(settings, name){
+			if( name === 'phonicscore/opensheetmusicdisplay'){
+				const keys = Object.keys(atts);
+				for(let i = 0; i < keys.length; i++){
+					settings.attributes[keys[i]] = atts[keys[i]];
+				}
+			}
+			return settings;
+		}
+		wp.hooks.addFilter(
+			'blocks.registerBlockType',
+			'phonicscore/opensheetmusicdisplay/block-type-hook',
+			registerAttributes
+		);
+	})();
+	EOT;
+}
+
+
 function phonicscore_opensheetmusicdisplay_block_init() {
 	$dir = __DIR__;
 
@@ -59,7 +88,6 @@ function phonicscore_opensheetmusicdisplay_block_init() {
 		filemtime( "$dir/$style_css" )
 	);
 
-	$attributes = phonicscore_opensheetmusicdisplay_get_attributes_list();
 	register_block_type(
 		'phonicscore/opensheetmusicdisplay',
 		array(
@@ -67,7 +95,7 @@ function phonicscore_opensheetmusicdisplay_block_init() {
 			'editor_style'  => 'phonicscore_opensheetmusicdisplay_block_editor',
 			'style'         => 'phonicscore_opensheetmusicdisplay_block',
 			'render_callback' => 'phonicscore_opensheetmusicdisplay_render_callback',
-			'attributes' => $attributes
+			'attributes' => phonicscore_opensheetmusicdisplay_processed_attributes
 		)
 	);
 }
@@ -332,6 +360,24 @@ function phonicscore_opensheetmusicdisplay_get_attributes_list() {
 		)
 	);
 	$attributes = apply_filters('phonicscore/opensheetmusicdisplay/block-attributes', $attributes);
+	$phonicscore_opensheetmusicdisplay_default_settings_options = get_option( 'phonicscore_opensheetmusicdisplay_default_settings_option_name' ); // Array of All Options
+	
+	foreach($attributes as $key => $value){
+		switch($value['type']){
+			case 'boolean':
+				$newValue = is_array($phonicscore_opensheetmusicdisplay_default_settings_options) && 
+							array_key_exists($key, $phonicscore_opensheetmusicdisplay_default_settings_options) &&
+							$phonicscore_opensheetmusicdisplay_default_settings_options[$key] === $key;
+				$attributes[$key]['default'] = $newValue;
+			break;
+			default:
+				if(is_array($phonicscore_opensheetmusicdisplay_default_settings_options) && 
+				array_key_exists($key, $phonicscore_opensheetmusicdisplay_default_settings_options)){
+					$attributes[$key]['default'] = $phonicscore_opensheetmusicdisplay_default_settings_options[$key];
+				}
+			break;
+		}
+	}
 	return $attributes;
 }
 
@@ -410,6 +456,10 @@ function phonicscore_opensheetmusicdisplay_enqueue_scripts(){
 		'0.1.1',
 		true
 	);
+	wp_add_inline_script(
+		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_exports',
+		 phonicscore_opensheetmusicdisplay_generate_client_attributes(),
+	);
 	wp_enqueue_script(
 		'phonicscore_opensheetmusicdisplay_frontend_script',
 		esc_url( plugins_url( 'build/osmd/osmd-loader.min.js', __FILE__ ) ),
@@ -435,6 +485,10 @@ function phonicscore_opensheetmusicdisplay_enqueue_admin_scripts($hook){
 		array( ),
 		'0.1.1',
 		true
+	);
+	wp_add_inline_script(
+		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_exports',
+		 phonicscore_opensheetmusicdisplay_generate_client_attributes(),
 	);
 	wp_enqueue_script(
 		'fredmeister77_queueable_attributes_dist',
