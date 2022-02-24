@@ -43,7 +43,7 @@ class phonicescore_OpenSheetMusicDisplayDefaultSettingsPage {
 			'zoom' => 1.0
 		);
 
-		$phonicscore_opensheetmusicdisplay_default_settings_options = add_option( 'phonicscore_opensheetmusicdisplay_default_settings_option_name', $default_values );
+		add_option( 'phonicscore_opensheetmusicdisplay_default_settings_option_name', $default_values );
 	}
 
 	public function phonicscore_opensheetmusicdisplay_default_settings_create_admin_page() {
@@ -222,7 +222,7 @@ class phonicescore_OpenSheetMusicDisplayDefaultSettingsPage {
 		}
 
 		if ( isset( $input['zoom'] ) ) {
-			$sanitary_values['zoom'] = $input['zoom'];
+			$sanitary_values['zoom'] = round($input['zoom'], 2);
 		}
 
 		return $sanitary_values;
@@ -234,85 +234,85 @@ class phonicescore_OpenSheetMusicDisplayDefaultSettingsPage {
 
 	public function drawTitle_callback() {
 		printf(
-			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[drawTitle]" id="drawTitle" value="drawTitle" %s> <label for="drawTitle">Render the sheet music title or not</label>',
+			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[drawTitle]" id="drawTitle" value="drawTitle" %s> <label for="drawTitle">Render the sheet music title</label>',
 			( isset( $this->phonicscore_opensheetmusicdisplay_default_settings_options['drawTitle'] ) && $this->phonicscore_opensheetmusicdisplay_default_settings_options['drawTitle'] === 'drawTitle' ) ? 'checked' : ''
 		);
 	}
 
 	public function drawSubtitle_callback() {
 		printf(
-			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[drawSubtitle]" id="drawSubtitle" value="drawSubtitle" %s> <label for="drawSubtitle">Render the sheet music subtitle or not</label>',
+			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[drawSubtitle]" id="drawSubtitle" value="drawSubtitle" %s> <label for="drawSubtitle">Render the sheet music subtitle</label>',
 			( isset( $this->phonicscore_opensheetmusicdisplay_default_settings_options['drawSubtitle'] ) && $this->phonicscore_opensheetmusicdisplay_default_settings_options['drawSubtitle'] === 'drawSubtitle' ) ? 'checked' : ''
 		);
 	}
 
 	public function drawComposer_callback() {
 		printf(
-			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[drawComposer]" id="drawComposer" value="drawComposer" %s> <label for="drawComposer">Render the composer name or not</label>',
+			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[drawComposer]" id="drawComposer" value="drawComposer" %s> <label for="drawComposer">Render the composer name</label>',
 			( isset( $this->phonicscore_opensheetmusicdisplay_default_settings_options['drawComposer'] ) && $this->phonicscore_opensheetmusicdisplay_default_settings_options['drawComposer'] === 'drawComposer' ) ? 'checked' : ''
 		);
 	}
 
 	public function drawLyricist_callback() {
 		printf(
-			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[drawLyricist]" id="drawLyricist" value="drawLyricist" %s> <label for="drawLyricist">Render the lyricist name or not</label>',
+			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[drawLyricist]" id="drawLyricist" value="drawLyricist" %s> <label for="drawLyricist">Render the lyricist name</label>',
 			( isset( $this->phonicscore_opensheetmusicdisplay_default_settings_options['drawLyricist'] ) && $this->phonicscore_opensheetmusicdisplay_default_settings_options['drawLyricist'] === 'drawLyricist' ) ? 'checked' : ''
 		);
 	}
 
 	public function drawMetronomeMarks_callback() {
 		printf(
-			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[drawMetronomeMarks]" id="drawMetronomeMarks" value="drawMetronomeMarks" %s> <label for="drawMetronomeMarks">Render the metronome markings or not</label>',
+			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[drawMetronomeMarks]" id="drawMetronomeMarks" value="drawMetronomeMarks" %s> <label for="drawMetronomeMarks">Render the metronome markings</label>',
 			( isset( $this->phonicscore_opensheetmusicdisplay_default_settings_options['drawMetronomeMarks'] ) && $this->phonicscore_opensheetmusicdisplay_default_settings_options['drawMetronomeMarks'] === 'drawMetronomeMarks' ) ? 'checked' : ''
 		);
 	}
 
 	public function drawPartNames_callback() {
 		printf(
-			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[drawPartNames]" id="drawPartNames" value="drawPartNames" %s> <label for="drawPartNames">Render the part names or not</label>',
+			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[drawPartNames]" id="drawPartNames" value="drawPartNames" %s> <label for="drawPartNames">Render the part names</label>',
 			( isset( $this->phonicscore_opensheetmusicdisplay_default_settings_options['drawPartNames'] ) && $this->phonicscore_opensheetmusicdisplay_default_settings_options['drawPartNames'] === 'drawPartNames' ) ? 'checked' : ''
 		);
 	}
 
 	public function drawPartAbbreviations_callback() {
 		printf(
-			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[drawPartAbbreviations]" id="drawPartAbbreviations" value="drawPartAbbreviations" %s> <label for="drawPartAbbreviations">Render the part abbreviations or not</label>',
+			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[drawPartAbbreviations]" id="drawPartAbbreviations" value="drawPartAbbreviations" %s> <label for="drawPartAbbreviations">Render the part abbreviations</label>',
 			( isset( $this->phonicscore_opensheetmusicdisplay_default_settings_options['drawPartAbbreviations'] ) && $this->phonicscore_opensheetmusicdisplay_default_settings_options['drawPartAbbreviations'] === 'drawPartAbbreviations' ) ? 'checked' : ''
 		);
 	}
 
 	public function drawMeasureNumbers_callback() {
 		printf(
-			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[drawMeasureNumbers]" id="drawMeasureNumbers" value="drawMeasureNumbers" %s> <label for="drawMeasureNumbers">Render the measure numbers or not</label>',
+			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[drawMeasureNumbers]" id="drawMeasureNumbers" value="drawMeasureNumbers" %s> <label for="drawMeasureNumbers">Render the measure numbers</label>',
 			( isset( $this->phonicscore_opensheetmusicdisplay_default_settings_options['drawMeasureNumbers'] ) && $this->phonicscore_opensheetmusicdisplay_default_settings_options['drawMeasureNumbers'] === 'drawMeasureNumbers' ) ? 'checked' : ''
 		);
 	}
 
 	public function drawMeasureNumbersOnlyAtSystemStart_callback() {
 		printf(
-			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[drawMeasureNumbersOnlyAtSystemStart]" id="drawMeasureNumbersOnlyAtSystemStart" value="drawMeasureNumbersOnlyAtSystemStart" %s> <label for="drawMeasureNumbersOnlyAtSystemStart">Render the measure numbers only at the beginning of a line or not</label>',
+			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[drawMeasureNumbersOnlyAtSystemStart]" id="drawMeasureNumbersOnlyAtSystemStart" value="drawMeasureNumbersOnlyAtSystemStart" %s> <label for="drawMeasureNumbersOnlyAtSystemStart">Render the measure numbers only at the beginning of a line</label>',
 			( isset( $this->phonicscore_opensheetmusicdisplay_default_settings_options['drawMeasureNumbersOnlyAtSystemStart'] ) && $this->phonicscore_opensheetmusicdisplay_default_settings_options['drawMeasureNumbersOnlyAtSystemStart'] === 'drawMeasureNumbersOnlyAtSystemStart' ) ? 'checked' : ''
 		);
 	}
 
 	public function drawTimeSignatures_callback() {
 		printf(
-			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[drawTimeSignatures]" id="drawTimeSignatures" value="drawTimeSignatures" %s> <label for="drawTimeSignatures">Render time signatures or not</label>',
+			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[drawTimeSignatures]" id="drawTimeSignatures" value="drawTimeSignatures" %s> <label for="drawTimeSignatures">Render time signatures</label>',
 			( isset( $this->phonicscore_opensheetmusicdisplay_default_settings_options['drawTimeSignatures'] ) && $this->phonicscore_opensheetmusicdisplay_default_settings_options['drawTimeSignatures'] === 'drawTimeSignatures' ) ? 'checked' : ''
 		);
 	}
 
 	public function newSystemFromXML_callback() {
 		printf(
-			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[newSystemFromXML]" id="newSystemFromXML" value="newSystemFromXML" %s> <label for="newSystemFromXML">Whether to oblige system breaks specified in the MusicXML or not</label>',
+			'<input type="checkbox" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[newSystemFromXML]" id="newSystemFromXML" value="newSystemFromXML" %s> <label for="newSystemFromXML">Oblige system breaks specified in the MusicXML</label>',
 			( isset( $this->phonicscore_opensheetmusicdisplay_default_settings_options['newSystemFromXML'] ) && $this->phonicscore_opensheetmusicdisplay_default_settings_options['newSystemFromXML'] === 'newSystemFromXML' ) ? 'checked' : ''
 		);
 	}
 
 	public function zoom_callback() {
 		printf(
-			'<input type="number" step="0.05" min="0.05" max="5.0" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[zoom]" id="zoom" value="%F"> <label for="zoom">The zoom value of the sheet</label>',
-			( isset( $this->phonicscore_opensheetmusicdisplay_default_settings_options['zoom'] ) && $this->phonicscore_opensheetmusicdisplay_default_settings_options['zoom'] === 'zoom' ) ? phonicscore_opensheetmusicdisplay_default_settings_options['zoom'] : 1.0
+			'<input type="number" step="0.05" min="0.05" max="5.0" name="phonicscore_opensheetmusicdisplay_default_settings_option_name[zoom]" id="zoom" value="%.2f"> <label for="zoom">Default Zoom Value</label>',
+			isset( $this->phonicscore_opensheetmusicdisplay_default_settings_options['zoom'] ) ? $this->phonicscore_opensheetmusicdisplay_default_settings_options['zoom'] : 1.00
 		);
 	}
 

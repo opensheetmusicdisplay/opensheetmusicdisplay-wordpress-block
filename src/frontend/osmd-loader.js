@@ -121,6 +121,8 @@ for(let i = 0; i < placeholders.length; i++){
         delete attributesMap.aspectRatio;
     }
 
+    attributesMap.autoResize = false;
+
     const updateHeight = () => {
         let height = 'auto';
         if(aspectRatioAsFloat > 0.0 && currentPlaceholder.offsetWidth){
@@ -204,7 +206,7 @@ for(let i = 0; i < placeholders.length; i++){
                 RestoreArrayPrototype();
                 OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_render', currentOsmd, attributesMap, osmdRenderBlock);
                 let beforeWidth = osmdRenderBlock.offsetWidth;
-                currentOsmd.render();
+                currentOsmd.autoResize();
                 resizeThreshold = Math.abs(beforeWidth - osmdRenderBlock.offsetWidth);
                 ExtendArrayPrototype();
             } catch(err){
