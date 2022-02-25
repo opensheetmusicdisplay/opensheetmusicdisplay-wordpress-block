@@ -4,7 +4,7 @@ Donate link:       https://OSMD.org/Donate
 Tags:              block,shortcode,osmd,music,sheet music,musicxml,opensheetmusicdisplay
 Requires at least: 5.6.0
 Tested up to:      5.9.0
-Stable tag:        1.1.8
+Stable tag:        1.2.0
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -118,6 +118,10 @@ Whether to render measure numbers just at the start of new music systems.
 *Checkbox, Default: On*
 Whether to render time signatures on the staves
 
+#### New Systems From XML
+*Checkbox, Default: Off*
+This determines whether system breaks specified in the MusicXML will be honored.
+
 ##Shortcode Options
 
 The shortcode has the same options as above, though as attributes written in camelCase.
@@ -196,6 +200,10 @@ If you are a Wordpress/javascript developer and are feeling bold and adventurous
 4. This shows another post with various options set (75% width, no draw title, Portrait aspect ratio)
 
 == Changelog ==
+
+= 1.2.0 =
+*Add Default Settings Page:
+Now an OSMD settings page will appear in the admin menu. These are to specify default settings that will apply to all new OSMD blocks as well as blocks that have not had their settings values updated from the default.
 
 = 1.1.8 =
 *Add resize threshold calculation to prevent OSMD from continuously re-rendering (on front-end).
