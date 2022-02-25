@@ -27,7 +27,6 @@ function phonicscore_opensheetmusicdisplay_generate_client_attributes(){
 	return <<<EOT
 	(function(){
 		const atts = ${jsonDefaults};
-		console.log(atts);
 		function registerAttributes(settings, name){
 			if( name === 'phonicscore/opensheetmusicdisplay'){
 				const keys = Object.keys(atts);
