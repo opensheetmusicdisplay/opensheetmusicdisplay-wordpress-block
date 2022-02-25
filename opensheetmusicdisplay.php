@@ -18,7 +18,9 @@
  *
  * @see https://developer.wordpress.org/block_editor/tutorials/block_tutorial/applying_styles_with_stylesheets/
  */
-include_once 'settings.php';
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+include_once 'opensheetmusicdisplay-settings.php';
 
 define("phonicscore_opensheetmusicdisplay_processed_attributes", phonicscore_opensheetmusicdisplay_get_attributes_list());
 
