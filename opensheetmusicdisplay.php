@@ -22,27 +22,50 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 include_once 'opensheetmusicdisplay-settings.php';
 
-define("phonicscore_opensheetmusicdisplay_processed_attributes", phonicscore_opensheetmusicdisplay_get_attributes_list());
+define("phonicscore_opensheetmusicdisplay_base_attributes", phonicscore_opensheetmusicdisplay_get_attributes_list());
+define("phonicscore_opensheetmusicdisplay_processed_attributes", phonicscore_opensheetmusicdisplay_process_attributes());
 
-function phonicscore_opensheetmusicdisplay_generate_client_attributes(){
-	$jsonDefaults = wp_json_encode(phonicscore_opensheetmusicdisplay_processed_attributes, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
+function phonicscore_opensheetmusicdisplay_generate_admin_client_attributes(){
+	$jsonBaseDefaults = wp_json_encode(phonicscore_opensheetmusicdisplay_base_attributes, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
+	$jsonAllDefaults = wp_json_encode(phonicscore_opensheetmusicdisplay_processed_attributes, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
 	return <<<EOT
 	(function(){
-		const atts = ${jsonDefaults};
+		const baseDefaults = ${jsonBaseDefaults};
+		const allDefaults = ${jsonAllDefaults};
 		function registerAttributes(settings, name){
 			if( name === 'phonicscore/opensheetmusicdisplay'){
-				const keys = Object.keys(atts);
+				const keys = Object.keys(baseDefaults);
 				for(let i = 0; i < keys.length; i++){
-					settings.attributes[keys[i]] = atts[keys[i]];
+					settings.attributes[keys[i]] = baseDefaults[keys[i]];
 				}
 			}
 			return settings;
 		}
-		wp.hooks.addFilter(
-			'blocks.registerBlockType',
-			'phonicscore/opensheetmusicdisplay/block-type-hook',
-			registerAttributes
-		);
+
+		function setDefaultAttributes(attributes){
+			const defaultsToSet = {};
+			const keys = Object.keys(allDefaults);
+			for(let i = 0; i < keys.length; i++){
+				if(attributes.hasOwnProperty(keys[i]) && allDefaults.hasOwnProperty(keys[i]) && 
+				   attributes[keys[i]] !== allDefaults[keys[i]].default) {
+					defaultsToSet[keys[i]] = allDefaults[keys[i]].default;
+				}
+			}
+			return defaultsToSet;
+		}
+
+		if(typeof wp !== 'undefined' && typeof baseDefaults === 'object' && typeof allDefaults === 'object'){
+			wp.hooks.addFilter(
+				'blocks.registerBlockType',
+				'phonicscore/opensheetmusicdisplay/block-type-hook',
+				registerAttributes
+			);
+			wp.hooks.addFilter(
+				'phonicscore_opensheetmusicdisplay_attributes-block-create',
+				'phonicscore/opensheetmusicdisplay/block-set-default-atts-init',
+				setDefaultAttributes
+			);
+		}
 	})();
 	EOT;
 }
@@ -96,7 +119,7 @@ function phonicscore_opensheetmusicdisplay_block_init() {
 			'editor_style'  => 'phonicscore_opensheetmusicdisplay_block_editor',
 			'style'         => 'phonicscore_opensheetmusicdisplay_block',
 			'render_callback' => 'phonicscore_opensheetmusicdisplay_render_callback',
-			'attributes' => phonicscore_opensheetmusicdisplay_processed_attributes
+			'attributes' => phonicscore_opensheetmusicdisplay_base_attributes
 		)
 	);
 }
@@ -361,9 +384,13 @@ function phonicscore_opensheetmusicdisplay_get_attributes_list() {
 		)
 	);
 	$attributes = apply_filters('phonicscore/opensheetmusicdisplay/block-attributes', $attributes);
+	return $attributes;
+}
+
+function phonicscore_opensheetmusicdisplay_process_attributes(){
 	$phonicscore_opensheetmusicdisplay_default_settings_options = get_option( 'phonicscore_opensheetmusicdisplay_default_settings_option_name' ); // Array of All Options
-	
-	foreach($attributes as $key => $value){
+	$attributes = phonicscore_opensheetmusicdisplay_base_attributes;
+	foreach(phonicscore_opensheetmusicdisplay_base_attributes as $key => $value){
 		switch($value['type']){
 			case 'boolean':
 				$newValue = is_array($phonicscore_opensheetmusicdisplay_default_settings_options) && 
@@ -405,8 +432,7 @@ EOT;
 }
 
 function phonicscore_opensheetmusicdisplay_shortcode_callback($shortCodeAtts, $content, $name) {
-	$availableAtts = phonicscore_opensheetmusicdisplay_get_attributes_list();
-	foreach ($availableAtts as $key => $value) {
+	foreach (phonicscore_opensheetmusicdisplay_processed_attributes as $key => $value) {
 		//Shortcode have their atts automatically lower cased. We can't do that though because of omsd option names.
 		//Find them in the shortcode atts and adapt them before passing to render function.
 		$keyLowerCase = strtolower($key);
@@ -457,10 +483,6 @@ function phonicscore_opensheetmusicdisplay_enqueue_scripts(){
 		'0.1.1',
 		true
 	);
-	wp_add_inline_script(
-		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_exports',
-		 phonicscore_opensheetmusicdisplay_generate_client_attributes(),
-	);
 	wp_enqueue_script(
 		'phonicscore_opensheetmusicdisplay_frontend_script',
 		esc_url( plugins_url( 'build/osmd/osmd-loader.min.js', __FILE__ ) ),
@@ -489,7 +511,7 @@ function phonicscore_opensheetmusicdisplay_enqueue_admin_scripts($hook){
 	);
 	wp_add_inline_script(
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_exports',
-		 phonicscore_opensheetmusicdisplay_generate_client_attributes(),
+		phonicscore_opensheetmusicdisplay_generate_admin_client_attributes(),
 	);
 	wp_enqueue_script(
 		'fredmeister77_queueable_attributes_dist',

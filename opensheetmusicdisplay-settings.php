@@ -178,46 +178,68 @@ class phonicescore_OpenSheetMusicDisplayDefaultSettingsPage {
 		$sanitary_values = array();
 		if ( isset( $input['drawTitle'] ) ) {
 			$sanitary_values['drawTitle'] = $input['drawTitle'];
+		} else {
+			$sanitary_values['drawTitle'] = false;
 		}
 
 		if ( isset( $input['drawSubtitle'] ) ) {
 			$sanitary_values['drawSubtitle'] = $input['drawSubtitle'];
+		} else {
+			$sanitary_values['drawSubtitle'] = false;
 		}
 
 		if ( isset( $input['drawComposer'] ) ) {
 			$sanitary_values['drawComposer'] = $input['drawComposer'];
+		} else {
+			$sanitary_values['drawComposer'] = false;
 		}
 
 		if ( isset( $input['drawLyricist'] ) ) {
 			$sanitary_values['drawLyricist'] = $input['drawLyricist'];
+		} else {
+			$sanitary_values['drawLyricist'] = false;
 		}
 
 		if ( isset( $input['drawMetronomeMarks'] ) ) {
 			$sanitary_values['drawMetronomeMarks'] = $input['drawMetronomeMarks'];
+		} else {
+			$sanitary_values['drawMetronomeMarks'] = false;
 		}
 
 		if ( isset( $input['drawPartNames'] ) ) {
 			$sanitary_values['drawPartNames'] = $input['drawPartNames'];
+		} else {
+			$sanitary_values['drawPartNames'] = false;
 		}
 
 		if ( isset( $input['drawPartAbbreviations'] ) ) {
 			$sanitary_values['drawPartAbbreviations'] = $input['drawPartAbbreviations'];
+		} else {
+			$sanitary_values['drawPartAbbreviations'] = false;
 		}
 
 		if ( isset( $input['drawMeasureNumbers'] ) ) {
 			$sanitary_values['drawMeasureNumbers'] = $input['drawMeasureNumbers'];
+		} else {
+			$sanitary_values['drawMeasureNumbers'] = false;
 		}
 
 		if ( isset( $input['drawMeasureNumbersOnlyAtSystemStart'] ) ) {
 			$sanitary_values['drawMeasureNumbersOnlyAtSystemStart'] = $input['drawMeasureNumbersOnlyAtSystemStart'];
+		} else {
+			$sanitary_values['drawMeasureNumbersOnlyAtSystemStart'] = false;
 		}
 
 		if ( isset( $input['drawTimeSignatures'] ) ) {
 			$sanitary_values['drawTimeSignatures'] = $input['drawTimeSignatures'];
+		} else {
+			$sanitary_values['drawTimeSignatures'] = false;
 		}
 
 		if ( isset( $input['newSystemFromXML'] ) ) {
 			$sanitary_values['newSystemFromXML'] = $input['newSystemFromXML'];
+		} else {
+			$sanitary_values['newSystemFromXML'] = false;
 		}
 
 		if ( isset( $input['zoom'] ) ) {

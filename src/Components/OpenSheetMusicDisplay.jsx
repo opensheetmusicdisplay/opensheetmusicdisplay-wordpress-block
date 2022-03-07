@@ -62,7 +62,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
               this.pluginManager.getPlugins()[i].postRenderHook(this.osmd, this.props, this.osmdDivRef.current, error);
             }
           }
-          this.loaderDivRef.current.classList.add('hide');
+          this.loaderDivRef.current?.classList.add('hide');
         }
       },250);
     }
@@ -97,7 +97,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
           console.log('Attempting to reload...');
           _self.loadFileBehavior();
         } else {
-          _self.loaderDivRef.current.classList.add('hide');
+          _self.loaderDivRef.current?.classList.add('hide');
           _self.loadAttempts = 0;
           _self.pendingLoad = undefined;
           _self.showErrorCallback(`Failed to load file: ${_self.props.file}`, error);
@@ -118,14 +118,14 @@ export class OpenSheetMusicDisplay extends PureComponent {
         }
       }
       if(this.props.file){
-        this.loaderDivRef.current.classList.remove('hide');
+        this.loaderDivRef.current?.classList.remove('hide');
         this.loadFileBehavior();
       }
     }
 
     componentDidUpdate(prevProps) {
       this.osmdDivRef.current.innerHTML = '';
-      this.loaderDivRef.current.classList.remove('hide');
+      this.loaderDivRef.current?.classList.remove('hide');
       const options = this.getOptionsObjectFromProps(this.props);
       //We always want to manage resizing from here. Turn off autoresize
       options.autoResize = false;
@@ -145,7 +145,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
       if(Math.abs(this.currentWidth - prevWidth) < 32){
         return;
     }
-      this.loaderDivRef.current.classList.remove('hide');
+      this.loaderDivRef.current?.classList.remove('hide');
       clearTimeout(this.timeoutObject);
       const self = this;
       this.timeoutObject = setTimeout(() => {

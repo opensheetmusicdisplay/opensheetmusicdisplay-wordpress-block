@@ -11,7 +11,7 @@ import {OpenSheetMusicDisplayGlobalHooks, OpenSheetMusicDisplayWordpressPlugin} 
 import { InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import { withFilters, Card, CardBody, SelectControl, CheckboxControl, Button, PanelBody, TextControl } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
-import { useState } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 
 /**
  * Retrieves the translation of text.
@@ -51,6 +51,24 @@ pluginManager.registerPlugin(wpPlugin);
  * @return {WPElement} Element to render.
  */
 const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, commitAttributes}) => {
+	useEffect(() => {
+		console.log(attributes.pristine);
+		if(window.phonicscore_opensheetmusicdisplay_first_init){
+			let defaultsToSet = wp.hooks.applyFilters('phonicscore_opensheetmusicdisplay_attributes-block-create', attributes);
+			let defaultKeys = Object.keys(defaultsToSet);
+			/*
+			if(defaultKeys.length > 0){
+				setAttributes(defaultsToSet);
+				 for(let i = 0; i < defaultKeys.length; i++){
+					 attributes[defaultKeys[i]] = defaultsToSet[defaultKeys[i]];
+				 }
+			}*/
+		}
+		window.phonicscore_opensheetmusicdisplay_first_init = true;
+		return () => {
+		};
+	}, []);
+
 	const onSelectMedia = (media) => {
 		setAttributes({
 			musicXmlId: media.id,
@@ -94,6 +112,7 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 	];
 
 	const blockProps = useBlockProps();
+	console.log(blockProps);
 
 	const translateAspectRatioToHeight = (aspectRatio) => {
 		if(!blockProps.ref.current || aspectRatio === 0.0 || !blockProps.ref.current.offsetWidth){

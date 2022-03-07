@@ -417,4 +417,5 @@ registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 		}
 	}
 } );
+console.log("register complete");
 });
