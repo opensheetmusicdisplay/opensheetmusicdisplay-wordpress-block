@@ -117,7 +117,7 @@ function phonicscore_opensheetmusicdisplay_block_init() {
 	);
 	wp_set_script_translations( 'phonicscore_opensheetmusicdisplay_block_editor', 'opensheetmusicdisplay' );
 
-	$editor_css = 'build/osmd_block.css';
+	$editor_css = 'build/styles/osmd_block.css';
 	wp_register_style(
 		'phonicscore_opensheetmusicdisplay_block_editor',
 		plugins_url( $editor_css, __FILE__ ),
@@ -125,7 +125,7 @@ function phonicscore_opensheetmusicdisplay_block_init() {
 		filemtime( "$dir/$editor_css" )
 	);
 
-	$style_css = 'build/style-osmd_block.css';
+	$style_css = 'build/styles/style-osmd_block.css';
 	wp_register_style(
 		'phonicscore_opensheetmusicdisplay_block',
 		plugins_url( $style_css, __FILE__ ),
