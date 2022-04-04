@@ -24,7 +24,8 @@
 		"@wordpress/hooks": "^2.11.1",
 		"@wordpress/element": "^2.11.1",
 		"@wordpress/compose": "^3.24.3",
-		"opensheetmusicdisplay": "file:../opensheetmusicdisplay"
+		"opensheetmusicdisplay": "file:../opensheetmusicdisplay",
+		"pb-deep-link": "file:../pb-deep-link"
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^13.0.1",

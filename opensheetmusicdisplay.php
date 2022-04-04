@@ -95,13 +95,13 @@ function phonicscore_opensheetmusicdisplay_generate_admin_client_attributes(){
 function phonicscore_opensheetmusicdisplay_block_init() {
 	$dir = __DIR__;
 
-	$script_asset_path = "$dir/build/index.asset.php";
+	$script_asset_path = "$dir/build/osmd_block.asset.php";
 	if ( ! file_exists( $script_asset_path ) ) {
 		throw new Error(
 			'You need to run `npm start` or `npm run build` for the "phonicscore/opensheetmusicdisplay" block first.'
 		);
 	}
-	$index_js     = 'build/index.js';
+	$index_js     = 'build/osmd_block.js';
 	$script_asset = require( $script_asset_path );
 	//Use default dependencies, add OSMD as one
 	if(array_key_exists('dependencies', $script_asset) && is_array($script_asset['dependencies'])){
@@ -117,7 +117,7 @@ function phonicscore_opensheetmusicdisplay_block_init() {
 	);
 	wp_set_script_translations( 'phonicscore_opensheetmusicdisplay_block_editor', 'opensheetmusicdisplay' );
 
-	$editor_css = 'build/index.css';
+	$editor_css = 'build/osmd_block.css';
 	wp_register_style(
 		'phonicscore_opensheetmusicdisplay_block_editor',
 		plugins_url( $editor_css, __FILE__ ),
@@ -125,7 +125,7 @@ function phonicscore_opensheetmusicdisplay_block_init() {
 		filemtime( "$dir/$editor_css" )
 	);
 
-	$style_css = 'build/style-index.css';
+	$style_css = 'build/style-osmd_block.css';
 	wp_register_style(
 		'phonicscore_opensheetmusicdisplay_block',
 		plugins_url( $style_css, __FILE__ ),

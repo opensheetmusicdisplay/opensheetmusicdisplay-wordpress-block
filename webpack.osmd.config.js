@@ -16,7 +16,7 @@ module.exports = [
   entry: {
             'queueable_attributes': './src/QueueableAttributes/registerQueueableAttributes.jsx',
             'osmd-loader': './src/frontend/osmd-loader.js',
-            'new_block_detection': './src/block/new-block-detection.js'
+            'new_block_detection': './src/new-block-detection.js'
         },
   output: {
     filename: '[name].min.js',
