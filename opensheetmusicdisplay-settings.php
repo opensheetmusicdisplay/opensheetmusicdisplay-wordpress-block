@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * at http://jeremyhixon.com/wp-tools/option-page/
  */
 
-class phonicescore_OpenSheetMusicDisplayDefaultSettingsPage {
+class phonicscore_OpenSheetMusicDisplayDefaultSettingsPage {
 	private $phonicscore_opensheetmusicdisplay_default_settings_options;
 
 	public function __construct() {
@@ -324,7 +324,7 @@ class phonicescore_OpenSheetMusicDisplayDefaultSettingsPage {
 
 }
 if ( is_admin() )
-	$phonicscore_opensheetmusicdisplay_default_settings = new phonicescore_OpenSheetMusicDisplayDefaultSettingsPage();
+	$phonicscore_opensheetmusicdisplay_default_settings = new phonicscore_OpenSheetMusicDisplayDefaultSettingsPage();
 
 /* 
  * Retrieve this value with:

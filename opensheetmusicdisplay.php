@@ -51,7 +51,6 @@ define("phonicscore_opensheetmusicdisplay_processed_defaults", phonicscore_opens
 
 function phonicscore_opensheetmusicdisplay_generate_admin_client_attributes(){
 	$jsonBaseDefaults = wp_json_encode(phonicscore_opensheetmusicdisplay_base_attributes, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
-	//TODO: Make available to new-block-detection
 	$jsonUserDefaults = wp_json_encode(phonicscore_opensheetmusicdisplay_user_set_defaults, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
 	return <<<EOT
 	(function(){
@@ -604,8 +603,6 @@ function phonicscore_opensheetmusicdisplay_activate_plugin(){
 		}
 	}
 }
-
-
 
 add_action('plugins_loaded', 'phonicscore_opensheetmusicdisplay_activate_plugin', 10);
 
