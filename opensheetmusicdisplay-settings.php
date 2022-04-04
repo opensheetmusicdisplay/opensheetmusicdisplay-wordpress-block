@@ -26,23 +26,7 @@ class phonicescore_OpenSheetMusicDisplayDefaultSettingsPage {
             EOT, // icon_url
 			null // position
 		);
-
-		$default_values = array(
-			'drawTitle' => 'drawTitle',
-			'drawSubtitle' => 'drawSubtitle',
-			'drawComposer' => 'drawComposer',
-			'drawLyricist' => 'drawLyricist',
-			'drawMetronomeMarks' => 'drawMetronomeMarks',
-			'drawPartNames' => 'drawPartNames',
-			'drawPartAbbreviations' => 'drawPartAbbreviations',
-			'drawMeasureNumbers' => 'drawMeasureNumbers',
-			'drawMeasureNumbersOnlyAtSystemStart' => false,
-			'drawTimeSignatures' => 'drawTimeSignatures',
-			'newSystemFromXML' => false,
-			'zoom' => 1.0
-		);
-		$default_values = apply_filters('phonicscore/opensheetmusicdisplay/settings-default-values', $default_values);
-		add_option( 'phonicscore_opensheetmusicdisplay_default_settings_option_name', $default_values );
+		add_option( 'phonicscore_opensheetmusicdisplay_default_settings_option_name', phonicscore_opensheetmusicdisplay_settings_page_defaults );
 	}
 
 	public function phonicscore_opensheetmusicdisplay_default_settings_create_admin_page() {

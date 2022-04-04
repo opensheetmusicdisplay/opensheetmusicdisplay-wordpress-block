@@ -7,6 +7,7 @@ module.exports = [
     '@wordpress/block-editor': 'wp.blockEditor',
     '@wordpress/components': 'wp.components',
     '@wordpress/compose': 'wp.compose',
+    '@wordpress/data': 'wp.data',
     '@wordpress/i18n': 'wp.i18n',
     opensheetmusicdisplay: 'opensheetmusicdisplay',
     'opensheetmusicdisplay-wordpress-block': 'window["opensheetmusicdisplay-wordpress-block"]',
@@ -14,7 +15,8 @@ module.exports = [
   },
   entry: {
             'queueable_attributes': './src/QueueableAttributes/registerQueueableAttributes.jsx',
-            'osmd-loader': './src/frontend/osmd-loader.js'
+            'osmd-loader': './src/frontend/osmd-loader.js',
+            'new_block_detection': './src/block/new-block-detection.js'
         },
   output: {
     filename: '[name].min.js',

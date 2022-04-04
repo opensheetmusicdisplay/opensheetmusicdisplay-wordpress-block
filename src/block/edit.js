@@ -51,23 +51,7 @@ pluginManager.registerPlugin(wpPlugin);
  * @return {WPElement} Element to render.
  */
 const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, commitAttributes}) => {
-	useEffect(() => {
-		console.log(attributes.pristine);
-		if(window.phonicscore_opensheetmusicdisplay_first_init){
-			let defaultsToSet = wp.hooks.applyFilters('phonicscore_opensheetmusicdisplay_attributes-block-create', attributes);
-			let defaultKeys = Object.keys(defaultsToSet);
-			/*
-			if(defaultKeys.length > 0){
-				setAttributes(defaultsToSet);
-				 for(let i = 0; i < defaultKeys.length; i++){
-					 attributes[defaultKeys[i]] = defaultsToSet[defaultKeys[i]];
-				 }
-			}*/
-		}
-		window.phonicscore_opensheetmusicdisplay_first_init = true;
-		return () => {
-		};
-	}, []);
+	const blockProps = useBlockProps();
 
 	const onSelectMedia = (media) => {
 		setAttributes({
@@ -110,10 +94,7 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 		{label: __('Portrait'), value: 'portrait'},
 		{label: __('Custom'), value: 'custom'}
 	];
-
-	const blockProps = useBlockProps();
-	console.log(blockProps);
-
+	
 	const translateAspectRatioToHeight = (aspectRatio) => {
 		if(!blockProps.ref.current || aspectRatio === 0.0 || !blockProps.ref.current.offsetWidth){
 			return 'auto';
