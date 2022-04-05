@@ -18,7 +18,7 @@ module.exports = {
     },
     output: {
       ...defaultConfig.output,
-      filename: '[name]/[name].js'
+      filename: '[name].js'
     },
     externals: {
         'opensheetmusicdisplay-wordpress-block': 'window["opensheetmusicdisplay-wordpress-block"]',
@@ -31,7 +31,7 @@ module.exports = {
           patterns: [
             {from: 'node_modules/pb-deep-link/**/endpoint.min.js', to: 'pbdeeplink/endpoint.min.js'},
             {from: 'node_modules/pb-deep-link/**/qrcode.min.js', to: 'pbdeeplink/qrcode.min.js'},
-            {from: '**/block.json', to: '[path]/block.json', context: 'src/'}
+            {from: '**/*.json', to: '[name].json', context: 'src/'}
           ]
         })
     ]
