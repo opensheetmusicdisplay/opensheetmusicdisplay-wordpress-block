@@ -45,8 +45,7 @@ import { useEffect } from '@wordpress/element';
  */
 
 //To track our previous deeplink result across renders
-let deepLinkResult = {};
-
+const deepLinkResults = new Map();
 const HelpTextRenderType = (generateBehavior) => {
 	switch (generateBehavior) {
 		case PracticeBirdDeepLink.DeepLinkGenerateBehavior.QR_ONLY:
@@ -64,9 +63,8 @@ const HelpTextRenderType = (generateBehavior) => {
 		break;
 	}
 }
-const Edit = ({attributes, setAttributes, toggleSelection}) => {
+const Edit = ({attributes, setAttributes, toggleSelection, clientId}) => {
 	const blockProps = useBlockProps();
-
 	const onSelectMedia = (media) => {
 		setAttributes({
 			musicXmlId: media.id,
@@ -82,6 +80,10 @@ const Edit = ({attributes, setAttributes, toggleSelection}) => {
 	}; */
 	const qrCode = React.createRef();
 	const mobileIcon = React.createRef();
+	let deepLinkResult = {};
+	if(deepLinkResults.has(clientId)){
+		deepLinkResult = deepLinkResults.get(clientId);
+	}
 	useEffect(() => {
 		if(attributes.target){
 			if(deepLinkResult.clear){
@@ -95,6 +97,7 @@ const Edit = ({attributes, setAttributes, toggleSelection}) => {
 			} else if (deepLinkResult.warn){
 				console.warn("PracticeBirdDeepLink: " + deepLinkResult.message + " from block: " + attributes.target);
 			}
+			deepLinkResults.set(clientId, deepLinkResult);
 		}
 	},
 	[attributes.target, attributes.qrScale, attributes.generateBehavior, attributes.autoRedirectAppStore]);
