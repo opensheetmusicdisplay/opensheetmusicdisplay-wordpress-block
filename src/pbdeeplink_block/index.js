@@ -34,7 +34,7 @@ import icons from '../block_assets/icons';
 //wrapper to ensure filters that are registered elsewhere (extensions/plugins to this block) are fired
 wp.domReady(() => {
 
-registerBlockType( 'phonicscore/practicebird/deep_link', {
+registerBlockType( 'phonicscore/practicebird-deeplink', {
 	/**
 	 * @see https://make.wordpress.org/core/2020/11/18/block-api-version-2/
 	 */
@@ -44,7 +44,7 @@ registerBlockType( 'phonicscore/practicebird/deep_link', {
 	 * This is the display title for your block, which can be translated with `i18n` functions.
 	 * The block inserter will show this name.
 	 */
-	title: __( 'PracticeBird Deeplinking', 'practicebird_deeplink' ),
+	title: __( 'PracticeBird Deeplink', 'practicebird_deeplink' ),
 
 	/**
 	 * This is a short description for your block, can be translated with `i18n` functions.
@@ -65,7 +65,7 @@ registerBlockType( 'phonicscore/practicebird/deep_link', {
 	 * An icon property should be specified to make it easier to identify a block.
 	 * These can be any of WordPress’ Dashicons, or a custom svg element.
 	 */
-	icon: '',
+	icon: icons.practicebird,
 
 	/**
 	 * Optional block extended support features.
@@ -99,6 +99,14 @@ registerBlockType( 'phonicscore/practicebird/deep_link', {
 		musicXmlTitle: {
 			type: 'string',
 			default: ''
+		},
+		scale: {
+			type: 'number',
+			default: 1.0
+		},
+		renderType: {
+			type: "number",
+			default: 0
 		}
 	}
 } );
