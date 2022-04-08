@@ -100,13 +100,21 @@ registerBlockType( 'phonicscore/practicebird-deeplink', {
 			type: 'string',
 			default: ''
 		},
-		scale: {
-			type: 'number',
-			default: 1.0
-		},
 		renderType: {
 			type: "number",
 			default: 0
+		},
+		qrScale: {
+			type: 'number',
+			default: 1.0
+		},
+		iconSize: {
+			type: "number",
+			default: 180
+		},
+		iconAutoRedirect: {
+			type: "boolean",
+			default: true
 		}
 	}
 } );

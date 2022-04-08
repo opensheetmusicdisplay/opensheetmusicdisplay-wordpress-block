@@ -6,9 +6,9 @@
  * Wordpress Dependencies
  */
 import { InspectorControls, BlockControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
-import { Button, PanelBody, RadioControl, ButtonGroup, Modal, IconButton, Icon, Dashicon } from '@wordpress/components';
+import { Button, PanelBody, RadioControl, Modal, IconButton, RangeControl, ResizableBox, ToggleControl } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
-import { mobile, info } from '@wordpress/icons';
+import { info } from '@wordpress/icons';
 import {useState} from '@wordpress/element';
 
 /**
@@ -45,8 +45,26 @@ import { useEffect } from '@wordpress/element';
  */
 
 //To track our previous deeplink result across renders
- let deepLinkResult = {};
-const Edit = ({attributes, setAttributes}) => {
+let deepLinkResult = {};
+
+const HelpTextRenderType = (renderType) => {
+	switch (renderType) {
+		case PracticeBirdDeepLink.DeepLinkGenerateBehavior.QR_ONLY:
+			return __("Only a QR code will be displayed, regardless of device type or screen size.");
+		break;
+		case PracticeBirdDeepLink.DeepLinkGenerateBehavior.MOBILE_ONLY:
+			return __("Only an icon w/ deep-link will be displayed, regardless of device type or screen size.");
+		break;
+		case PracticeBirdDeepLink.DeepLinkGenerateBehavior.DETECT:
+			return __("An attempt will be made to detect mobile devices which will render the icon - Otherwise, the QR code.");
+		break;
+		case PracticeBirdDeepLink.DeepLinkGenerateBehavior.QR_AND_MOBILE:
+		default:
+			return __(" Both a QR code and icon for mobile devices will be generated. Screen size determines which is displayed.");
+		break;
+	}
+}
+const Edit = ({attributes, setAttributes, toggleSelection}) => {
 	const blockProps = useBlockProps();
 
 	const onSelectMedia = (media) => {
@@ -56,9 +74,13 @@ const Edit = ({attributes, setAttributes}) => {
 			musicXmlTitle: media.title
 		});
 	}
-
-	const width = attributes.scale * PracticeBirdDeepLink.DEFAULT_QR_SIZE;
-	const height = attributes.scale * PracticeBirdDeepLink.DEFAULT_QR_SIZE;
+/*
+	const QR_SIZE_TO_SCALE_ENUM = {
+		SMALL: 0.5,
+		MEDIUM: 1.0,
+		LARGE: 1.5
+	}; */
+	const qrSize = parseInt(attributes.qrScale * PracticeBirdDeepLink.DEFAULT_QR_SIZE, 10);
 
 	const qrCode = React.createRef();
 	const mobileIcon = React.createRef();
@@ -68,7 +90,7 @@ const Edit = ({attributes, setAttributes}) => {
 				deepLinkResult.clear();
 			}
 			deepLinkResult = PracticeBirdDeepLink.DeepLinkQR(attributes.musicXmlUrl, qrCode.current, mobileIcon.current,
-							{generateBehavior: attributes.renderType, width, height});
+							{generateBehavior: attributes.renderType, size: qrSize, autoRedirectAppStore: attributes.iconAutoRedirect});
 			if(deepLinkResult.error && qrCode.current){
 				console.error("PracticeBirdDeepLink: " + result.message + " from block: " + attributes.musicXmlUrl);
 				qrCode.current.innerText = __(deepLinkResult.message);
@@ -77,10 +99,22 @@ const Edit = ({attributes, setAttributes}) => {
 			}
 		}
 	},
-	[attributes.musicXmlUrl, attributes.scale, attributes.renderType]);
+	[attributes.musicXmlUrl, attributes.qrScale, attributes.renderType, attributes.iconAutoRedirect]);
+
+	let mobileEditClassName = "";
+	if(attributes.renderType === PracticeBirdDeepLink.DeepLinkGenerateBehavior.QR_ONLY ||
+		(attributes.renderType === PracticeBirdDeepLink.DeepLinkGenerateBehavior.DETECT &&
+		 deepLinkResult.generatedIcon === undefined)){
+		mobileEditClassName = "hidden";
+	} else if(attributes.renderType !== PracticeBirdDeepLink.DeepLinkGenerateBehavior.MOBILE_ONLY){
+		mobileEditClassName = "hidden-md hidden-lg";
+	}
 	
     const [ isRenderExplanationVisible, setIsRenderExplanationVisible ] = useState( false );
-	const closeModal = () =>{setIsRenderExplanationVisible(false)};
+	const closeRenderExplanationModal = () =>{setIsRenderExplanationVisible(false)};
+
+    const [ isAutoRedirectExplanationVisible, setIsAutoRedirectExplanationVisible ] = useState( false );
+	const closeAutoRedirectExplanationModal = () =>{setIsAutoRedirectExplanationVisible(false)};
 	return (
 		<div { ...blockProps }>
 			{
@@ -125,24 +159,24 @@ const Edit = ({attributes, setAttributes}) => {
 						</div>
 						<br/>
 						{ isRenderExplanationVisible && 
-						<Modal style={{maxWidth: "600px"}} title={__("Render Type Description")} onRequestClose={closeModal}>
+						<Modal style={{maxWidth: "600px"}} title={__("Render Type Description")} onRequestClose={closeRenderExplanationModal}>
 							<ul>
 								<li>
-								<strong>&#8226;{__(" Responsive - QR and Icon:")}</strong>{__(" Both a QR code and icon for mobile devices will be generated. Which one is displayed will depend on the device screen size: greater than 991px for QR code, less than 992px for linked icon.")}
+								<strong>{__("Responsive - QR and Icon:")}</strong>{__(" Both a QR code and icon for mobile devices will be generated. Which one is displayed will depend on the device screen size: greater than 991px for QR code, less than 992px for linked icon.")}
 								</li>
 								<li>
-								<strong>&#8226;{__(" QR Code Only:")}</strong>{__(" Only a QR code will be generated and displayed regardless of device size or type.")}
+								<strong>{__("QR Code Only:")}</strong>{__(" Only a QR code will be generated and displayed regardless of device size or type.")}
 								</li>
 								<li>
-								<strong>&#8226;{__(" Icon Only:")}</strong>{__(" Only a icon w/ a link will be generated and displayed regardless of device size or type.")}
+								<strong>{__("Icon Only:")}</strong>{__(" Only a icon w/ a link will be generated and displayed regardless of device size or type.")}
 								</li>
 								<li>
-								<strong>&#8226;{__(" Smart Detect - QR or Icon:")}</strong>{__(" The device will attempt to be detected. If iOS or Android is detected, a mobile icon will be generated. For all other platforms, a QR code will be generated.")}
+								<strong>{__("Smart Detect - QR or Icon:")}</strong>{__(" The device will attempt to be detected. If iOS or Android is detected, a mobile icon will be generated. For all other platforms, a QR code will be generated.")}
 								</li>
 							</ul>
 							<center>
-								<Button variant="primary" onClick={ closeModal }>
-									Close
+								<Button variant="primary" onClick={ closeRenderExplanationModal }>
+								{__("Close")}
 								</Button>
 							</center>
 						</Modal> 
@@ -153,7 +187,7 @@ const Edit = ({attributes, setAttributes}) => {
 									{__("Render Behavior")}&nbsp;
 									<IconButton
 									icon={info}
-									onClick={() =>{setIsRenderExplanationVisible(true)} }
+									onClick={() =>setIsRenderExplanationVisible(true) }
 									size={18}
 									style={{
 										padding: 0,
@@ -175,6 +209,7 @@ const Edit = ({attributes, setAttributes}) => {
 								{label: __("Icon Only"), value: PracticeBirdDeepLink.DeepLinkGenerateBehavior.MOBILE_ONLY},
 								{label: __("Smart Detect - QR or Icon"), value: PracticeBirdDeepLink.DeepLinkGenerateBehavior.DETECT},
 							]}
+							help={HelpTextRenderType(attributes.renderType)}
 							onChange={(value) => setAttributes({renderType: parseInt(value, 10)})}
 						>
 									
@@ -184,20 +219,107 @@ const Edit = ({attributes, setAttributes}) => {
 						title={__('QR Code Options')}
 						initialOpen = { false }
 					>
-
+						<RangeControl
+							disabled={attributes.renderType === PracticeBirdDeepLink.DeepLinkGenerateBehavior.MOBILE_ONLY}
+							label={__("Scale")}
+							value={ attributes.qrScale }
+							onChange={ ( value ) => setAttributes( {qrScale: value} ) }
+							min={ 0.5 }
+							max={ 1.5 }
+							step={0.1}
+							marks={true}
+						></RangeControl>
 					</PanelBody>
 					<PanelBody
 						title={__('Icon Options')}
 						initialOpen = { false }
 					>
-						
+					{ isAutoRedirectExplanationVisible && 
+					<Modal style={{maxWidth: "600px"}} title={__("Auto-Redirect Description")} onRequestClose={closeAutoRedirectExplanationModal}>
+						<ul>
+							<li>
+							<strong>{__("On: ")}</strong>{__("If the mobile deep-link icon is displayed and the deep-link fails on click, an attempt will be made to detect the mobile platform and redirect to the proper PracticeBird app store link (Android or iOS).")}
+							</li>
+							<li>
+							<strong>{__("Off: ")}</strong>{__("No attempt to redirect will be made, and if the deeplink fails, it will fail silently with the page not reacting.")}
+							</li>
+						</ul>
+						<center>
+							<Button variant="primary" onClick={ closeAutoRedirectExplanationModal }>
+								{__("Close")}
+							</Button>
+						</center>
+					</Modal> 
+					}
+					<ToggleControl
+						label={
+							<span>
+							{__("Auto-redirect to App Store")}&nbsp;
+							<IconButton
+							icon={info}
+							onClick={() =>setIsAutoRedirectExplanationVisible(true) }
+							size={18}
+							style={{
+								padding: 0,
+								margin: 0,
+								minWidth: "18px",
+								minHeight: "18px",
+								width: "18px",
+								height: "18px",
+								verticalAlign: "middle"
+							}}
+							>
+							</IconButton>
+						</span>}
+						help={
+							attributes.iconAutoRedirect
+								? 'Will attempt redirecting to app store on deep-link failure.'
+								: 'Will fail silently, no redirection occuring.'
+						}
+						checked={ attributes.iconAutoRedirect }
+						onChange={ () => setAttributes({iconAutoRedirect: !attributes.iconAutoRedirect}) }
+					/>
 					</PanelBody>
 				</InspectorControls>
 			}
 			{	attributes.musicXmlId > -1 ?
 				<div className="phonicscore_practicebird_deeplink__render-block">
 					<div ref={qrCode} />
-					<div ref={mobileIcon} />
+					{
+
+					}
+					<ResizableBox className={mobileEditClassName}
+						style={{margin: "5px"}}
+						lockAspectRatio={true}
+						size={ {
+							height: attributes.iconSize,
+							width: attributes.iconSize,
+						} }
+						minHeight="50"
+						minWidth="50"
+						maxHeight="180"
+						maxWidth="180"
+						enable={ {
+							top: false,
+							right: false,
+							bottom: false,
+							left: false,
+							topRight: true,
+							bottomRight: true,
+							bottomLeft: true,
+							topLeft: true,
+						} }
+						onResizeStop={ ( event, direction, elt, delta ) => {
+							setAttributes( {
+								iconSize: parseInt( attributes.iconSize + delta.width, 10 ),
+							} );
+							toggleSelection( true );
+						} }
+						onResizeStart={ () => {
+							toggleSelection( false );
+						} }>
+						<div ref={mobileIcon} />
+					</ResizableBox>
 				</div> : 
 				<h4>{__('No MusicXML Selected.')}</h4>
 			}
@@ -209,3 +331,34 @@ export default withSelect( (select, props) => {
 	const { getMedia } = select('core');
 	return { media: props.attributes.musicXmlId > -1 ? getMedia(props.attributes.musicXmlId) : undefined };
 } )(Edit);
+
+
+
+/*
+						<ButtonGroup title={__("Size")} disabled={attributes.renderType === PracticeBirdDeepLink.DeepLinkGenerateBehavior.MOBILE_ONLY}>
+							<IconButton 
+								variant="secondary" 
+								icon={image} 
+								size={16}
+								onClick={() => setAttributes({qrScale: QR_SIZE_TO_SCALE_ENUM.SMALL})}
+								isPressed={attributes.qrScale === QR_SIZE_TO_SCALE_ENUM.SMALL}
+								disabled={attributes.renderType === PracticeBirdDeepLink.DeepLinkGenerateBehavior.MOBILE_ONLY}
+							></IconButton>
+							<IconButton 
+								variant="secondary" 
+								icon={image} 
+								size={24}
+								onClick={() => setAttributes({qrScale: QR_SIZE_TO_SCALE_ENUM.MEDIUM})}
+								isPressed={attributes.qrScale === QR_SIZE_TO_SCALE_ENUM.MEDIUM}
+								disabled={attributes.renderType === PracticeBirdDeepLink.DeepLinkGenerateBehavior.MOBILE_ONLY}
+							></IconButton>
+							<IconButton 
+								variant="secondary" 
+								icon={image} 
+								size={32}
+								onClick={() => setAttributes({qrScale: QR_SIZE_TO_SCALE_ENUM.LARGE})}
+								isPressed={attributes.qrScale === QR_SIZE_TO_SCALE_ENUM.LARGE}
+								disabled={attributes.renderType === PracticeBirdDeepLink.DeepLinkGenerateBehavior.MOBILE_ONLY}
+							></IconButton>
+						</ButtonGroup>
+*/
