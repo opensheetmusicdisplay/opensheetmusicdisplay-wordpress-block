@@ -57,19 +57,34 @@ function phonicscore_practicebird_deeplink_block_init() {
 }
 
 function phonicscore_practicebird_deeplink_render_callback($block_attributes, $content){
-	$asJson = wp_json_encode($block_attributes, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
+	wp_enqueue_script(
+		'phonicscore_practicebird_deeplink_frontend',
+		esc_url( plugins_url( 'build/pbdeeplink_frontend.js', __FILE__ ) ),
+		array( 'phonicscore_practicebird_deeplink_qrcode_library' ),
+		'0.1.0',
+		true
+	);
 	$className = '';
+	$iconSize = '180px';
 	if(is_array($block_attributes)){
 		if(array_key_exists('className', $block_attributes)){
 			$className = $block_attributes['className'];
 		}
+		if(array_key_exists('iconSize', $block_attributes)){
+			$iconSize = $block_attributes['iconSize'] . "px";
+		}
+		if(!array_key_exists('generateBehavior', $block_attributes)){
+			$block_attributes['generateBehavior'] = 0;
+		}
 	}
+
+	$asJson = wp_json_encode($block_attributes, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
 	return
 		<<<EOT
-		<div class="phonicscore_practicebird_deeplink__placeholder $className">
-			<div class="phonicscore_practicebird_deeplink__loading-spinner hide"></div>
-			<div class="phonicscore_practicebird_deeplink__render-block"></div>
-			<code style="display:none;" class="attributesAsJson">$asJson</code>
+		<div class="practicebird-deeplink__render-placeholder $className">
+			<div class="practicebird-deeplink__qr-container"></div>
+			<div class="practicebird-deeplink__mobile-container" style="width: $iconSize; height: $iconSize;"></div>
+			<code style="display:none!important;" class="hidden">$asJson</code>
 		</div>
 EOT;
 }

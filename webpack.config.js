@@ -18,6 +18,7 @@ module.exports = {
     entry: {
       osmd_block: path.resolve( process.cwd(), 'src/osmd_block', 'index.js' ),
       pbdeeplink_block: path.resolve( process.cwd(), 'src/pbdeeplink_block', 'index.js' ),
+      pbdeeplink_frontend: path.resolve( process.cwd(), 'src/pbdeeplink_block', 'frontend.js' )
     },
     output: {
       ...defaultConfig.output,

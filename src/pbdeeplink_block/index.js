@@ -92,7 +92,7 @@ registerBlockType( 'phonicscore/practicebird-deeplink', {
 			type: 'number',
 			default: -1
 		},
-		musicXmlUrl: {
+		target: {
 			type: 'string',
 			default: ''
 		},
@@ -100,7 +100,7 @@ registerBlockType( 'phonicscore/practicebird-deeplink', {
 			type: 'string',
 			default: ''
 		},
-		renderType: {
+		generateBehavior: {
 			type: "number",
 			default: 0
 		},
@@ -108,11 +108,15 @@ registerBlockType( 'phonicscore/practicebird-deeplink', {
 			type: 'number',
 			default: 1.0
 		},
+		size: {
+			type: 'number',
+			default: PracticeBirdDeepLink.DEFAULT_QR_SIZE
+		},
 		iconSize: {
 			type: "number",
 			default: 180
 		},
-		iconAutoRedirect: {
+		autoRedirectAppStore: {
 			type: "boolean",
 			default: true
 		}
