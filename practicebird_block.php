@@ -1,10 +1,12 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+//TODO: make settings?
+define('phonicscore_practicebird_deeplink_endpoint_path', '/?phonicscore_practicebird_deeplink_endpoint=1');
+
 /**
  * This file defines all registration for the practice bird deeplink block
  */
-
 function phonicscore_practicebird_deeplink_block_init() {
 	$dir = __DIR__;
 
@@ -76,6 +78,9 @@ function phonicscore_practicebird_deeplink_render_callback($block_attributes, $c
 		if(!array_key_exists('generateBehavior', $block_attributes)){
 			$block_attributes['generateBehavior'] = 0;
 		}
+		if(!array_key_exists('endpointUrl', $block_attributes)){
+			$block_attributes['endpointUrl'] = get_site_url(null, phonicscore_practicebird_deeplink_endpoint_path);
+		}
 	}
 
 	$asJson = wp_json_encode($block_attributes, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
@@ -134,9 +139,30 @@ function phonicscore_practicebird_deeplink_admin_notices() {
     <?php
 }
 
+function phonicscore_practicebird_deeplink_setup_rewrite_rules(){
+	add_filter( 'query_vars', function( $query_vars ) {
+		array_push($query_vars, 'target', 'phonicscore_practicebird_deeplink_endpoint');
+		return $query_vars;
+	} );
+	add_action( 'template_include', function( $template ) {
+		$url = SERVER_SCHEME . '://' . SERVER_HOST . SERVER_REQUEST_URI;
+		$path = parse_url($url, PHP_URL_PATH);
+		if (
+		    get_query_var( 'target' ) != false && 
+			get_query_var( 'target' ) != '' &&
+			get_query_var('phonicscore_practicebird_deeplink_endpoint') != false &&
+			get_query_var('phonicscore_practicebird_deeplink_endpoint') != '' ) {
+			return plugin_dir_path( __FILE__ ) . 'practicebird_endpoint.php';
+		}
+		return $template;
+	} );
+}
+
 function phonicscore_practicebird_deeplink_activate_plugin(){
 	//add_action( 'init', 'phonicscore_opensheetmusicdisplay_shortcode_init' );
 	add_action( 'wp_enqueue_scripts', 'phonicscore_practicebird_deeplink_enqueue_scripts' );
+	phonicscore_practicebird_deeplink_setup_rewrite_rules();
+	flush_rewrite_rules();
 	if(function_exists('register_block_type')){
         add_action( 'init', 'phonicscore_practicebird_deeplink_block_init' );
 		add_action( 'admin_enqueue_scripts', 'phonicscore_practicebird_deeplink_enqueue_admin_scripts' );

@@ -90,7 +90,9 @@ const Edit = ({attributes, setAttributes, toggleSelection, clientId}) => {
 				deepLinkResult.clear();
 			}
 			deepLinkResult = PracticeBirdDeepLink.DeepLinkQR(attributes.target, qrCode.current, mobileIcon.current,
-							{generateBehavior: attributes.generateBehavior, size: attributes.size, autoRedirectAppStore: attributes.autoRedirectAppStore});
+							{generateBehavior: attributes.generateBehavior, size: attributes.size,
+								//TODO: Populate from server
+							endpointUrl: '/?phonicscore_practicebird_deeplink_endpoint=1'});
 			if(deepLinkResult.error && qrCode.current){
 				console.error("PracticeBirdDeepLink: " + result.message + " from block: " + attributes.target);
 				qrCode.current.innerText = __(deepLinkResult.message);
@@ -100,7 +102,7 @@ const Edit = ({attributes, setAttributes, toggleSelection, clientId}) => {
 			deepLinkResults.set(clientId, deepLinkResult);
 		}
 	},
-	[attributes.target, attributes.qrScale, attributes.generateBehavior, attributes.autoRedirectAppStore]);
+	[attributes.target, attributes.qrScale, attributes.generateBehavior]);
 
 	let mobileEditClassName = "";
 	if(attributes.generateBehavior === PracticeBirdDeepLink.DeepLinkGenerateBehavior.QR_ONLY ||
