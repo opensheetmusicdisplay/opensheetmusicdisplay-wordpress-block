@@ -53,7 +53,40 @@ function phonicscore_practicebird_deeplink_block_init() {
 			'editor_style'  => 'phonicscore_practicebird_deeplink_block_editor',
 			'style'         => 'phonicscore_practicebird_deeplink_block',
 			'render_callback' => 'phonicscore_practicebird_deeplink_render_callback',
-			'attributes' => array() //TODO: Attributes
+			'attributes' => array(
+				'musicXmlId' => array(
+					'type' => 'number',
+					'default' => -1
+				),
+				'target' => array(
+					'type' => 'string',
+					'default' => ''
+				),
+				'musicXmlTitle' => array(
+					'type' => 'string',
+					'default' => ''
+				),
+				'generateBehavior' => array(
+					'type' => 'number',
+					'default' => 0
+				),
+				'qrScale' => array(
+					'type' => 'number',
+					'default' => 1.0
+				),
+				'size' => array(
+					'type' => 'number',
+					'default' => 256
+				),
+				'iconSize' => array(
+					'type' => 'number',
+					'default' => 180
+				),
+				'autoRedirectAppStore' => array(
+					'type' => 'boolean',
+					'default' => true
+				)
+			) //TODO: Attributes
 		)
 	);
 }
