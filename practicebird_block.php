@@ -4,6 +4,42 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 //TODO: make settings?
 define('phonicscore_practicebird_deeplink_endpoint_path', '/?phonicscore_practicebird_deeplink_endpoint=1');
 
+function phonicscore_practicebird_deeplink_attributes(){
+	return array(
+		'musicXmlId' => array(
+			'type' => 'number',
+			'default' => -1
+		),
+		'target' => array(
+			'type' => 'string',
+			'default' => ''
+		),
+		'musicXmlTitle' => array(
+			'type' => 'string',
+			'default' => ''
+		),
+		'generateBehavior' => array(
+			'type' => 'number',
+			'default' => 0
+		),
+		'qrScale' => array(
+			'type' => 'number',
+			'default' => 1.0
+		),
+		'size' => array(
+			'type' => 'number',
+			'default' => 256
+		),
+		'iconSize' => array(
+			'type' => 'number',
+			'default' => 180
+		),
+		'autoRedirectAppStore' => array(
+			'type' => 'boolean',
+			'default' => true
+		)
+	);
+}
 /**
  * This file defines all registration for the practice bird deeplink block
  */
@@ -53,40 +89,7 @@ function phonicscore_practicebird_deeplink_block_init() {
 			'editor_style'  => 'phonicscore_practicebird_deeplink_block_editor',
 			'style'         => 'phonicscore_practicebird_deeplink_block',
 			'render_callback' => 'phonicscore_practicebird_deeplink_render_callback',
-			'attributes' => array(
-				'musicXmlId' => array(
-					'type' => 'number',
-					'default' => -1
-				),
-				'target' => array(
-					'type' => 'string',
-					'default' => ''
-				),
-				'musicXmlTitle' => array(
-					'type' => 'string',
-					'default' => ''
-				),
-				'generateBehavior' => array(
-					'type' => 'number',
-					'default' => 0
-				),
-				'qrScale' => array(
-					'type' => 'number',
-					'default' => 1.0
-				),
-				'size' => array(
-					'type' => 'number',
-					'default' => 256
-				),
-				'iconSize' => array(
-					'type' => 'number',
-					'default' => 180
-				),
-				'autoRedirectAppStore' => array(
-					'type' => 'boolean',
-					'default' => true
-				)
-			) //TODO: Attributes
+			'attributes' => phonicscore_practicebird_deeplink_attributes()
 		)
 	);
 }
@@ -125,6 +128,71 @@ function phonicscore_practicebird_deeplink_render_callback($block_attributes, $c
 			<code style="display:none!important;" class="hidden">$asJson</code>
 		</div>
 EOT;
+}
+
+function phonicscore_practicebird_deeplink_shortcode_callback($shortCodeAtts, $content, $name) {
+	if(array_key_exists("generatebehavior", $shortCodeAtts)){
+		switch($shortCodeAtts["generatebehavior"]){
+			case "QR_ONLY":
+				$shortCodeAtts["generatebehavior"] = 1;
+			break;
+			case "MOBILE_ONLY":
+				$shortCodeAtts["generatebehavior"] = 2;
+			break;
+			case "DETECT":
+				$shortCodeAtts["generatebehavior"] = 3;
+			break;
+			case "QR_AND_MOBILE":
+			default:
+			$shortCodeAtts["generatebehavior"] = 0;
+			break;
+		}
+	}
+
+	if(array_key_exists("qrscale", $shortCodeAtts)){
+		$scaleVal = floatval($shortCodeAtts["qrscale"]);
+		if($scaleVal){
+			$shortCodeAtts["size"] = $scaleVal * 256;
+		}
+	}
+
+	foreach (phonicscore_practicebird_deeplink_attributes() as $key => $value) {
+		//Shortcode have their atts automatically lower cased. We can't do that though because of attribute names
+		//Find them in the shortcode atts and adapt them before passing to render function.
+		$keyLowerCase = strtolower($key);
+		if(array_key_exists($keyLowerCase, $shortCodeAtts) ) {
+			switch ($value['type']) {
+				case 'number':
+					$shortCodeAtts[$key] = floatval($shortCodeAtts[$keyLowerCase]);
+				break;
+				case 'boolean':
+					if($shortCodeAtts[$keyLowerCase] == 'true'){
+						$shortCodeAtts[$key] = true;
+					} else {
+						$shortCodeAtts[$key] = false;
+					}
+				break;
+				case 'array':
+				case 'object':
+					$shortCodeAtts[$key] = json_decode($shortCodeAtts[$keyLowerCase]);
+				break;
+				default:
+					$shortCodeAtts[$key] = $shortCodeAtts[$keyLowerCase];
+				break;
+			}
+			if($key != $keyLowerCase) {
+				unset($shortCodeAtts[$keyLowerCase]);
+			}
+		} else if($value['default'] != null) {//else use the (valid) default value
+			$shortCodeAtts[$key] = $value['default'];
+		}
+	}
+	
+	return phonicscore_practicebird_deeplink_render_callback($shortCodeAtts, $content);
+}
+
+function phonicscore_practicebird_deeplink_shortcode_init(){
+	add_shortcode('pb-deep-link', 'phonicscore_practicebird_deeplink_shortcode_callback');
 }
 
 function phonicscore_practicebird_deeplink_enqueue_admin_scripts($hook){
@@ -192,7 +260,7 @@ function phonicscore_practicebird_deeplink_setup_rewrite_rules(){
 }
 
 function phonicscore_practicebird_deeplink_activate_plugin(){
-	//add_action( 'init', 'phonicscore_opensheetmusicdisplay_shortcode_init' );
+	add_action( 'init', 'phonicscore_practicebird_deeplink_shortcode_init' );
 	add_action( 'wp_enqueue_scripts', 'phonicscore_practicebird_deeplink_enqueue_scripts' );
 	phonicscore_practicebird_deeplink_setup_rewrite_rules();
 	flush_rewrite_rules();
