@@ -20,7 +20,9 @@ It enables uploading of .xml, .musicxml and .mxl files to your Wordpress Media L
 
 We have also added a shortcode in this plugin for those who do not use the Gutenberg editor.
 
-## Block Options
+Additionally, as of 1.3.0 we have added another block: PracticeBird Deeplink. This block allows you to deeplink your musicXML directly into our PracticeBird app via QR code, mobile icon, or both!
+
+## OpenSheetMusicDisplay Block Options
 The block has a number of options in the sidebar (Inspector Controls) described here.
 
 ### Rendering
@@ -122,7 +124,7 @@ Whether to render time signatures on the staves
 *Checkbox, Default: Off*
 This determines whether system breaks specified in the MusicXML will be honored.
 
-##Shortcode Options
+## OpenSheetMusicDisplay Shortcode Options
 
 The shortcode has the same options as above, though as attributes written in camelCase.
 
@@ -139,6 +141,65 @@ The shortcode is "opensheetmusicdisplay". Example given with full set of attribu
 ```
 
 It's important to note that zoom is out of 1: so 1 = 100%, 0.75 = 75%, 2 = 200%, etc.
+
+
+## PracticeBird DeepLink Block Options
+This block also has a number of options in the sidebar (Inspector Controls) described here (as well as via info menus available in the sidebar).
+
+### Basic Options
+This section contains basic options for the block: the musicXML file to deep link as well as how to render the deeplink.
+
+#### Select Media
+*Button/File Select, Default: None Selected*
+This control shows the currently selected score above it (if there is one).
+The button 'Select Media' opens your Wordpress Media Library in a modal window, which allows you to select previously uploaded MusicXML, or to upload one for deep linking.
+
+#### Render Behavior
+*Radio Button, Default: Responsive - QR and Icon*
+These are full descriptions of what each option does:
+Responsive - QR and Icon: Both a QR code and icon for mobile devices will be generated. Which one is displayed will depend on the device screen size: greater than 991px for QR code, less than 992px for linked icon.
+QR Code Only: Only a QR code will be generated and displayed regardless of device size or type.
+Icon Only: Only a icon w/ a link will be generated and displayed regardless of device size or type.
+Smart Detect - QR or Icon: The device will attempt to be detected. If iOS or Android is detected, a mobile icon will be generated. For all other platforms, a QR code will be generated.
+
+### QR Code Options
+
+#### Scale
+*Slider, Default: 1*
+This is the scale of the QR code and changes it's rendered size. (the Default scale of 1 is 256px x 256px)
+
+#### Icon Options
+
+### Auto-redirect to App Store
+*Toggle Button, Default: On*
+On: If the mobile deep-link icon is displayed and the deep-link fails on click, an attempt will be made to detect the mobile platform and redirect to the proper PracticeBird app store link (Android or iOS).
+Off: No attempt to redirect will be made, and if the deeplink fails, it will fail silently with the page not reacting.
+
+Additionally, the icon can be resized via the block editor when it is rendered. If you select "Icon Only" while rendering, you will see resize toggles available on the corners of the icon.
+
+
+## PracticeBird DeepLink Shortcode Options
+
+The shortcode has the same options as above, though in some cases are named differently.
+
+- the musicXML url is defined by the 'target' attribute.
+- The icon size is defined (in px) by the 'iconSize' attribute.
+- The QR scale is defined by the 'qrScale' attribute.
+- the 'generateBehavior' attribute is a string with the following possible values, which correspond to the values mentioned above:
+    - QR_AND_MOBILE
+    - QR_ONLY
+    - MOBILE_ONLY
+    - DETECT
+
+In the shortcode any toggle or checkbox attribute values are specified with true or false.
+Numeric values can be specified as float or integers.
+
+To specify the musicXML you need to provide a URL; This can be copied from your Media center in Wordpress when viewing the details of a file.
+
+The shortcode is "pb-deep-link". Example given with full set of attributes:
+```
+[pb-deep-link target="https://staging.opensheetmusicdisplay.org/wp-content/uploads/sites/2/2021/09/thescale.musicxml" generateBehavior="QR_AND_MOBILE" iconSize="50", qrScale="1.5", autoRedirectAppStore="false"]
+```
 
 == About Us ==
 
@@ -182,15 +243,15 @@ Please contact us at support@opensheetmusicdisplay.org
 
 = Is feature x, y, or z available? Will it be available? =
 
-We are planning to release a premium extension to this plugin for more exciting and advanced features such as:
-- Audio player
-- Transpose
-- Annotations
-- Many OSMD Rendering Options
-- A lot more!
+We now have a premium add-on to our plugin available here: https://opensheetmusicdisplay.org/wp-plugin/pricing/
+If you'd like:
+-Audio Player
+-Transposition
+-Performance Mode Rendering
+-Brand coloring (for playback buttons)
+-Premium Support
 
-Finally, this block has extensibility and plugin hooks (Currently not well documented, but will be). 
-If you are a Wordpress/javascript developer and are feeling bold and adventurous, you might be able to add the functionality yourself.
+Please consider subscribing!
 
 == Screenshots ==
 
