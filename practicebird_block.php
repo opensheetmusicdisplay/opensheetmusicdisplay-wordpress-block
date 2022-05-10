@@ -50,11 +50,32 @@ function phonicscore_practicebird_deeplink_attributes(){
 		)
 	);
 	$attributes = apply_filters('phonicscore/practicebird-deeplink/block-attributes', $attributes);
+	$phonicscore_practicebird_deeplink_user_set_defaults = get_option( 'phonicscore_practicebird_deeplink_default_settings_option_name' );
+	if(is_array($phonicscore_practicebird_deeplink_user_set_defaults)){
+		foreach($attributes as $key => $value){
+			switch($value['type']){
+				case 'boolean':
+					if(array_key_exists($key, $phonicscore_practicebird_deeplink_user_set_defaults) && $phonicscore_practicebird_deeplink_user_set_defaults[$key]
+						&& $value['default'] === false){
+						$attributes[$key]['default'] = true;
+					} else if((!array_key_exists($key, $phonicscore_practicebird_deeplink_user_set_defaults) || !$phonicscore_practicebird_deeplink_user_set_defaults[$key]) && $value['default'] === true){
+						$attributes[$key]['default'] = false;
+					}
+				break;
+				default:
+					if(array_key_exists($key, $phonicscore_practicebird_deeplink_user_set_defaults) &&
+						$phonicscore_practicebird_deeplink_user_set_defaults[$key] != $value['default']){
+						$attributes[$key]['default'] = $phonicscore_practicebird_deeplink_user_set_defaults[$key];
+					}
+				break;
+			}
+		}
+	}
 	return $attributes;
 }
 
 function phonicscore_practicebird_deeplink_get_user_set_defaults(){
-	$phonicscore_practicebird_deeplink_user_set_defaults = get_option( 'phonicscore_practicebird_deeplink_default_settings_option_name' ); // Array of All Options
+	$phonicscore_practicebird_deeplink_user_set_defaults = get_option( 'phonicscore_practicebird_deeplink_default_settings_option_name' );
 	$attributes = array();
 	if(is_array($phonicscore_practicebird_deeplink_user_set_defaults)){
 		foreach(phonicscore_practicebird_deeplink_base_attributes as $key => $value){
@@ -98,9 +119,16 @@ function phonicscore_practicebird_deeplink_generate_admin_client_attributes(){
 	(function(){
 		const baseDefaults = ${jsonBaseDefaults};
 		const userDefaults = ${jsonUserDefaults};
+		const userDefaultsKeys = Object.keys(userDefaults);
 		function registerAttributes(settings, name){
-			if( name === 'phonicscore/practicebird_deeplink'){
+			if( name === 'phonicscore/practicebird-deeplink'){
 				settings.attributes = {...settings.attributes, ...baseDefaults};
+				for(let idx = 0; idx < userDefaultsKeys.length; idx++){
+					if(settings.attributes[userDefaultsKeys[idx]]){
+						settings.attributes[userDefaultsKeys[idx]].default = userDefaults[userDefaultsKeys[idx]].default;
+					}
+					
+				}
 			}
 			return settings;
 		}
@@ -297,6 +325,11 @@ function phonicscore_practicebird_deeplink_enqueue_admin_scripts($hook){
 		array( ),
 		'0.1.0',
 		true
+	);
+
+	wp_add_inline_script(
+		'phonicscore_practicebird_deeplink_qrcode_library',
+		phonicscore_practicebird_deeplink_generate_admin_client_attributes(),
 	);
 
 	wp_enqueue_style(

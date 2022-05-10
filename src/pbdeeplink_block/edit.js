@@ -72,12 +72,7 @@ const Edit = ({attributes, setAttributes, toggleSelection, clientId}) => {
 			musicXmlTitle: media.title
 		});
 	}
-/*
-	const QR_SIZE_TO_SCALE_ENUM = {
-		SMALL: 0.5,
-		MEDIUM: 1.0,
-		LARGE: 1.5
-	}; */
+
 	const qrCode = React.createRef();
 	const mobileIcon = React.createRef();
 	let deepLinkResult = {};
@@ -90,8 +85,7 @@ const Edit = ({attributes, setAttributes, toggleSelection, clientId}) => {
 				deepLinkResult.clear();
 			}
 			deepLinkResult = PracticeBirdDeepLink.DeepLinkQR(attributes.target, qrCode.current, mobileIcon.current,
-							{generateBehavior: attributes.generateBehavior, size: attributes.size,
-								//TODO: Populate from server
+							{...attributes,
 							endpointUrl: '/?phonicscore_practicebird_deeplink_endpoint=1'});
 			if(deepLinkResult.error && qrCode.current){
 				console.error("PracticeBirdDeepLink: " + result.message + " from block: " + attributes.target);
