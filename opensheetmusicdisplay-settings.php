@@ -30,8 +30,19 @@ class phonicscore_OpenSheetMusicDisplayDefaultSettingsPage {
 	}
 
 	public function phonicscore_opensheetmusicdisplay_default_settings_create_admin_page() {
-		$this->phonicscore_opensheetmusicdisplay_default_settings_options = get_option( 'phonicscore_opensheetmusicdisplay_default_settings_option_name' ); ?>
-
+		$this->phonicscore_opensheetmusicdisplay_default_settings_options = get_option( 'phonicscore_opensheetmusicdisplay_default_settings_option_name' );
+		$options_pristine = true;
+		//Populate with default settings if they don't exist
+		foreach(phonicscore_opensheetmusicdisplay_settings_page_defaults as $key => $value){
+			if(!array_key_exists($key, $this->phonicscore_opensheetmusicdisplay_default_settings_options) || !isset($this->phonicscore_opensheetmusicdisplay_default_settings_options[$key])){
+				$this->phonicscore_opensheetmusicdisplay_default_settings_options[$key] = phonicscore_opensheetmusicdisplay_settings_page_defaults[$key];
+				$options_pristine = false;
+			}
+		}
+		if(!$options_pristine){
+			update_option('phonicscore_opensheetmusicdisplay_default_settings_option_name', $this->phonicscore_opensheetmusicdisplay_default_settings_options);
+		}
+		?>
 		<div class="wrap">
 			<h2>OpenSheetMusicDisplay Settings</h2>
 			<p>Default settings for all new and unset OSMD blocks/shortcodes.</p>
