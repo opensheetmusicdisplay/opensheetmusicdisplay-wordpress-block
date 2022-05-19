@@ -3,7 +3,7 @@ Contributors:      opensheetmusicdisplay, fredmeister77
 Donate link:       https://OSMD.org/Donate
 Tags:              block,shortcode,osmd,music,sheet music,musicxml,opensheetmusicdisplay
 Requires at least: 5.6.0
-Tested up to:      5.9.0
+Tested up to:      6.0.0
 Stable tag:        1.3.0
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
@@ -266,7 +266,10 @@ Please consider subscribing!
 *Fixes for Default Settings:
 Default settings changes will no longer overwrite existing blocks. This was due to how Wordpress handles default block attributes.
 *Add PracticeBird Deeplink block
-Now an optional block is included to deep-link music sheets into our free PracticeBird app for practice!
+Now an additional block is included to deep-link music sheets into our free PracticeBird app for practice!
+*Updated to latest OSMD version:
+-More performant rendering! 30-60% faster rendering times!
+-Misc. bugfixes
 
 = 1.2.0 =
 *Add Default Settings Page:

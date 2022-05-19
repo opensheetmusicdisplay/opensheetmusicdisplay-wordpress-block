@@ -48,6 +48,16 @@ include_once 'opensheetmusicdisplay-settings.php';
 define("phonicscore_opensheetmusicdisplay_base_attributes", phonicscore_opensheetmusicdisplay_get_attributes_list());
 define("phonicscore_opensheetmusicdisplay_user_set_defaults", phonicscore_opensheetmusicdisplay_get_user_set_defaults());
 define("phonicscore_opensheetmusicdisplay_processed_defaults", phonicscore_opensheetmusicdisplay_get_processed_defaults());
+if(!defined('SERVER_SCHEME')){
+	define('SERVER_SCHEME', (isset($_SERVER['HTTPS']) ? "https" : "http"));
+}
+if(!defined('SERVER_HOST')){
+	define('SERVER_HOST', sanitize_text_field($_SERVER['HTTP_HOST']));
+
+}
+if(!defined('SERVER_REQUEST_URI')){
+	define('SERVER_REQUEST_URI', sanitize_text_field($_SERVER['REQUEST_URI']));
+}
 
 function phonicscore_opensheetmusicdisplay_generate_admin_client_attributes(){
 	$jsonBaseDefaults = wp_json_encode(phonicscore_opensheetmusicdisplay_base_attributes, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);

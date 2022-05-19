@@ -25,3 +25,5 @@ node_modules/
 *.zip
 # dotenv environment variables file
 .env
+
+package-lock.json
