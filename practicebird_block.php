@@ -50,22 +50,23 @@ function phonicscore_practicebird_deeplink_attributes(){
 		)
 	);
 	$attributes = apply_filters('phonicscore/practicebird-deeplink/block-attributes', $attributes);
-	$phonicscore_practicebird_deeplink_user_set_defaults = get_option( 'phonicscore_practicebird_deeplink_default_settings_option_name' );
-	if(is_array($phonicscore_practicebird_deeplink_user_set_defaults)){
+	//So far, these user options are universal branding options.
+	//thus it is fine to just set them as the default
+	$phonicscore_practicebird_deeplink_default_settings_options = get_option( 'phonicscore_practicebird_deeplink_default_settings_option_name' );
+	
+	if(is_array($phonicscore_practicebird_deeplink_default_settings_options)){
 		foreach($attributes as $key => $value){
 			switch($value['type']){
 				case 'boolean':
-					if(array_key_exists($key, $phonicscore_practicebird_deeplink_user_set_defaults) && $phonicscore_practicebird_deeplink_user_set_defaults[$key]
-						&& $value['default'] === false){
+					if(array_key_exists($key, $phonicscore_practicebird_deeplink_default_settings_options) && $phonicscore_practicebird_deeplink_default_settings_options[$key]){
 						$attributes[$key]['default'] = true;
-					} else if((!array_key_exists($key, $phonicscore_practicebird_deeplink_user_set_defaults) || !$phonicscore_practicebird_deeplink_user_set_defaults[$key]) && $value['default'] === true){
+					} else {
 						$attributes[$key]['default'] = false;
 					}
 				break;
 				default:
-					if(array_key_exists($key, $phonicscore_practicebird_deeplink_user_set_defaults) &&
-						$phonicscore_practicebird_deeplink_user_set_defaults[$key] != $value['default']){
-						$attributes[$key]['default'] = $phonicscore_practicebird_deeplink_user_set_defaults[$key];
+					if(array_key_exists($key, $phonicscore_practicebird_deeplink_default_settings_options)){
+						$attributes[$key]['default'] = $phonicscore_practicebird_deeplink_default_settings_options[$key];
 					}
 				break;
 			}
