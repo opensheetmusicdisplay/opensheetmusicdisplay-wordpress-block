@@ -389,7 +389,6 @@ function phonicscore_practicebird_deeplink_activate_plugin(){
 	add_action( 'init', 'phonicscore_practicebird_deeplink_shortcode_init' );
 	add_action( 'wp_enqueue_scripts', 'phonicscore_practicebird_deeplink_enqueue_scripts' );
 	phonicscore_practicebird_deeplink_setup_rewrite_rules();
-	flush_rewrite_rules();
 	if(function_exists('register_block_type')){
         add_action( 'init', 'phonicscore_practicebird_deeplink_block_init' );
 		add_action( 'admin_enqueue_scripts', 'phonicscore_practicebird_deeplink_enqueue_admin_scripts' );
