@@ -4,7 +4,7 @@ Donate link:       https://OSMD.org/Donate
 Tags:              block,shortcode,osmd,music,sheet music,musicxml,opensheetmusicdisplay
 Requires at least: 5.6.0
 Tested up to:      6.2
-Stable tag:        1.3.4
+Stable tag:        1.3.5
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -261,6 +261,13 @@ Please consider subscribing!
 4. This shows another post with various options set (75% width, no draw title, Portrait aspect ratio)
 
 == Changelog ==
+
+= 1.3.5 =
+* Minor CSS bugfix with unintended elements being hidden
+-We use a small responsive shim CSS sheet to imitate some basic bootstrap classes (hiding, display, size hiding, etc.)
+-Other plugins (e.g. WooCommerce) use the hidden classes and don't remove them from elements when they are intended to be displayed
+-This caused those elements to be hidden from the user when both plugins are Activate
+-Removed the !important flag from these classes to accept the element level styling to take effect
 
 = 1.3.4 =
 * Updated to latest OSMD Version (1.7.5, from 1.7.1) See changelog for all updates: https://github.com/opensheetmusicdisplay/opensheetmusicdisplay/blob/develop/CHANGELOG.md

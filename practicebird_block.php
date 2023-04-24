@@ -337,7 +337,7 @@ function phonicscore_practicebird_deeplink_enqueue_admin_scripts($hook){
 		'phonicscore_practicebird_deeplink_qrcode_library_css',
 		esc_url( plugins_url( 'build/pbdeeplink/responsive_shim.min.css', __FILE__ ) ),
 		array( ),
-		'0.1.0'
+		'0.1.1'
 	);
 }
 
@@ -354,7 +354,7 @@ function phonicscore_practicebird_deeplink_enqueue_scripts($hook){
 		'phonicscore_practicebird_deeplink_qrcode_library_css',
 		esc_url( plugins_url( 'build/pbdeeplink/responsive_shim.min.css', __FILE__ ) ),
 		array( ),
-		'0.1.0'
+		'0.1.1'
 	);
 }
 
