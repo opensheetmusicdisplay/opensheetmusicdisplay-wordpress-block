@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     OpenSheetMusicDisplay
  * Description:     Block (and shortcode) to render MusicXML in the browser as sheet music using OSMD. Additionally provides a block to deeplink musicXML into the PracticeBird app.
- * Version:         1.3.5
+ * Version:         1.3.6
  * Author:          opensheetmusicdisplay.org
  * Author URI:		https://opensheetmusicdisplay.org
  * License:         GPL-2.0-or-later
@@ -522,7 +522,7 @@ function phonicscore_opensheetmusicdisplay_enqueue_scripts(){
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist',
 		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay.min.js', __FILE__ ) ),
 		array( ),
-		'1.7.5',
+		'1.8.0',
 		true
 	);
 	wp_enqueue_script(
@@ -548,7 +548,7 @@ function phonicscore_opensheetmusicdisplay_enqueue_admin_scripts($hook){
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist',
 		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay.min.js', __FILE__ ) ),
 		array( ),
-		'1.7.5',
+		'1.8.0',
 		true
 	);
 	wp_enqueue_script(
