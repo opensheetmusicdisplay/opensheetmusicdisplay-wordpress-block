@@ -3,8 +3,8 @@ Contributors:      opensheetmusicdisplay, fredmeister77
 Donate link:       https://OSMD.org/Donate
 Tags:              block,shortcode,osmd,music,sheet music,musicxml,opensheetmusicdisplay
 Requires at least: 5.6.0
-Tested up to:      6.2
-Stable tag:        1.3.5
+Tested up to:      6.3
+Stable tag:        1.3.6
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -261,6 +261,17 @@ Please consider subscribing!
 4. This shows another post with various options set (75% width, no draw title, Portrait aspect ratio)
 
 == Changelog ==
+
+= 1.3.7 =
+* Update to the latest OSMD version: 1.8.3. 
+See changelog for all updates: 
+https://github.com/opensheetmusicdisplay/opensheetmusicdisplay/blob/develop/CHANGELOG.md
+
+
+= 1.3.6 =
+* Update to the latest OSMD version: 1.8.0. 
+See changelog for all updates: 
+https://github.com/opensheetmusicdisplay/opensheetmusicdisplay/blob/develop/CHANGELOG.md
 
 = 1.3.5 =
 * Minor CSS bugfix with unintended elements being hidden
