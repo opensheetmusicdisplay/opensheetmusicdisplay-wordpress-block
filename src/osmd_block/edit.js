@@ -145,7 +145,7 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 						>
 						</CheckboxControl>
 							<Button
-								isPrimary= {true}
+								variant="primary"
 								onClick={() => {queueAttribute('rerenderDummy', {}, 0); commitAttributes();}}
 							>
 								{__('Rerender')}
@@ -175,7 +175,7 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 										</sub>
 										<br/>
 										<Button 
-											isSecondary= {true}
+											variant="secondary"
 											onClick={open}
 										>
 											{__('Select Media')}

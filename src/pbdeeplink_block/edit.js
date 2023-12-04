@@ -6,7 +6,7 @@
  * Wordpress Dependencies
  */
 import { InspectorControls, BlockControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
-import { Button, PanelBody, RadioControl, Modal, IconButton, RangeControl, ResizableBox, ToggleControl } from '@wordpress/components';
+import { Button, PanelBody, RadioControl, Modal, Icon, RangeControl, ResizableBox, ToggleControl } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
 import { info } from '@wordpress/icons';
 import {useState} from '@wordpress/element';
@@ -144,7 +144,7 @@ const Edit = ({attributes, setAttributes, toggleSelection, clientId}) => {
 										</sub>
 										<br/>
 										<Button 
-											isSecondary= {true}
+											variant="secondary"
 											onClick={open}
 										>
 											{__('Select Media')}
@@ -182,21 +182,32 @@ const Edit = ({attributes, setAttributes, toggleSelection, clientId}) => {
 							label={
 								<span>
 									{__("Render Behavior")}&nbsp;
-									<IconButton
-									icon={info}
-									onClick={() =>setIsRenderExplanationVisible(true) }
-									size={18}
-									style={{
-										padding: 0,
-										margin: 0,
-										minWidth: "18px",
-										minHeight: "18px",
-										width: "18px",
-										height: "18px",
-										verticalAlign: "middle"
-									}}
-									>
-									</IconButton>
+									<Button
+										onClick={() =>setIsRenderExplanationVisible(true) }
+										style={{
+											padding: 0,
+											margin: 0,
+											minWidth: "18px",
+											minHeight: "18px",
+											width: "18px",
+											height: "18px",
+											verticalAlign: "middle"
+										}}
+										>
+										<Icon
+											icon={info}
+											size={18}
+											style={{
+												padding: 0,
+												margin: 0,
+												minWidth: "18px",
+												minHeight: "18px",
+												width: "18px",
+												height: "18px",
+												verticalAlign: "middle"
+											}}
+										></Icon>
+									</Button>
 								</span>
 							}
 							selected={attributes.generateBehavior}
@@ -252,10 +263,8 @@ const Edit = ({attributes, setAttributes, toggleSelection, clientId}) => {
 						label={
 							<span>
 							{__("Auto-redirect to App Store")}&nbsp;
-							<IconButton
-							icon={info}
+							<Button
 							onClick={() =>setIsAutoRedirectExplanationVisible(true) }
-							size={18}
 							style={{
 								padding: 0,
 								margin: 0,
@@ -266,7 +275,20 @@ const Edit = ({attributes, setAttributes, toggleSelection, clientId}) => {
 								verticalAlign: "middle"
 							}}
 							>
-							</IconButton>
+								<Icon
+									icon={info}
+									size={18}
+									style={{
+										padding: 0,
+										margin: 0,
+										minWidth: "18px",
+										minHeight: "18px",
+										width: "18px",
+										height: "18px",
+										verticalAlign: "middle"
+									}}
+								></Icon>
+							</Button>
 						</span>}
 						help={
 							attributes.autoRedirectAppStore
