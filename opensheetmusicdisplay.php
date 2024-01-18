@@ -64,8 +64,8 @@ function phonicscore_opensheetmusicdisplay_generate_admin_client_attributes(){
 	$jsonUserDefaults = wp_json_encode(phonicscore_opensheetmusicdisplay_user_set_defaults, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
 	return <<<EOT
 	(function(){
-		const baseDefaults = ${jsonBaseDefaults};
-		const userDefaults = ${jsonUserDefaults};
+		const baseDefaults = {$jsonBaseDefaults};
+		const userDefaults = {$jsonUserDefaults};
 		function registerAttributes(settings, name){
 			if( name === 'phonicscore/opensheetmusicdisplay'){
 				settings.attributes = {...settings.attributes, ...baseDefaults};
