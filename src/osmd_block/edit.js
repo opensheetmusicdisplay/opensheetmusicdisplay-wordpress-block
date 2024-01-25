@@ -9,7 +9,7 @@ import {OpenSheetMusicDisplayGlobalHooks, OpenSheetMusicDisplayWordpressPlugin} 
  * Wordpress Dependencies
  */
 import { InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
-import { withFilters, Card, CardBody, SelectControl, CheckboxControl, Button, PanelBody, TextControl } from '@wordpress/components';
+import { withFilters, Card, CardBody, SelectControl, ToggleControl, Button, PanelBody, TextControl } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 
@@ -133,7 +133,7 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 				<InspectorControls>
 					<Card>
 					<CardBody>
-						<CheckboxControl
+						<ToggleControl
 							label={__('Automatically Rerender on Change')}
 							checked={ !attributes.queueAttributes }
 							onChange={ (val) => {
@@ -143,7 +143,7 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 								}
 							} }
 						>
-						</CheckboxControl>
+						</ToggleControl>
 							<Button
 								variant="primary"
 								onClick={() => {queueAttribute('rerenderDummy', {}, 0); commitAttributes();}}
@@ -185,6 +185,7 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 							/>
 						</MediaUploadCheck>
 						</div>
+						<div className="phonicscore_opensheetmusicdisplay_spacer"></div>
 							<TextControl
 								label={__('Width (%)')}
 								type='number'
@@ -225,72 +226,72 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 						title={__('Drawing Options')}
 						initialOpen = { false }
 						>
-							<CheckboxControl
+							<ToggleControl
 								label={__('Draw Title')}
 								checked={ queueableAttributes.drawTitle.value }
 								onChange={(val) => queueAttribute('drawTitle', val, 0)}
 							>
-							</CheckboxControl>
-							<CheckboxControl
+							</ToggleControl>
+							<ToggleControl
 								label={__('Draw Subtitle')}
 								checked={ queueableAttributes.drawSubtitle.value }
 								onChange={(val) => queueAttribute('drawSubtitle', val, 0)}
 							>
-							</CheckboxControl>
-							<CheckboxControl
+							</ToggleControl>
+							<ToggleControl
 								label={__('Draw Composer')}
 								checked={ queueableAttributes.drawComposer.value }
 								onChange={ (val) => queueAttribute('drawComposer', val, 0) }
 							>
-							</CheckboxControl>
-							<CheckboxControl
+							</ToggleControl>
+							<ToggleControl
 								label={__('Draw Lyricist')}
 								checked={ queueableAttributes.drawLyricist.value }
 								onChange={ (val) => queueAttribute('drawLyricist', val, 0) }
 							>
-							</CheckboxControl>
-							<CheckboxControl
+							</ToggleControl>
+							<ToggleControl
 								label={__('Draw Metronome Marks')}
 								checked={ queueableAttributes.drawMetronomeMarks.value }
 								onChange={ (val) => queueAttribute('drawMetronomeMarks', val, 0) }
 							>
-							</CheckboxControl>
-							<CheckboxControl
+							</ToggleControl>
+							<ToggleControl
 								label={__('Draw Part Names')}
 								checked={ queueableAttributes.drawPartNames.value }
 								onChange={ (val) => queueAttribute('drawPartNames', val, 0) }
 							>
-							</CheckboxControl>
-							<CheckboxControl
+							</ToggleControl>
+							<ToggleControl
 								label={__('Draw Part Abbreviations')}
 								checked={ queueableAttributes.drawPartAbbreviations.value }
 								onChange={ (val) => queueAttribute('drawPartAbbreviations', val, 0) }
 							>
-							</CheckboxControl>
-							<CheckboxControl
+							</ToggleControl>
+							<ToggleControl
 								label={__('Draw Measure Numbers')}
 								checked={ queueableAttributes.drawMeasureNumbers.value }
 								onChange={ (val) => queueAttribute('drawMeasureNumbers', val, 0) }
 							>
-							</CheckboxControl>
-							<CheckboxControl
+							</ToggleControl>
+							<ToggleControl
 								label={__('Draw Measure Numbers Only at System Start')}
 								checked={ queueableAttributes.drawMeasureNumbersOnlyAtSystemStart.value }
 								onChange={ (val) => queueAttribute('drawMeasureNumbersOnlyAtSystemStart', val, 0) }
 							>
-							</CheckboxControl>
-							<CheckboxControl
+							</ToggleControl>
+							<ToggleControl
 								label={__('Draw Time Signatures')}
 								checked={ queueableAttributes.drawTimeSignatures.value }
 								onChange={ (val) =>  queueAttribute('drawTimeSignatures', val, 0) }
 							>
-							</CheckboxControl>
-							<CheckboxControl
+							</ToggleControl>
+							<ToggleControl
 								label={__('New Systems From XML')}
 								checked={ queueableAttributes.newSystemFromXML.value }
 								onChange={ (val) =>  queueAttribute('newSystemFromXML', val, 0) }
 							>
-							</CheckboxControl>
+							</ToggleControl>
 						</PanelBody>
 				</InspectorControls>
 			}

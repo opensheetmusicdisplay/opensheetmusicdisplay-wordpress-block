@@ -457,6 +457,7 @@ function phonicscore_opensheetmusicdisplay_get_processed_defaults(){
 }
 
 function phonicscore_opensheetmusicdisplay_render_callback($block_attributes, $content){
+// 	$asJson = wp_json_encode($block_attributes, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_HEX_QUOT | JSON_HEX_TAG);
 	$asJson = wp_json_encode($block_attributes, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
 	$width = '100%';
 	$className = '';
