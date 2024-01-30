@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     OpenSheetMusicDisplay
  * Description:     Block (and shortcode) to render MusicXML in the browser as sheet music using OSMD. Additionally provides a block to deeplink musicXML into the PracticeBird app.
- * Version:         1.3.9
+ * Version:         1.4.0
  * Author:          opensheetmusicdisplay.org
  * Author URI:		https://opensheetmusicdisplay.org
  * License:         GPL-2.0-or-later
@@ -457,8 +457,7 @@ function phonicscore_opensheetmusicdisplay_get_processed_defaults(){
 }
 
 function phonicscore_opensheetmusicdisplay_render_callback($block_attributes, $content){
-// 	$asJson = wp_json_encode($block_attributes, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_HEX_QUOT | JSON_HEX_TAG);
-	$asJson = wp_json_encode($block_attributes, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
+	$asJson = wp_json_encode($block_attributes, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_HEX_QUOT | JSON_HEX_TAG);
 	$width = '100%';
 	$className = '';
 	if(is_array($block_attributes)){
@@ -523,7 +522,7 @@ function phonicscore_opensheetmusicdisplay_enqueue_scripts(){
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist',
 		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay.min.js', __FILE__ ) ),
 		array( ),
-		'1.8.4',
+		'1.8.5',
 		true
 	);
 	wp_enqueue_script(
@@ -549,7 +548,7 @@ function phonicscore_opensheetmusicdisplay_enqueue_admin_scripts($hook){
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist',
 		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay.min.js', __FILE__ ) ),
 		array( ),
-		'1.8.4',
+		'1.8.5',
 		true
 	);
 	wp_enqueue_script(

@@ -4,7 +4,7 @@ Donate link:       https://OSMD.org/Donate
 Tags:              block,shortcode,osmd,music,sheet music,musicxml,opensheetmusicdisplay
 Requires at least: 5.6.0
 Tested up to:      6.4
-Stable tag:        1.3.9
+Stable tag:        1.4.0
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -29,7 +29,7 @@ The block has a number of options in the sidebar (Inspector Controls) described 
 The section immediately below the block heading contains two controls related to re-rendering the sheet music.
 
 #### Automatically Rerender on Change
-*Checkbox, Default: Off*
+*Toggle, Default: Off*
 When this is on, any change to the lower settings (except for 'Container Aspect Ratio') will trigger a re-render of the sheet music in the editor.
 
 This is not recommended for larger pieces of sheet music, as rendering can take time.
@@ -77,58 +77,58 @@ This input allows you to control the zoom level of the rendered sheet music.
 These are additional OSMD drawing options - Whether to render certain parts of the sheet music.
 
 #### Draw Title
-*Checkbox, Default: On*
+*Toggle, Default: On*
 Whether to render the sheet music title.
 
 **NOTE:** Draw Subtitle must be off for this to be reflected in the sheet music (currently).
 
 #### Draw Subtitle
-*Checkbox, Default: On*
+*Toggle, Default: On*
 Whether to render the sheet music subtitle.
 
 #### Draw Composer
-*Checkbox, Default: On*
+*Toggle, Default: On*
 Whether to render the sheet music composer.
 
 **NOTE:** There seem to be some rendering issues in OSMD with this option if 'Draw Lyricist' is not off as well. We are working on this.
 
 #### Draw Lyricist
-*Checkbox, Default: On*
+*Toggle, Default: On*
 Whether to render the sheet music Lyricist.
 
 #### Draw Metronome Marks
-*Checkbox, Default: On*
+*Toggle, Default: On*
 Whether to render the tempo markings.
 
 #### Draw Part Names
-*Checkbox, Default: On*
+*Toggle, Default: On*
 Whether to render the part names before each stave.
 
 #### Draw Part Abbreviations
-*Checkbox, Default: On*
+*Toggle, Default: On*
 Whether to render the part abbreviations on subsequent music systems.
 
 #### Draw Measure Numbers
-*Checkbox, Default: On*
+*Toggle, Default: On*
 Whether to render measure numbers
 
 #### Draw Measure Numbers Only at System Start
-*Checkbox, Default: Off*
+*Toggle, Default: Off*
 Whether to render measure numbers just at the start of new music systems.
 
 #### Draw Time Signatures
-*Checkbox, Default: On*
+*Toggle, Default: On*
 Whether to render time signatures on the staves
 
 #### New Systems From XML
-*Checkbox, Default: Off*
+*Toggle, Default: Off*
 This determines whether system breaks specified in the MusicXML will be honored.
 
 ## OpenSheetMusicDisplay Shortcode Options
 
 The shortcode has the same options as above, though as attributes written in camelCase.
 
-In the shortcode any checkbox attribute values are specified with true or false.
+In the shortcode any Toggle attribute values are specified with true or false.
 Numeric values can be specified as float or integers.
 
 To specify the musicXML you need to provide a URL; This can be copied from your Media center in Wordpress when viewing the details of a file.
@@ -191,7 +191,7 @@ The shortcode has the same options as above, though in some cases are named diff
     - MOBILE_ONLY
     - DETECT
 
-In the shortcode any toggle or checkbox attribute values are specified with true or false.
+In the shortcode any toggle or Toggle attribute values are specified with true or false.
 Numeric values can be specified as float or integers.
 
 To specify the musicXML you need to provide a URL; This can be copied from your Media center in Wordpress when viewing the details of a file.
@@ -261,6 +261,14 @@ Please consider subscribing!
 4. This shows another post with various options set (75% width, no draw title, Portrait aspect ratio)
 
 == Changelog ==
+
+= 1.4.0 =
+* Encode attributes via hex for HTML
+* UI Tweaks (add spacing)
+* Bugfixes for PHP deprecation ($ string templating syntax)
+* Update to the latest OSMD version: 1.8.5. 
+See changelog for all updates: 
+https://github.com/opensheetmusicdisplay/opensheetmusicdisplay/blob/develop/CHANGELOG.md
 
 = 1.3.9 =
 * Update some deprecated Wordpress lib calls
