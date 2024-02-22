@@ -3,7 +3,7 @@ Contributors:      opensheetmusicdisplay, fredmeister77
 Donate link:       https://OSMD.org/Donate
 Tags:              block,shortcode,osmd,music,sheet music,musicxml,opensheetmusicdisplay
 Requires at least: 5.6.0
-Tested up to:      6.4
+Tested up to:      6.4.3
 Stable tag:        1.4.0
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
@@ -266,6 +266,7 @@ Please consider subscribing!
 * Encode attributes via hex for HTML
 * UI Tweaks (add spacing)
 * Bugfixes for PHP deprecation ($ string templating syntax)
+* isset check for PHP server variable warnings (https://wordpress.org/support/topic/php-warning-476/#post-17445960)
 * Update to the latest OSMD version: 1.8.5. 
 See changelog for all updates: 
 https://github.com/opensheetmusicdisplay/opensheetmusicdisplay/blob/develop/CHANGELOG.md

@@ -51,11 +51,11 @@ define("phonicscore_opensheetmusicdisplay_processed_defaults", phonicscore_opens
 if(!defined('SERVER_SCHEME')){
 	define('SERVER_SCHEME', (isset($_SERVER['HTTPS']) ? "https" : "http"));
 }
-if(!defined('SERVER_HOST')){
+if(!defined('SERVER_HOST') && isset($_SERVER['HTTP_HOST'])){
 	define('SERVER_HOST', sanitize_text_field($_SERVER['HTTP_HOST']));
 
 }
-if(!defined('SERVER_REQUEST_URI')){
+if(!defined('SERVER_REQUEST_URI') && isset($_SERVER['REQUEST_URI'])){
 	define('SERVER_REQUEST_URI', sanitize_text_field($_SERVER['REQUEST_URI']));
 }
 
