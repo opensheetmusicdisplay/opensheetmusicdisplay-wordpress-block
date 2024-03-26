@@ -13,16 +13,18 @@ Block or shortcode to render MusicXML in the browser as sheet music using OSMD.
 
 == Description ==
 
-This Gutenberg block brings [OpenSheetMusicDisplay](https://github.com/opensheetmusicdisplay/opensheetmusicdisplay) seamlessly to your Wordpress site!
+This plugin provides two blocks for MusicXML usages:
+
+1. The 'OSMD Sheet Music' block brings [OpenSheetMusicDisplay](https://github.com/opensheetmusicdisplay/opensheetmusicdisplay) seamlessly to your Wordpress site!
 This will allow you to render responsive MusicXML live in your visitors' browser.
 
 It enables uploading of .xml, .musicxml and .mxl files to your Wordpress Media Library, which can then be selected in the block for rendering.
 
-We have also added a shortcode in this plugin for those who do not use the Gutenberg editor.
+(We have also added a shortcode in this plugin for those who do not use the Gutenberg editor.)
 
-Additionally, as of 1.3.0 we have added another block: PracticeBird Deeplink. This block allows you to deeplink your musicXML directly into our PracticeBird app via QR code, mobile icon, or both!
+2. Additionally, as of 1.3.0 we have added another block: 'PracticeBird QR Code'. This block allows you to deeplink your musicXML directly into our PracticeBird app via QR code, mobile icon, or both!
 
-## OpenSheetMusicDisplay Block Options
+## OSMD Sheet Music Block Options
 The block has a number of options in the sidebar (Inspector Controls) described here.
 
 ### Rendering
@@ -143,7 +145,7 @@ The shortcode is "opensheetmusicdisplay". Example given with full set of attribu
 It's important to note that zoom is out of 1: so 1 = 100%, 0.75 = 75%, 2 = 200%, etc.
 
 
-## PracticeBird DeepLink Block Options
+## PracticeBird QR Code Block Options
 This block also has a number of options in the sidebar (Inspector Controls) described here (as well as via info menus available in the sidebar).
 
 ### Basic Options
