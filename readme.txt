@@ -22,7 +22,7 @@ It enables uploading of .xml, .musicxml and .mxl files to your Wordpress Media L
 
 (We have also added a shortcode in this plugin for those who do not use the Gutenberg editor.)
 
-2. Additionally, as of 1.3.0 we have added another block: 'PracticeBird QR Code'. This block allows you to deeplink your musicXML directly into our PracticeBird app via QR code, mobile icon, or both!
+2. Additionally, as of 1.3.0 we have added another block: 'OSMD QR Code'. This block allows you to deeplink your musicXML directly into our PracticeBird app via QR code, mobile icon, or both!
 
 ## OSMD Sheet Music Block Options
 The block has a number of options in the sidebar (Inspector Controls) described here.
@@ -145,7 +145,7 @@ The shortcode is "opensheetmusicdisplay". Example given with full set of attribu
 It's important to note that zoom is out of 1: so 1 = 100%, 0.75 = 75%, 2 = 200%, etc.
 
 
-## PracticeBird QR Code Block Options
+## OSMD QR Code Block Options
 This block also has a number of options in the sidebar (Inspector Controls) described here (as well as via info menus available in the sidebar).
 
 ### Basic Options
@@ -180,7 +180,7 @@ Off: No attempt to redirect will be made, and if the deeplink fails, it will fai
 Additionally, the icon can be resized via the block editor when it is rendered. If you select "Icon Only" while rendering, you will see resize toggles available on the corners of the icon.
 
 
-## PracticeBird DeepLink Shortcode Options
+## OSMD QR Code Shortcode Options
 
 The shortcode has the same options as above, though in some cases are named differently.
 

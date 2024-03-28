@@ -1,6 +1,6 @@
 {
 	"name": "phonicscore/practicebird/deep_link",
-	"title": "PracticeBird QR Code",
+	"title": "OSMD QR Code",
 	"category": "embed",
 	"icon": "",
 	"description": "Block to render QR codes/icons that deep-link musicXML into the PracticeBird iOS/Android app.",
