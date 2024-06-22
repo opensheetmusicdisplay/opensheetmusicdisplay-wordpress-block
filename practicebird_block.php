@@ -216,13 +216,6 @@ function phonicscore_practicebird_deeplink_block_init() {
 }
 
 function phonicscore_practicebird_deeplink_render_callback($block_attributes, $content){
-	wp_enqueue_script(
-		'phonicscore_practicebird_deeplink_frontend',
-		esc_url( plugins_url( 'build/pbdeeplink_frontend.js', __FILE__ ) ),
-		array( 'phonicscore_practicebird_deeplink_qrcode_library' ),
-		'0.1.0',
-		true
-	);
 	$className = '';
 	$iconSize = '180px';
 	if(is_array($block_attributes)){
@@ -350,6 +343,14 @@ function phonicscore_practicebird_deeplink_enqueue_scripts($hook){
 		true
 	);
 
+	wp_enqueue_script(
+		'phonicscore_practicebird_deeplink_frontend',
+		esc_url( plugins_url( 'build/pbdeeplink_frontend.js', __FILE__ ) ),
+		array( 'phonicscore_practicebird_deeplink_qrcode_library', 'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_exports' ),
+		'0.1.0',
+		true
+	);
+
 	wp_enqueue_style(
 		'phonicscore_practicebird_deeplink_qrcode_library_css',
 		esc_url( plugins_url( 'build/pbdeeplink/responsive_shim.min.css', __FILE__ ) ),
@@ -387,7 +388,7 @@ function phonicscore_practicebird_deeplink_setup_rewrite_rules(){
 
 function phonicscore_practicebird_deeplink_activate_plugin(){
 	add_action( 'init', 'phonicscore_practicebird_deeplink_shortcode_init' );
-	add_action( 'wp_enqueue_scripts', 'phonicscore_practicebird_deeplink_enqueue_scripts' );
+	add_action( 'wp_enqueue_scripts', 'phonicscore_practicebird_deeplink_enqueue_scripts', 99 );
 	phonicscore_practicebird_deeplink_setup_rewrite_rules();
 	if(function_exists('register_block_type')){
         add_action( 'init', 'phonicscore_practicebird_deeplink_block_init' );
