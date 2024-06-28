@@ -317,7 +317,7 @@ function phonicscore_practicebird_deeplink_enqueue_admin_scripts($hook){
 		'phonicscore_practicebird_deeplink_qrcode_library',
 		esc_url( plugins_url( 'build/pbdeeplink/qrcode.min.js', __FILE__ ) ),
 		array( ),
-		'0.1.0',
+		'0.1.4',
 		true
 	);
 
@@ -339,7 +339,7 @@ function phonicscore_practicebird_deeplink_enqueue_scripts($hook){
 		'phonicscore_practicebird_deeplink_qrcode_library',
 		esc_url( plugins_url( 'build/pbdeeplink/qrcode.min.js', __FILE__ ) ),
 		array( ),
-		'0.1.0',
+		'0.1.4',
 		true
 	);
 
@@ -347,7 +347,7 @@ function phonicscore_practicebird_deeplink_enqueue_scripts($hook){
 		'phonicscore_practicebird_deeplink_frontend',
 		esc_url( plugins_url( 'build/pbdeeplink_frontend.js', __FILE__ ) ),
 		array( 'phonicscore_practicebird_deeplink_qrcode_library', 'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_exports' ),
-		'0.1.0',
+		'0.1.1',
 		true
 	);
 
