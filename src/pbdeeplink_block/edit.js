@@ -10,6 +10,7 @@ import { Button, PanelBody, RadioControl, Modal, Icon, RangeControl, ResizableBo
 import { withSelect } from '@wordpress/data';
 import { info } from '@wordpress/icons';
 import {useState} from '@wordpress/element';
+import {OpenSheetMusicDisplayGlobalHooks} from 'opensheetmusicdisplay-wordpress-block';
 
 /**
  * Retrieves the translation of text.
@@ -79,19 +80,24 @@ const Edit = ({attributes, setAttributes, toggleSelection, clientId}) => {
 	if(deepLinkResults.has(clientId)){
 		deepLinkResult = deepLinkResults.get(clientId);
 	}
+
+	let pluginProps = OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_practicebird_deeplink_setup', attributes);
+	if(!pluginProps){
+		pluginProps = {};
+	}
 	useEffect(() => {
-		if(attributes.target){
+		if(pluginProps.target){
 			if(deepLinkResult.clear){
 				deepLinkResult.clear();
 			}
-			deepLinkResult = PracticeBirdDeepLink.DeepLinkQR(attributes.target, qrCode.current, mobileIcon.current,
-							{...attributes,
+			deepLinkResult = PracticeBirdDeepLink.DeepLinkQR(pluginProps.target, qrCode.current, mobileIcon.current,
+							{...pluginProps,
 							endpointUrl: '/?phonicscore_practicebird_deeplink_endpoint=1'});
 			if(deepLinkResult.error && qrCode.current){
-				console.error("PracticeBirdDeepLink: " + result.message + " from block: " + attributes.target);
+				console.error("PracticeBirdDeepLink: " + result.message + " from block: " + pluginProps.target);
 				qrCode.current.innerText = __(deepLinkResult.message);
 			} else if (deepLinkResult.warn){
-				console.warn("PracticeBirdDeepLink: " + deepLinkResult.message + " from block: " + attributes.target);
+				console.warn("PracticeBirdDeepLink: " + deepLinkResult.message + " from block: " + pluginProps.target);
 			}
 			deepLinkResults.set(clientId, deepLinkResult);
 		}
@@ -99,11 +105,11 @@ const Edit = ({attributes, setAttributes, toggleSelection, clientId}) => {
 	[attributes.target, attributes.qrScale, attributes.generateBehavior]);
 
 	let mobileEditClassName = "";
-	if(attributes.generateBehavior === PracticeBirdDeepLink.DeepLinkGenerateBehavior.QR_ONLY ||
-		(attributes.generateBehavior === PracticeBirdDeepLink.DeepLinkGenerateBehavior.DETECT &&
+	if(pluginProps.generateBehavior === PracticeBirdDeepLink.DeepLinkGenerateBehavior.QR_ONLY ||
+		(pluginProps.generateBehavior === PracticeBirdDeepLink.DeepLinkGenerateBehavior.DETECT &&
 		 deepLinkResult.generatedIcon === undefined)){
 		mobileEditClassName = "hidden";
-	} else if(attributes.generateBehavior !== PracticeBirdDeepLink.DeepLinkGenerateBehavior.MOBILE_ONLY){
+	} else if(pluginProps.generateBehavior !== PracticeBirdDeepLink.DeepLinkGenerateBehavior.MOBILE_ONLY){
 		mobileEditClassName = "hidden-md hidden-lg";
 	}
 	

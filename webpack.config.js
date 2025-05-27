@@ -10,6 +10,8 @@ for(let pluginIdx = 0; pluginIdx < defaultConfig.plugins.length; pluginIdx++){
   }
 }
 
+defaultConfig.optimization.minimizer[0].options.exclude =  /(pbdeeplink|osmd)/;
+
 module.exports = {
     ...defaultConfig,
     externals: {

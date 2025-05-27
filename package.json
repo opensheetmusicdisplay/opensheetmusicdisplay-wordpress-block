@@ -10,7 +10,7 @@
 		"wp:build": "wp-scripts build",
 		"osmd:build": "webpack --progress --config webpack.osmd.config.js",
 		"osmd:build-exports": "webpack --progress --config webpack.osmd.exports.config.js",
-		"build": "npm-run-all wp:build osmd:build osmd:build-exports",
+		"build": "run-s wp:build osmd:build osmd:build-exports",
 		"format:js": "wp-scripts format-js",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",

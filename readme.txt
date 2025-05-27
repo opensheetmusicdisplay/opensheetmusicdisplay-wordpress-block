@@ -1,10 +1,10 @@
 === OpenSheetMusicDisplay ===
 Contributors:      opensheetmusicdisplay, fredmeister77
 Donate link:       https://OSMD.org/Donate
-Tags:              block,shortcode,osmd,music,sheet music,musicxml,opensheetmusicdisplay
+Tags:              opensheetmusicdisplay,osmd,music,sheet music,musicxml
 Requires at least: 5.6.0
-Tested up to:      6.4.3
-Stable tag:        1.4.0
+Tested up to:      6.8.1
+Stable tag:        1.4.1
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -263,6 +263,13 @@ Please consider subscribing!
 4. This shows another post with various options set (75% width, no draw title, Portrait aspect ratio)
 
 == Changelog ==
+
+= 1.4.1 =
+* Contains user input sanitization on render to prevent XSS attacks from authenticated users (Contributor and above)
+* Update to Latest PracticeBird Deep linking Library
+* Update to the latest OSMD version: 1.9.0. 
+See changelog for all updates: 
+https://github.com/opensheetmusicdisplay/opensheetmusicdisplay/blob/develop/CHANGELOG.md
 
 = 1.4.0 =
 * Encode attributes via hex for HTML
