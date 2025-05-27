@@ -220,10 +220,10 @@ function phonicscore_practicebird_deeplink_render_callback($block_attributes, $c
 	$iconSize = '180px';
 	if(is_array($block_attributes)){
 		if(array_key_exists('className', $block_attributes)){
-			$className = $block_attributes['className'];
+			$className = esc_attr($block_attributes['className']);
 		}
 		if(array_key_exists('iconSize', $block_attributes)){
-			$iconSize = $block_attributes['iconSize'] . "px";
+			$iconSize = esc_attr($block_attributes['iconSize']) . "px";
 		}
 		if(!array_key_exists('generateBehavior', $block_attributes)){
 			$block_attributes['generateBehavior'] = 0;
