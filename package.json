@@ -7,6 +7,7 @@
 	"module": "src/export.js",
 	"main": "build/osmd/export.min.js",
 	"scripts": {
+		"setup": "cd ../opensheetmusicdisplay && npm install && cd ../pb-deep-link && npm install && cd ../opensheetmusicdisplay-wordpress-block && npm install",
 		"wp:build": "wp-scripts build",
 		"osmd:build": "webpack --progress --config webpack.osmd.config.js",
 		"osmd:build-exports": "webpack --progress --config webpack.osmd.exports.config.js",

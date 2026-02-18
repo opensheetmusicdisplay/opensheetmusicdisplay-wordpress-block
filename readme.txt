@@ -264,6 +264,12 @@ Please consider subscribing!
 
 == Changelog ==
 
+= 1.4.2 =
+* Fixes for build process - local dependency references.
+* Update to the latest OSMD version: 1.9.6.
+See changelog for all updates: 
+https://github.com/opensheetmusicdisplay/opensheetmusicdisplay/blob/develop/CHANGELOG.md
+
 = 1.4.1 =
 * Contains user input sanitization on render to prevent XSS attacks from authenticated users (Contributor and above)
 * Update to Latest PracticeBird Deep linking Library

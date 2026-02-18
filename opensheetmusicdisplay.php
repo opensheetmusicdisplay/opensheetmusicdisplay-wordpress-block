@@ -523,7 +523,7 @@ function phonicscore_opensheetmusicdisplay_enqueue_scripts(){
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist',
 		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay.min.js', __FILE__ ) ),
 		array( ),
-		'1.9.0',
+		'1.9.6',
 		true
 	);
 	wp_enqueue_script(
