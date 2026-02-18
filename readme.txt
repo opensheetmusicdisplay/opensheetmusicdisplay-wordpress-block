@@ -3,8 +3,8 @@ Contributors:      opensheetmusicdisplay, fredmeister77
 Donate link:       https://OSMD.org/Donate
 Tags:              opensheetmusicdisplay,osmd,music,sheet music,musicxml
 Requires at least: 5.6.0
-Tested up to:      6.8.1
-Stable tag:        1.4.1
+Tested up to:      6.9.1
+Stable tag:        1.4.2
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
