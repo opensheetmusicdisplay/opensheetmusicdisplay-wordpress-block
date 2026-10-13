@@ -35,9 +35,9 @@ import icons from '../block_assets/icons';
 wp.domReady(() => {
 registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 	/**
-	 * @see https://make.wordpress.org/core/2020/11/18/block-api-version-2/
+	 * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-api-versions/
 	 */
-	apiVersion: 2,
+	apiVersion: 3,
 
 	/**
 	 * This is the display title for your block, which can be translated with `i18n` functions.

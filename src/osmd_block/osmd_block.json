@@ -1,4 +1,5 @@
 {
+	"apiVersion": 3,
 	"name": "phonicscore/opensheetmusicdisplay",
 	"title": "OSMD Sheet Music",
 	"category": "embed",
@@ -9,6 +10,6 @@
 		"html": false
 	},
 	"editorScript": "file:./osmd_block.js",
-	"editorStyle": "file:../styles/osmd_block.css",
-	"style": "file:../styles/style-osmd_block.css"
+	"editorStyle": "file:./styles/osmd_block.css",
+	"style": "file:./styles/style-osmd_block.css"
 }

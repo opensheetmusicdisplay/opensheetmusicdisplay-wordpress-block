@@ -8,12 +8,17 @@ import { select, subscribe, dispatch } from '@wordpress/data';
         const getExistingBlocks = new Promise( ( resolve ) => {
                 const unsubscribe = subscribe( () => {
                     //approximate editor ready by checking for clean post/blocks loaded
-                    const isCleanNewPost = select( 'core/editor' ).isCleanNewPost();
+                    const editor = select( 'core/editor' );
+                    const isCleanNewPost = editor && editor.isCleanNewPost && editor.isCleanNewPost();
                     if ( isCleanNewPost ) {
                         unsubscribe();
                         resolve([]);
                     }
-                    const blocks = select( 'core/block-editor' ).getBlocks();
+                    const blockEditor = select( 'core/block-editor' );
+                    if ( ! blockEditor ) {
+                        return;
+                    }
+                    const blocks = blockEditor.getBlocks();
                     if ( blocks.length > 0 ) {
                         unsubscribe();
                         resolve(blocks);

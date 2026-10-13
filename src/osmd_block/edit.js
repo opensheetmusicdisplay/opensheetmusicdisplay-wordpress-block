@@ -10,8 +10,7 @@ import {OpenSheetMusicDisplayGlobalHooks, OpenSheetMusicDisplayWordpressPlugin} 
  */
 import { InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import { withFilters, Card, CardBody, SelectControl, ToggleControl, Button, PanelBody, TextControl } from '@wordpress/components';
-import { withSelect } from '@wordpress/data';
-import { useState } from '@wordpress/element';
+import { useRef, useState } from '@wordpress/element';
 
 /**
  * Retrieves the translation of text.
@@ -51,7 +50,8 @@ pluginManager.registerPlugin(wpPlugin);
  * @return {WPElement} Element to render.
  */
 const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, commitAttributes}) => {
-	const blockProps = useBlockProps();
+	const blockRef = useRef();
+	const blockProps = useBlockProps({ref: blockRef});
 
 	const onSelectMedia = (media) => {
 		setAttributes({
@@ -96,10 +96,10 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 	];
 	
 	const translateAspectRatioToHeight = (aspectRatio) => {
-		if(!blockProps.ref.current || aspectRatio === 0.0 || !blockProps.ref.current.offsetWidth){
+		if(!blockRef.current || aspectRatio === 0.0 || !blockRef.current.offsetWidth){
 			return 'auto';
 		} else {
-			return (blockProps.ref.current.offsetWidth / aspectRatio).toString() + 'px';
+			return (blockRef.current.offsetWidth / aspectRatio).toString() + 'px';
 		}
 	};
 
@@ -367,7 +367,4 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 	);
 }
 
-export default withSelect( (select, props) => {
-	const { getMedia } = select('core');
-	return { media: props.attributes.musicXmlId > -1 ? getMedia(props.attributes.musicXmlId) : undefined };
-} )(Edit);
+export default Edit;

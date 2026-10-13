@@ -1,5 +1,6 @@
 {
-	"name": "phonicscore/practicebird/deep_link",
+	"apiVersion": 3,
+	"name": "phonicscore/practicebird-deeplink",
 	"title": "OSMD QR Code",
 	"category": "embed",
 	"icon": "",
@@ -8,7 +9,7 @@
 	"supports": {
 		"html": false
 	},
-	"editorScript": "file:./osmd_block.js",
-	"editorStyle": "file:../styles/osmd_block.css",
-	"style": "file:../styles/style-osmd_block.css"
+	"editorScript": "file:./pbdeeplink_block.js",
+	"editorStyle": "file:./styles/pbdeeplink_block.css",
+	"style": "file:./styles/style-pbdeeplink_block.css"
 }

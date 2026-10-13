@@ -2,7 +2,7 @@
 Contributors:      opensheetmusicdisplay, fredmeister77
 Donate link:       https://OSMD.org/Donate
 Tags:              opensheetmusicdisplay,osmd,music,sheet music,musicxml
-Requires at least: 5.6.0
+Requires at least: 6.3
 Tested up to:      7.1.3
 Stable tag:        1.5.0
 Requires PHP:      7.0.0
@@ -340,6 +340,13 @@ If you'd like:
 
 Please consider subscribing!
 
+= Why does the console mention global-styles-css-custom-properties-inline-css? =
+
+WordPress can log an iframe warning for its own global-styles stylesheet. This is a known upstream issue, independent of this plugin's block API migration: https://github.com/WordPress/gutenberg/issues/76082
+The plugin's blocks use API version 3 and load their content assets through WordPress's iframe-compatible APIs.
+
+The message "[api-fetch][preload] All preloads consumed." is informational output from WordPress, not a warning or rendering error.
+
 == Screenshots ==
 
 1. This is a two-column post example with the OSMD block in the second column with zoom level set. Shows Basic options to the right.
@@ -350,6 +357,11 @@ Please consider subscribing!
 == Changelog ==
 
 = 1.5.0 =
+* Require WordPress 6.3 or newer and migrate both blocks to API version 3 for the iframe editor.
+* Load renderer libraries and content styles in the editor iframe while keeping editor hooks in the admin window.
+* Remove unused deprecated getMedia lookups and use an absolute PracticeBird endpoint URL for iframe QR previews.
+* Correct React SVG attribute names in the block icons to avoid invalid DOM property warnings.
+* Clean up preview rendering when blocks are removed and render Braille using the block's own document.
 * Add Music Braille to the free sheet music block and shortcode, with braille-only display, lyrics, bar-over-bar keyboard layout, ensemble layout, facsimile signs and a translation view.
 * Add shortcode attributes: brailleenabled, braillehidescore, braillelyrics, braillebaroverbar, brailleensemble, braillefacsimile and brailleshowtranslation. All are off by default.
 * Update the bundled OpenSheetMusicDisplay library from 1.9.6 to 2.2.1, bringing faster loading and rendering, cross-staff slurs, nested tuplets, two-note tremolos, wavy trill lines, swing and metric modulation marks, measure repeats and part-group labels.

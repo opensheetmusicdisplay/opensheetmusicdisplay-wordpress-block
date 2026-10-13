@@ -1,4 +1,4 @@
-import { BrailleConverter, BrailleDOMRenderer } from 'opensheetmusicdisplay';
+import { getRenderingLibrary } from '../Rendering/getRenderingLibrary';
 
 export const BRAILLE_ATTRIBUTE_NAMES = [
     'brailleEnabled',
@@ -19,6 +19,7 @@ export function renderBraille(osmd, settings, containerEl){
         return;
     }
     try {
+        const { BrailleConverter, BrailleDOMRenderer } = getRenderingLibrary(containerEl, 'opensheetmusicdisplay');
         const output = new BrailleConverter().convert(osmd.Sheet, {
             lyrics: !!settings.brailleLyrics,
             barOverBar: !!settings.brailleBarOverBar,
@@ -40,7 +41,7 @@ export function renderBraille(osmd, settings, containerEl){
         containerEl.appendChild(outputElement);
     } catch(err){
         console.warn('Error generating Music Braille: ', err);
-        const message = document.createElement('p');
+        const message = containerEl.ownerDocument.createElement('p');
         message.className = 'phonicscore-opensheetmusicdisplay__braille-error';
         message.textContent = 'Could not generate Music Braille for this score.';
         containerEl.appendChild(message);

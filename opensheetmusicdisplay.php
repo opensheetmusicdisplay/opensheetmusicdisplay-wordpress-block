@@ -3,6 +3,7 @@
  * Plugin Name:     OpenSheetMusicDisplay
  * Description:     Block (and shortcode) to render MusicXML in the browser as sheet music and Music Braille using OSMD. Additionally provides a block to deeplink musicXML into the PracticeBird app.
  * Version:         1.5.0
+ * Requires at least: 6.3
  * Author:          opensheetmusicdisplay.org
  * Author URI:		https://opensheetmusicdisplay.org
  * License:         GPL-2.0-or-later
@@ -118,6 +119,7 @@ function phonicscore_opensheetmusicdisplay_block_init() {
 		$script_asset['dependencies'][] = 'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_exports';
 		$script_asset['dependencies'][] = 'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist';
 		$script_asset['dependencies'][] = 'fredmeister77_queueable_attributes_dist';
+		$script_asset['dependencies'][] = 'wp-dom-ready';
 	}
 	wp_register_script(
 		'phonicscore_opensheetmusicdisplay_block_editor',
@@ -146,6 +148,7 @@ function phonicscore_opensheetmusicdisplay_block_init() {
 	register_block_type(
 		'phonicscore/opensheetmusicdisplay',
 		array(
+			'api_version'   => 3,
 			'editor_script' => 'phonicscore_opensheetmusicdisplay_block_editor',
 			'editor_style'  => 'phonicscore_opensheetmusicdisplay_block_editor',
 			'style'         => 'phonicscore_opensheetmusicdisplay_block',
@@ -546,66 +549,65 @@ function phonicscore_opensheetmusicdisplay_shortcode_init(){
 	add_shortcode('opensheetmusicdisplay', 'phonicscore_opensheetmusicdisplay_shortcode_callback');
 }
 
-function phonicscore_opensheetmusicdisplay_enqueue_scripts(){
-	wp_enqueue_script(
+function phonicscore_opensheetmusicdisplay_register_scripts(){
+	wp_register_script(
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist',
 		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay.min.js', __FILE__ ) ),
-		array( ),
+		array(),
 		'2.2.1',
 		true
 	);
-	wp_enqueue_script(
+	wp_register_script(
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_exports',
 		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay-wordpress-block.min.js', __FILE__ ) ),
-		array( 'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist' ),
+		array( 'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist', 'wp-hooks', 'wp-dom-ready' ),
 		'1.5.0',
 		true
 	);
-	wp_enqueue_script(
+	wp_register_script(
 		'phonicscore_opensheetmusicdisplay_frontend_script',
 		esc_url( plugins_url( 'build/osmd/osmd-loader.min.js', __FILE__ ) ),
 		array( 'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist', 'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_exports' ),
 		'1.1.7',
 		true
 	);
-}
-function phonicscore_opensheetmusicdisplay_enqueue_admin_scripts($hook){
-    if ( 'post.php' != $hook && 'post-new.php' != $hook ) {
-        return;
-    }
-	wp_enqueue_script(
-		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist',
-		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay.min.js', __FILE__ ) ),
-		array( ),
-		'2.2.1',
-		true
-	);
-	wp_enqueue_script(
-		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_exports',
-		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay-wordpress-block.min.js', __FILE__ ) ),
-		array( 'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist' ),
-		'1.5.0',
-		true
-	);
-	wp_add_inline_script(
-		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_exports',
-		phonicscore_opensheetmusicdisplay_generate_admin_client_attributes(),
-	);
-	wp_enqueue_script(
+	wp_register_script(
 		'fredmeister77_queueable_attributes_dist',
 		esc_url( plugins_url( 'build/osmd/queueable_attributes.min.js', __FILE__ ) ),
-		array( ),
+		array( 'wp-compose', 'wp-element', 'wp-hooks' ),
 		'0.1.1',
 		true
 	);
-	wp_enqueue_script(
+	wp_register_script(
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_detection',
 		esc_url( plugins_url( 'build/osmd/new_block_detection.min.js', __FILE__ ) ),
-		array( ),
+		array( 'wp-data', 'wp-hooks', 'wp-dom-ready' ),
 		'0.0.1',
 		true
 	);
 }
+
+function phonicscore_opensheetmusicdisplay_enqueue_scripts(){
+	wp_enqueue_script( 'phonicscore_opensheetmusicdisplay_frontend_script' );
+}
+
+function phonicscore_opensheetmusicdisplay_enqueue_admin_scripts($hook = null){
+	wp_enqueue_script( 'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_exports' );
+	wp_add_inline_script(
+		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_exports',
+		phonicscore_opensheetmusicdisplay_generate_admin_client_attributes()
+	);
+	wp_enqueue_script( 'fredmeister77_queueable_attributes_dist' );
+	wp_enqueue_script( 'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_detection' );
+}
+
+function phonicscore_opensheetmusicdisplay_enqueue_editor_content_assets(){
+	if ( is_admin() ) {
+		// Run the renderer in the same document as the block, including editor iframes.
+		wp_enqueue_script( 'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist' );
+	}
+}
+
 function phonicscore_opensheetmusicdisplay_musicxml_mime_types( $mimes ) {
 	$mimes['musicxml'] = 'application/vnd.recordare.musicxml+xml';
 	$mimes['mxl'] = 'application/vnd.recordare.musicxml';
@@ -626,13 +628,15 @@ function phonicscore_opensheetmusicdisplay_admin_notices() {
 }
 
 function phonicscore_opensheetmusicdisplay_activate_plugin(){
+	add_action( 'init', 'phonicscore_opensheetmusicdisplay_register_scripts', 5 );
 	if(function_exists('register_block_type')){
 		add_action( 'init', 'phonicscore_opensheetmusicdisplay_block_init' );
 	}
 	add_action( 'init', 'phonicscore_opensheetmusicdisplay_shortcode_init' );
 	add_action( 'wp_enqueue_scripts', 'phonicscore_opensheetmusicdisplay_enqueue_scripts' );
 	if(function_exists('register_block_type')){
-		add_action( 'admin_enqueue_scripts', 'phonicscore_opensheetmusicdisplay_enqueue_admin_scripts' );
+		add_action( 'enqueue_block_editor_assets', 'phonicscore_opensheetmusicdisplay_enqueue_admin_scripts' );
+		add_action( 'enqueue_block_assets', 'phonicscore_opensheetmusicdisplay_enqueue_editor_content_assets' );
 		if (current_user_can('edit_posts') && is_admin()){
 			$resizeUpdateMessageViewed = get_user_meta(get_current_user_id(), 'phonicscore_opensheetmusicdisplay_resize_update_message_viewed', true);
 			if($resizeUpdateMessageViewed === '' || $resizeUpdateMessageViewed == false){
