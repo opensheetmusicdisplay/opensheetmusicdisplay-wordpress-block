@@ -2,6 +2,7 @@ const path = require('path');
 
 module.exports = [
 {
+  mode: 'production',
   externals: {
     'opensheetmusicdisplay-wordpress-block': 'window["opensheetmusicdisplay-wordpress-block"]',
     opensheetmusicdisplay: 'opensheetmusicdisplay',

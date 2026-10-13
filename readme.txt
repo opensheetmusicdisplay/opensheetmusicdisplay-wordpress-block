@@ -3,13 +3,13 @@ Contributors:      opensheetmusicdisplay, fredmeister77
 Donate link:       https://OSMD.org/Donate
 Tags:              opensheetmusicdisplay,osmd,music,sheet music,musicxml
 Requires at least: 5.6.0
-Tested up to:      6.9.1
-Stable tag:        1.4.2
+Tested up to:      7.1.3
+Stable tag:        1.5.0
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
-Block or shortcode to render MusicXML in the browser as sheet music using OSMD.
+Block or shortcode to render MusicXML in the browser as sheet music and Music Braille using OSMD.
 
 == Description ==
 
@@ -20,9 +20,30 @@ This will allow you to render responsive MusicXML live in your visitors' browser
 
 It enables uploading of .xml, .musicxml and .mxl files to your Wordpress Media Library, which can then be selected in the block for rendering.
 
+Music Braille is included in the free plugin: display Unicode braille music below the score or show braille alone. Optional layouts support keyboard music, ensemble scores and lyrics, with a translation view explaining the signs. These options work in both the block and the shortcode.
+
 (We have also added a shortcode in this plugin for those who do not use the Gutenberg editor.)
 
 2. Additionally, as of 1.3.0 we have added another block: 'OSMD QR Code'. This block allows you to deeplink your musicXML directly into our PracticeBird app via QR code, mobile icon, or both!
+
+## MusicXML Notation Support
+
+This release includes OpenSheetMusicDisplay 2.2.1. In addition to notes, rests, chords, lyrics and tablature, the updated renderer supports:
+
+- Slurs across staves, such as between the two hands of a piano part.
+- Nested tuplets and tremolos between two notes.
+- Wavy trill extension lines.
+- Swing indications, complex metronome marks and metric modulation note equations.
+- MusicXML measure-repeat signs (simile/slashes) and part-group names and abbreviations.
+- Natural-sharp and natural-flat accidental combinations.
+
+These markings are read from the selected MusicXML file and rendered with the score. The updated engine also improves score loading and rendering performance, with fixes for lyrics, dynamics, tablature and layout after resizing or changing zoom.
+
+## Default Settings and Styling
+
+Open **OSMD Settings** in the WordPress admin menu to choose the default drawing options and zoom for new sheet music blocks and shortcodes that omit those options. Explicitly saved block settings and shortcode attributes keep their own values.
+
+To style an individual block, use **Advanced -> Additional CSS class(es)** in the block editor and add the corresponding styles to your theme.
 
 ## OSMD Sheet Music Block Options
 The block has a number of options in the sidebar (Inspector Controls) described here.
@@ -32,7 +53,7 @@ The section immediately below the block heading contains two controls related to
 
 #### Automatically Rerender on Change
 *Toggle, Default: Off*
-When this is on, any change to the lower settings (except for 'Container Aspect Ratio') will trigger a re-render of the sheet music in the editor.
+When this is on, changes to the score settings (except for 'Container Aspect Ratio') trigger a re-render of the sheet music in the editor. Changes affecting only Music Braille regenerate the braille output without re-rendering the score.
 
 This is not recommended for larger pieces of sheet music, as rendering can take time.
 It is best to do 'batch' updates with the settings and use the 'Rerender' button to manually preview the changes.
@@ -126,16 +147,54 @@ Whether to render time signatures on the staves
 *Toggle, Default: Off*
 This determines whether system breaks specified in the MusicXML will be honored.
 
+### Music Braille
+
+Open the **Music Braille** panel in the block sidebar and enable **Show Music Braille**. The remaining braille controls appear when it is enabled. All seven toggles default to Off.
+
+Braille output is selectable Unicode text. It includes notes, rests, octave signs, key and time signatures, chords, voices, dynamics, articulations, ornaments, ties, slurs and repeats. Multi-staff scores are detected automatically; keyboard output includes hand signs.
+
+#### Show Music Braille
+
+Renders Music Braille below the sheet music in the editor and on the published page.
+
+#### Hide Score (Braille Only)
+
+Hides the printed sheet music and keeps the braille output visible. This can be combined with any braille layout.
+
+#### Lyrics
+
+Adds aligned word and music lines for vocal music, including multiple verses when present in the MusicXML.
+
+#### Bar-over-bar (Keyboard)
+
+Aligns the right-hand and left-hand music vertically, measure by measure. This option applies to multi-staff scores and has no effect on a single-staff score.
+
+#### Ensemble
+
+Produces aligned music for multiple instruments with instrument abbreviations and an instrument list. Enable it explicitly for ensemble scores; it has no effect on a single-instrument score.
+
+#### Facsimile (Mirror Print Layout)
+
+Includes clef and octave-shift signs. For a single-staff score, braille line breaks follow the rendered score's system breaks. Keyboard, ensemble and lyrics layouts retain their own line grouping.
+
+#### Show Translation (Sign Meanings)
+
+Adds a translation view below the braille text, grouped by measure, explaining the musical meaning of the signs.
+
+When combining layout options, Ensemble takes precedence for scores with multiple instruments, followed by Lyrics, then the multi-staff keyboard layout. Bar-over-bar aligns the keyboard layout; Facsimile adds its signs to the selected layout.
+
+With **Automatically Rerender on Change** enabled, changes affecting only braille update its display without redrawing the score. With it disabled, click **Rerender** to apply queued braille settings.
+
 ## OpenSheetMusicDisplay Shortcode Options
 
-The shortcode has the same options as above, though as attributes written in camelCase.
+The shortcode has the same options as above. Attribute names can be written in camelCase or lowercase.
 
 In the shortcode any Toggle attribute values are specified with true or false.
 Numeric values can be specified as float or integers.
 
 To specify the musicXML you need to provide a URL; This can be copied from your Media center in Wordpress when viewing the details of a file.
 
-The shortcode is "opensheetmusicdisplay". Example given with full set of attributes:
+The shortcode is "opensheetmusicdisplay". Example with drawing options:
 ```
 [opensheetmusicdisplay musicXmlUrl="http://url.com/wp-content/uploads/sites/2/2021/02/Beethoven_AnDieFerneGeliebte.xml" zoom="0.75" width="75" 
     drawTitle="false" drawSubtitle="false" drawComposer="true" drawLyricist="true" drawMetronomeMarks="false" drawPartNames="false" drawPartAbbreviations="false"
@@ -143,6 +202,32 @@ The shortcode is "opensheetmusicdisplay". Example given with full set of attribu
 ```
 
 It's important to note that zoom is out of 1: so 1 = 100%, 0.75 = 75%, 2 = 200%, etc.
+
+### Music Braille Shortcode Attributes
+
+| Attribute | Block control |
+| --- | --- |
+| `brailleenabled` | Show Music Braille |
+| `braillehidescore` | Hide Score (Braille Only) |
+| `braillelyrics` | Lyrics |
+| `braillebaroverbar` | Bar-over-bar (Keyboard) |
+| `brailleensemble` | Ensemble |
+| `braillefacsimile` | Facsimile (Mirror Print Layout) |
+| `brailleshowtranslation` | Show Translation (Sign Meanings) |
+
+All braille attributes default to `false`. Set `brailleenabled="true"` to enable braille output; the other attributes customize it as described in the block options above.
+
+Show braille alone with explanations of the signs:
+
+```
+[opensheetmusicdisplay musicxmlurl="https://example.com/score.musicxml" brailleenabled="true" braillehidescore="true" brailleshowtranslation="true"]
+```
+
+Show a keyboard score with aligned braille below it:
+
+```
+[opensheetmusicdisplay musicxmlurl="https://example.com/piano.musicxml" brailleenabled="true" braillebaroverbar="true"]
+```
 
 
 ## OSMD QR Code Block Options
@@ -263,6 +348,17 @@ Please consider subscribing!
 4. This shows another post with various options set (75% width, no draw title, Portrait aspect ratio)
 
 == Changelog ==
+
+= 1.5.0 =
+* Add Music Braille to the free sheet music block and shortcode, with braille-only display, lyrics, bar-over-bar keyboard layout, ensemble layout, facsimile signs and a translation view.
+* Add shortcode attributes: brailleenabled, braillehidescore, braillelyrics, braillebaroverbar, brailleensemble, braillefacsimile and brailleshowtranslation. All are off by default.
+* Update the bundled OpenSheetMusicDisplay library from 1.9.6 to 2.2.1, bringing faster loading and rendering, cross-staff slurs, nested tuplets, two-note tremolos, wavy trill lines, swing and metric modulation marks, measure repeats and part-group labels.
+* Include OSMD fixes for lyrics, dynamics, accidentals, tablature and repeated rendering after resizing or changing zoom.
+* Regenerate braille after braille-only option changes without re-rendering the sheet music.
+* Ensure loading indicators are cleared even when an extension's post-render hook fails.
+* Document Music Braille controls and shortcode examples, notation support, default settings and block styling.
+See the upstream changelog for the full OSMD changes:
+https://github.com/opensheetmusicdisplay/opensheetmusicdisplay/blob/2.2.1/CHANGELOG.md
 
 = 1.4.2 =
 * Fixes for build process - local dependency references.

@@ -3,6 +3,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = [
 {
+  mode: 'production',
   externals: {
     '@wordpress/block-editor': 'wp.blockEditor',
     '@wordpress/components': 'wp.components',

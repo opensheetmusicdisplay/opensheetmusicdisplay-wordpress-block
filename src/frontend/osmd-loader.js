@@ -1,5 +1,5 @@
 import { OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
-import {OpenSheetMusicDisplayGlobalHooks} from 'opensheetmusicdisplay-wordpress-block';
+import {OpenSheetMusicDisplayGlobalHooks, renderBraille, BRAILLE_ATTRIBUTE_NAMES} from 'opensheetmusicdisplay-wordpress-block';
 
 //Fix for incompatibility with Prototype.JS.
 //Prototype overrides the reduce method (among many other things) of Array
@@ -53,6 +53,16 @@ function FindOrCreateMessageBlock(osmdRenderBlock){
     }
 
     return message;
+}
+
+function FindOrCreateBrailleBlock(currentPlaceholder, osmdRenderBlock){
+    let brailleBlock = currentPlaceholder.getElementsByClassName('phonicscore-opensheetmusicdisplay__braille')[0];
+    if(!brailleBlock){
+        brailleBlock = document.createElement('div');
+        brailleBlock.classList.add('phonicscore-opensheetmusicdisplay__braille');
+        osmdRenderBlock.insertAdjacentElement('afterend', brailleBlock);
+    }
+    return brailleBlock;
 }
 
 function DisplayError(osmdRenderBlock, error, details){
@@ -121,6 +131,16 @@ for(let i = 0; i < placeholders.length; i++){
         delete attributesMap.aspectRatio;
     }
 
+    const brailleSettings = {};
+    for(const brailleAttributeName of BRAILLE_ATTRIBUTE_NAMES){
+        brailleSettings[brailleAttributeName] = attributesMap[brailleAttributeName];
+        delete attributesMap[brailleAttributeName];
+    }
+    const brailleBlock = FindOrCreateBrailleBlock(currentPlaceholder, osmdRenderBlock);
+    if(brailleSettings.brailleEnabled && brailleSettings.brailleHideScore){
+        osmdRenderBlock.classList.add('phonicscore-opensheetmusicdisplay__render-block--hidden');
+    }
+
     attributesMap.autoResize = false;
 
     const updateHeight = () => {
@@ -154,13 +174,19 @@ for(let i = 0; i < placeholders.length; i++){
                 let beforeWidth = osmdRenderBlock.offsetWidth;
                 currentOsmd.render();
                 resizeThreshold = Math.abs(beforeWidth - osmdRenderBlock.offsetWidth);
+                renderBraille(currentOsmd, brailleSettings, brailleBlock);
                 ExtendArrayPrototype();
             } catch(err){
                 console.warn(err);
                 DisplayError(osmdRenderBlock, 'Error loading sheet music file: ' + url, err);
             } finally {
-                OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_post-render', currentOsmd, attributesMap, osmdRenderBlock);
-                OpenSheetMusicDisplayGlobalHooks.didAction('phonicscore_opensheetmusicdisplay_render');
+                try {
+                    OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_post-render', currentOsmd, attributesMap, osmdRenderBlock);
+                    OpenSheetMusicDisplayGlobalHooks.didAction('phonicscore_opensheetmusicdisplay_render');
+                } catch(hookErr){
+                    // A hook registered by another plugin must never be able to leave the loading spinner stuck.
+                    console.error('Error in phonicscore_opensheetmusicdisplay_post-render hook: ', hookErr);
+                }
                 loader.classList.add('hide');
                 loadAttempt = 0;
             }
@@ -208,13 +234,20 @@ for(let i = 0; i < placeholders.length; i++){
                 let beforeWidth = osmdRenderBlock.offsetWidth;
                 currentOsmd.autoResize();
                 resizeThreshold = Math.abs(beforeWidth - osmdRenderBlock.offsetWidth);
+                if(brailleSettings.brailleFacsimile){
+                    renderBraille(currentOsmd, brailleSettings, brailleBlock);
+                }
                 ExtendArrayPrototype();
             } catch(err){
                 console.warn(err);
                 DisplayError(osmdRenderBlock, 'Error loading sheet music file: ' + url, err);
             } finally {
-                OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_post-render', currentOsmd, attributesMap, osmdRenderBlock);
-                OpenSheetMusicDisplayGlobalHooks.didAction('phonicscore_opensheetmusicdisplay_render');
+                try {
+                    OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_post-render', currentOsmd, attributesMap, osmdRenderBlock);
+                    OpenSheetMusicDisplayGlobalHooks.didAction('phonicscore_opensheetmusicdisplay_render');
+                } catch(hookErr){
+                    console.error('Error in phonicscore_opensheetmusicdisplay_post-render hook: ', hookErr);
+                }
                 loader.classList.add('hide');
             }
         }, 500);

@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:     OpenSheetMusicDisplay
- * Description:     Block (and shortcode) to render MusicXML in the browser as sheet music using OSMD. Additionally provides a block to deeplink musicXML into the PracticeBird app.
- * Version:         1.4.2
+ * Description:     Block (and shortcode) to render MusicXML in the browser as sheet music and Music Braille using OSMD. Additionally provides a block to deeplink musicXML into the PracticeBird app.
+ * Version:         1.5.0
  * Author:          opensheetmusicdisplay.org
  * Author URI:		https://opensheetmusicdisplay.org
  * License:         GPL-2.0-or-later
@@ -412,6 +412,34 @@ function phonicscore_opensheetmusicdisplay_get_attributes_list() {
 		'musicXmlTitle' => array(
 			'type' => 'string',
 			'default' => null
+		),
+		'brailleEnabled' => array(
+			'type' => 'boolean',
+			'default' => false
+		),
+		'brailleHideScore' => array(
+			'type' => 'boolean',
+			'default' => false
+		),
+		'brailleLyrics' => array(
+			'type' => 'boolean',
+			'default' => false
+		),
+		'brailleBarOverBar' => array(
+			'type' => 'boolean',
+			'default' => false
+		),
+		'brailleEnsemble' => array(
+			'type' => 'boolean',
+			'default' => false
+		),
+		'brailleFacsimile' => array(
+			'type' => 'boolean',
+			'default' => false
+		),
+		'brailleShowTranslation' => array(
+			'type' => 'boolean',
+			'default' => false
 		)
 	);
 	$attributes = apply_filters('phonicscore/opensheetmusicdisplay/block-attributes', $attributes);
@@ -523,14 +551,14 @@ function phonicscore_opensheetmusicdisplay_enqueue_scripts(){
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist',
 		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay.min.js', __FILE__ ) ),
 		array( ),
-		'1.9.6',
+		'2.2.1',
 		true
 	);
 	wp_enqueue_script(
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_exports',
 		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay-wordpress-block.min.js', __FILE__ ) ),
-		array( ),
-		'0.1.1',
+		array( 'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist' ),
+		'1.5.0',
 		true
 	);
 	wp_enqueue_script(
@@ -549,14 +577,14 @@ function phonicscore_opensheetmusicdisplay_enqueue_admin_scripts($hook){
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist',
 		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay.min.js', __FILE__ ) ),
 		array( ),
-		'1.9.6',
+		'2.2.1',
 		true
 	);
 	wp_enqueue_script(
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_exports',
 		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay-wordpress-block.min.js', __FILE__ ) ),
-		array( ),
-		'0.1.1',
+		array( 'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist' ),
+		'1.5.0',
 		true
 	);
 	wp_add_inline_script(

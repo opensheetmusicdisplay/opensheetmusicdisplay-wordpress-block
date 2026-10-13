@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { OpenSheetMusicDisplay as OSMD } from 'opensheetmusicdisplay';
+import { renderBraille, BRAILLE_ATTRIBUTE_NAMES } from '../Braille/renderBraille';
 //TODO: Combine with React repo, use as npm dependency.
 //TODO: Would be nice to use tsx and have typing on options
 export class OpenSheetMusicDisplay extends PureComponent {
@@ -12,6 +13,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
       this.osmd = undefined;
       this.osmdDivRef = React.createRef();
       this.loaderDivRef = React.createRef();
+      this.brailleDivRef = React.createRef();
       this.pluginManager = undefined;
       if(props.pluginManager?._reflection?.class?.name === 'OpenSheetMusicDisplayReactPluginManager'){
         this.pluginManager = props.pluginManager;
@@ -27,7 +29,7 @@ export class OpenSheetMusicDisplay extends PureComponent {
       const propKeys = Object.keys(props);
       for(let i = 0; i < propKeys.length; i++){
         const key = propKeys[i];
-        if(key !== 'file' && key !== 'zoom' && key !== 'width'){
+        if(key !== 'file' && key !== 'zoom' && key !== 'width' && !BRAILLE_ATTRIBUTE_NAMES.includes(key)){
           options[key] = props[key];
         }
       }
@@ -54,13 +56,22 @@ export class OpenSheetMusicDisplay extends PureComponent {
         try{
           this.osmd.render();
         } catch(err){
+          error = err;
           console.warn('Error rendering: ', err);
           this.showErrorCallback(`Error rendering file: ${this.props.file}`, err);
         } finally{
-          if(this.pluginManager?.getPlugins()?.length > 0){
-            for(let i = 0; i < this.pluginManager.getPlugins().length; i++){
-              this.pluginManager.getPlugins()[i].postRenderHook(this.osmd, this.props, this.osmdDivRef.current, error);
+          if(!this.pendingLoad){
+            renderBraille(this.osmd, this.props, this.brailleDivRef.current);
+          }
+          try {
+            if(this.pluginManager?.getPlugins()?.length > 0){
+              for(let i = 0; i < this.pluginManager.getPlugins().length; i++){
+                this.pluginManager.getPlugins()[i].postRenderHook(this.osmd, this.props, this.osmdDivRef.current, error);
+              }
             }
+          } catch(hookErr){
+            // A hook registered by another plugin must never be able to leave the loading spinner stuck.
+            console.error('Error in OSMD post-render plugin hook: ', hookErr);
           }
           this.loaderDivRef.current?.classList.add('hide');
         }
@@ -124,7 +135,20 @@ export class OpenSheetMusicDisplay extends PureComponent {
     }
 
     componentDidUpdate(prevProps) {
+      // A braille-only change must not trigger the slow, browser-blocking OSMD re-render.
+      const onlyBrailleChanged = Object.keys({...prevProps, ...this.props}).every(
+        (key) => BRAILLE_ATTRIBUTE_NAMES.includes(key) || prevProps[key] === this.props[key]
+      );
+      if(onlyBrailleChanged){
+        if(!this.pendingLoad){
+          renderBraille(this.osmd, this.props, this.brailleDivRef.current);
+        }
+        return;
+      }
       this.osmdDivRef.current.innerHTML = '';
+      if(this.brailleDivRef.current){
+        this.brailleDivRef.current.innerHTML = '';
+      }
       this.loaderDivRef.current?.classList.remove('hide');
       const options = this.getOptionsObjectFromProps(this.props);
       //We always want to manage resizing from here. Turn off autoresize
@@ -177,7 +201,11 @@ export class OpenSheetMusicDisplay extends PureComponent {
       let renderResult = (
         <div className="phonicscore-opensheetmusicdisplay">
           <div className="phonicscore-opensheetmusicdisplay__full-loading-spinner hide" ref={this.loaderDivRef}></div>
-          <div className="phonicscore-opensheetmusicdisplay__render-block" ref={this.osmdDivRef} />
+          <div
+            className={'phonicscore-opensheetmusicdisplay__render-block' + (this.props.brailleEnabled && this.props.brailleHideScore ? ' phonicscore-opensheetmusicdisplay__render-block--hidden' : '')}
+            ref={this.osmdDivRef}
+          />
+          <div className="phonicscore-opensheetmusicdisplay__braille" ref={this.brailleDivRef} />
         </div>
         );
         if(this.pluginManager?.getPlugins()?.length > 0){

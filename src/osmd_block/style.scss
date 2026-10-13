@@ -21,6 +21,22 @@ body{
   margin-right: auto;
 }
 
+/* Keep the width so OSMD can still lay out the (hidden) score; display:none would break rendering. */
+.phonicscore-opensheetmusicdisplay__render-block--hidden{
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+}
+
+.phonicscore-opensheetmusicdisplay__braille{
+  padding: 8px 0;
+}
+
+.phonicscore-opensheetmusicdisplay__braille-error{
+  font-style: italic;
+  opacity: 0.8;
+}
+
 .hide{
   display: none !important;
 }

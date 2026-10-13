@@ -347,6 +347,34 @@ registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 			type: 'boolean',
 			default: false
 		},
+		brailleEnabled: {
+			type: 'boolean',
+			default: false
+		},
+		brailleHideScore: {
+			type: 'boolean',
+			default: false
+		},
+		brailleLyrics: {
+			type: 'boolean',
+			default: false
+		},
+		brailleBarOverBar: {
+			type: 'boolean',
+			default: false
+		},
+		brailleEnsemble: {
+			type: 'boolean',
+			default: false
+		},
+		brailleFacsimile: {
+			type: 'boolean',
+			default: false
+		},
+		brailleShowTranslation: {
+			type: 'boolean',
+			default: false
+		},
 		rerenderDummy: {
 			type: 'object',
 			default: {}
@@ -411,7 +439,14 @@ registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 				"autoGenerateMutipleRestMeasuresFromRestMeasures",
 				"width",
 				"zoom",
-				"rerenderDummy"
+				"rerenderDummy",
+				"brailleEnabled",
+				"brailleHideScore",
+				"brailleLyrics",
+				"brailleBarOverBar",
+				"brailleEnsemble",
+				"brailleFacsimile",
+				"brailleShowTranslation"
 			]
 		}
 	}
