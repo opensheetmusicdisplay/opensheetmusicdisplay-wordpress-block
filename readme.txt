@@ -357,6 +357,10 @@ The message "[api-fetch][preload] All preloads consumed." is informational outpu
 == Changelog ==
 
 = 1.5.0 =
+* Upgrade the build toolchain to WordPress Scripts 36.1.0 and Webpack 5, refresh dependency security fixes and track reproducible installs with Node 24.21.0 and npm 12.2.0.
+* Use WordPress's React runtime consistently and provide a JSX compatibility fallback for WordPress 6.3–6.5.
+* Verify linked library commits and copied-asset hashes, and generate dependency metadata for shared and frontend scripts.
+* Document the remaining unpatched build-only braces advisory and the PracticeBird decoder update required upstream in DEPENDENCIES.md.
 * Require WordPress 6.3 or newer and migrate both blocks to API version 3 for the iframe editor.
 * Load renderer libraries and content styles in the editor iframe while keeping editor hooks in the admin window.
 * Remove unused deprecated getMedia lookups and use an absolute PracticeBird endpoint URL for iframe QR previews.
