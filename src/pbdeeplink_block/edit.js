@@ -1,15 +1,15 @@
 /**
  * Internal Dependencies
  */
+import { getRenderingLibrary } from '../Rendering/getRenderingLibrary';
 
 /**
  * Wordpress Dependencies
  */
 import { InspectorControls, BlockControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import { Button, PanelBody, RadioControl, Modal, Icon, RangeControl, ResizableBox, ToggleControl } from '@wordpress/components';
-import { withSelect } from '@wordpress/data';
 import { info } from '@wordpress/icons';
-import {useState} from '@wordpress/element';
+import {useEffect, useRef, useState} from '@wordpress/element';
 import {OpenSheetMusicDisplayGlobalHooks} from 'opensheetmusicdisplay-wordpress-block';
 
 /**
@@ -34,7 +34,6 @@ import { useBlockProps } from '@wordpress/block-editor';
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import './editor.scss';
-import { useEffect } from '@wordpress/element';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -45,8 +44,6 @@ import { useEffect } from '@wordpress/element';
  * @return {WPElement} Element to render.
  */
 
-//To track our previous deeplink result across renders
-const deepLinkResults = new Map();
 const HelpTextRenderType = (generateBehavior) => {
 	switch (generateBehavior) {
 		case PracticeBirdDeepLink.DeepLinkGenerateBehavior.QR_ONLY:
@@ -74,35 +71,44 @@ const Edit = ({attributes, setAttributes, toggleSelection, clientId}) => {
 		});
 	}
 
-	const qrCode = React.createRef();
-	const mobileIcon = React.createRef();
-	let deepLinkResult = {};
-	if(deepLinkResults.has(clientId)){
-		deepLinkResult = deepLinkResults.get(clientId);
-	}
+	const qrCode = useRef();
+	const mobileIcon = useRef();
+	const [deepLinkResult, setDeepLinkResult] = useState({});
+	const [rendererError, setRendererError] = useState('');
 
 	let pluginProps = OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_practicebird_deeplink_setup', attributes);
 	if(!pluginProps){
 		pluginProps = {};
 	}
 	useEffect(() => {
-		if(pluginProps.target){
-			if(deepLinkResult.clear){
-				deepLinkResult.clear();
+		const qrContainer = qrCode.current;
+		const iconContainer = mobileIcon.current;
+		let result;
+		setRendererError('');
+		if(pluginProps.target && attributes.musicXmlId > -1){
+			try {
+				const renderer = getRenderingLibrary(qrContainer, 'PracticeBirdDeepLink');
+				const endpointUrl = window.phonicscorePracticeBirdEditorSettings?.endpointUrl;
+				if(!endpointUrl){
+					throw new Error('The PracticeBird endpoint URL is unavailable.');
+				}
+				result = renderer.DeepLinkQR(pluginProps.target, qrContainer, iconContainer, {...pluginProps, endpointUrl});
+				setDeepLinkResult(result);
+				if(result.error){
+					setRendererError(result.message);
+				} else if(result.warn){
+					console.warn('PracticeBirdDeepLink: ' + result.message);
+				}
+			} catch(error){
+				setRendererError('Could not initialize the QR code: ' + error.message);
 			}
-			deepLinkResult = PracticeBirdDeepLink.DeepLinkQR(pluginProps.target, qrCode.current, mobileIcon.current,
-							{...pluginProps,
-							endpointUrl: '/?phonicscore_practicebird_deeplink_endpoint=1'});
-			if(deepLinkResult.error && qrCode.current){
-				console.error("PracticeBirdDeepLink: " + result.message + " from block: " + pluginProps.target);
-				qrCode.current.innerText = __(deepLinkResult.message);
-			} else if (deepLinkResult.warn){
-				console.warn("PracticeBirdDeepLink: " + deepLinkResult.message + " from block: " + pluginProps.target);
-			}
-			deepLinkResults.set(clientId, deepLinkResult);
 		}
-	},
-	[attributes.target, attributes.qrScale, attributes.generateBehavior]);
+		return () => {
+			result?.clear?.();
+			qrContainer?.replaceChildren();
+			iconContainer?.replaceChildren();
+		};
+	}, [attributes.musicXmlId, pluginProps.target, pluginProps.qrScale, pluginProps.size, pluginProps.generateBehavior, pluginProps.iconSize, pluginProps.autoRedirectAppStore]);
 
 	let mobileEditClassName = "";
 	if(pluginProps.generateBehavior === PracticeBirdDeepLink.DeepLinkGenerateBehavior.QR_ONLY ||
@@ -309,6 +315,7 @@ const Edit = ({attributes, setAttributes, toggleSelection, clientId}) => {
 			}
 			{	attributes.musicXmlId > -1 ?
 				<div className="phonicscore_practicebird_deeplink__render-block">
+					{rendererError && <p role="alert">{rendererError}</p>}
 					<div ref={qrCode} />
 					{
 
@@ -352,10 +359,7 @@ const Edit = ({attributes, setAttributes, toggleSelection, clientId}) => {
 	);
 }
 
-export default withSelect( (select, props) => {
-	const { getMedia } = select('core');
-	return { media: props.attributes.musicXmlId > -1 ? getMedia(props.attributes.musicXmlId) : undefined };
-} )(Edit);
+export default Edit;
 
 
 

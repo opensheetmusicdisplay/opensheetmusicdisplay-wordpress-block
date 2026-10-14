@@ -1,46 +1,73 @@
 {
 	"name": "opensheetmusicdisplay-wordpress-block",
-	"version": "1.1.0",
+	"version": "1.5.0",
 	"description": "Block to render MusicXML in the browser as sheet music using OSMD.",
 	"author": "opensheetmusicdisplay, fredmeister77",
 	"license": "GPL-2.0-or-later",
-	"module": "src/export.js",
-	"main": "build/osmd/export.min.js",
+	"module": "src/opensheetmusicdisplay-wordpress-block.js",
+	"main": "build/osmd/opensheetmusicdisplay-wordpress-block.min.js",
 	"scripts": {
+		"setup": "npm ci",
+		"check:toolchain": "node scripts/check-toolchain.js",
+		"inputs:update": "node scripts/library-inputs.js --update",
+		"inputs:check": "node scripts/library-inputs.js",
+		"inputs:check:dev": "node scripts/library-inputs.js --development",
 		"wp:build": "wp-scripts build",
-		"osmd:build": "webpack --progress --config webpack.osmd.config.js",
-		"osmd:build-exports": "webpack --progress --config webpack.osmd.exports.config.js",
-		"build": "run-s wp:build osmd:build osmd:build-exports",
-		"format:js": "wp-scripts format-js",
+		"wp:start": "wp-scripts start",
+		"osmd:build": "webpack --config webpack.osmd.config.js",
+		"osmd:build-exports": "webpack --config webpack.osmd.exports.config.js",
+		"build": "run-s check:toolchain inputs:check wp:build osmd:build osmd:build-exports check:artifacts",
+		"check:artifacts": "node scripts/check-artifacts.js",
+		"audit:check": "node scripts/check-audit.js",
+		"test:checks": "node --test scripts/tests/*.test.js",
+		"format:js": "wp-scripts format",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
-		"start": "wp-scripts start",
+		"start": "run-s check:toolchain inputs:check:dev osmd:build osmd:build-exports wp:start",
 		"packages-update": "wp-scripts packages-update"
 	},
 	"dependencies": {
-		"@wordpress/block-editor": "^5.2.2",
-		"@wordpress/blocks": "^6.25.2",
-		"@wordpress/i18n": "^3.17.0",
-		"@wordpress/hooks": "^2.11.1",
-		"@wordpress/element": "^2.11.1",
-		"@wordpress/compose": "^3.24.3",
 		"opensheetmusicdisplay": "file:../opensheetmusicdisplay",
 		"pb-deep-link": "file:../pb-deep-link"
 	},
 	"devDependencies": {
-		"@wordpress/scripts": "^13.0.1",
-		"@wordpress/dependency-extraction-webpack-plugin": "3.4.1",
-		"npm-run-all": "^4.1.5",
-		"ts-loader": "^8.0.14",
-		"typescript": "^4.1.3",
-		"@types/node": "^14.14.22",
-		"webpack": "^4.44.2",
-		"webpack-cli": "^4.5.0",
-		"copy-webpack-plugin": "^6.4.0",
-		"@types/resize-observer-browser": "^0.1.5",
-		"babel-loader": "^8.2.2",
-		"@babel/core": "^7.12.16",
-		"@babel/preset-env": "^7.12.16",
-		"@babel/preset-react": "^7.12.13"
+		"@wordpress/block-editor": "18.1.0",
+		"@wordpress/blocks": "16.2.0",
+		"@wordpress/components": "42.0.0",
+		"@wordpress/compose": "8.10.0",
+		"@wordpress/data": "10.57.0",
+		"@wordpress/dependency-extraction-webpack-plugin": "6.57.0",
+		"@wordpress/element": "9.0.0",
+		"@wordpress/hooks": "4.57.0",
+		"@wordpress/i18n": "6.30.0",
+		"@wordpress/icons": "18.0.0",
+		"@wordpress/scripts": "36.1.0",
+		"copy-webpack-plugin": "14.0.0",
+		"npm-run-all2": "9.0.3",
+		"react": "19.3.0",
+		"react-dom": "19.3.0",
+		"webpack": "5.111.1",
+		"webpack-cli": "7.2.3"
+	},
+	"engines": {
+		"node": "24.21.0",
+		"npm": "12.2.0"
+	},
+	"packageManager": "npm@12.2.0",
+	"overrides": {
+		"@wordpress/scripts": {
+			"copy-webpack-plugin": "$copy-webpack-plugin",
+			"sockjs": {
+				"uuid": "11.1.1"
+			}
+		},
+		"postcss-selector-parser": "7.1.6",
+		"markdownlint-cli": {
+			"js-yaml": "5.4.3",
+			"smol-toml": "1.9.1"
+		},
+		"micromark-extension-math": {
+			"katex": "0.19.0"
+		}
 	}
 }

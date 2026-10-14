@@ -1,0 +1,20 @@
+{
+	"opensheetmusicdisplay": {
+		"path": "../opensheetmusicdisplay",
+		"commit": "6e3cbd412274a0cc56ffac87e268d44e9b11ebb0",
+		"version": "2.2.1",
+		"assets": {
+			"build/opensheetmusicdisplay.min.js": "11b95f3ce58613ff6e9cd633b7c18c9d4594d79ac3f00daa9664f038142bfa2d"
+		}
+	},
+	"pb-deep-link": {
+		"path": "../pb-deep-link",
+		"commit": "573cfdbb54267d65ea662ce5af77d8e93a2d9fe5",
+		"version": null,
+		"assets": {
+			"dist/endpoint.min.js": "8962592526ae3b4db5304ca2bc1c6785d37db3eb5344999800e98c6c41f31d8d",
+			"dist/qrcode.min.js": "13cdcb80a39cd5675fb920ddbe601aa1b03c488f0a14cd96d4515895a9761a5a",
+			"dist/responsive_shim.min.css": "9f18cd3f8686d8b5e27742f8fac4257fd7e5fd36173061417dfb03a63e5d0037"
+		}
+	}
+}

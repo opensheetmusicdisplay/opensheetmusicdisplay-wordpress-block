@@ -10,8 +10,7 @@ import {OpenSheetMusicDisplayGlobalHooks, OpenSheetMusicDisplayWordpressPlugin} 
  */
 import { InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import { withFilters, Card, CardBody, SelectControl, ToggleControl, Button, PanelBody, TextControl } from '@wordpress/components';
-import { withSelect } from '@wordpress/data';
-import { useState } from '@wordpress/element';
+import { useRef, useState } from '@wordpress/element';
 
 /**
  * Retrieves the translation of text.
@@ -51,7 +50,8 @@ pluginManager.registerPlugin(wpPlugin);
  * @return {WPElement} Element to render.
  */
 const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, commitAttributes}) => {
-	const blockProps = useBlockProps();
+	const blockRef = useRef();
+	const blockProps = useBlockProps({ref: blockRef});
 
 	const onSelectMedia = (media) => {
 		setAttributes({
@@ -96,10 +96,10 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 	];
 	
 	const translateAspectRatioToHeight = (aspectRatio) => {
-		if(!blockProps.ref.current || aspectRatio === 0.0 || !blockProps.ref.current.offsetWidth){
+		if(!blockRef.current || aspectRatio === 0.0 || !blockRef.current.offsetWidth){
 			return 'auto';
 		} else {
-			return (blockProps.ref.current.offsetWidth / aspectRatio).toString() + 'px';
+			return (blockRef.current.offsetWidth / aspectRatio).toString() + 'px';
 		}
 	};
 
@@ -120,7 +120,14 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 		maxReloadAttempts: 5,
 		newSystemFromXML: attributes.newSystemFromXML,
 		pluginManager: pluginManager,
-		rerenderDummy: attributes.rerenderDummy
+		rerenderDummy: attributes.rerenderDummy,
+		brailleEnabled: attributes.brailleEnabled,
+		brailleHideScore: attributes.brailleHideScore,
+		brailleLyrics: attributes.brailleLyrics,
+		brailleBarOverBar: attributes.brailleBarOverBar,
+		brailleEnsemble: attributes.brailleEnsemble,
+		brailleFacsimile: attributes.brailleFacsimile,
+		brailleShowTranslation: attributes.brailleShowTranslation
 	};
 	
 	let pluginProps = OpenSheetMusicDisplayGlobalHooks.applyFilters('phonicscore_opensheetmusicdisplay_block-props', OSMDProps, attributes, queueableAttributes);
@@ -293,6 +300,62 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 							>
 							</ToggleControl>
 						</PanelBody>
+						<PanelBody
+							title={__('Music Braille')}
+							initialOpen = { false }
+							>
+							<ToggleControl
+								label={__('Show Music Braille')}
+								help={__('Renders the score as Music Braille below the sheet music.')}
+								checked={ queueableAttributes.brailleEnabled.value }
+								onChange={ (val) => queueAttribute('brailleEnabled', val, 0) }
+							>
+							</ToggleControl>
+							{ queueableAttributes.brailleEnabled.value ?
+							<div>
+								<ToggleControl
+									label={__('Hide Score (Braille Only)')}
+									checked={ queueableAttributes.brailleHideScore.value }
+									onChange={ (val) => queueAttribute('brailleHideScore', val, 0) }
+								>
+								</ToggleControl>
+								<ToggleControl
+									label={__('Lyrics')}
+									help={__('Adds word lines for vocal music.')}
+									checked={ queueableAttributes.brailleLyrics.value }
+									onChange={ (val) => queueAttribute('brailleLyrics', val, 0) }
+								>
+								</ToggleControl>
+								<ToggleControl
+									label={__('Bar-over-bar (Keyboard)')}
+									help={__('Vertically aligned hands. No effect on single-staff scores.')}
+									checked={ queueableAttributes.brailleBarOverBar.value }
+									onChange={ (val) => queueAttribute('brailleBarOverBar', val, 0) }
+								>
+								</ToggleControl>
+								<ToggleControl
+									label={__('Ensemble')}
+									help={__('Bar-over-bar with instrument abbreviations. No effect on single-instrument scores.')}
+									checked={ queueableAttributes.brailleEnsemble.value }
+									onChange={ (val) => queueAttribute('brailleEnsemble', val, 0) }
+								>
+								</ToggleControl>
+								<ToggleControl
+									label={__('Facsimile (Mirror Print Layout)')}
+									help={__('Follows the rendered system breaks and clefs.')}
+									checked={ queueableAttributes.brailleFacsimile.value }
+									onChange={ (val) => queueAttribute('brailleFacsimile', val, 0) }
+								>
+								</ToggleControl>
+								<ToggleControl
+									label={__('Show Translation (Sign Meanings)')}
+									checked={ queueableAttributes.brailleShowTranslation.value }
+									onChange={ (val) => queueAttribute('brailleShowTranslation', val, 0) }
+								>
+								</ToggleControl>
+							</div> : null
+							}
+						</PanelBody>
 				</InspectorControls>
 			}
 			{	attributes.musicXmlId > -1 ?
@@ -304,7 +367,4 @@ const Edit = ({attributes, setAttributes, queueableAttributes, queueAttribute, c
 	);
 }
 
-export default withSelect( (select, props) => {
-	const { getMedia } = select('core');
-	return { media: props.attributes.musicXmlId > -1 ? getMedia(props.attributes.musicXmlId) : undefined };
-} )(Edit);
+export default Edit;

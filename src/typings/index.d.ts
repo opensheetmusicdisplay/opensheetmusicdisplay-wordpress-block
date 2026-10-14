@@ -1,6 +1,6 @@
-import { _Hooks } from "@wordpress/hooks/build-types/createHooks";
+import { createHooks } from '@wordpress/hooks';
 
 declare module 'opensheetmusicdisplay-wordpress-block' {
-    const OpenSheetMusicDisplayGlobalHooks: _Hooks;
-    export default OpenSheetMusicDisplayGlobalHooks;
+	const OpenSheetMusicDisplayGlobalHooks: ReturnType< typeof createHooks >;
+	export default OpenSheetMusicDisplayGlobalHooks;
 }

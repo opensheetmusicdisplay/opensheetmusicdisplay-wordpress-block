@@ -35,9 +35,9 @@ import icons from '../block_assets/icons';
 wp.domReady(() => {
 registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 	/**
-	 * @see https://make.wordpress.org/core/2020/11/18/block-api-version-2/
+	 * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-api-versions/
 	 */
-	apiVersion: 2,
+	apiVersion: 3,
 
 	/**
 	 * This is the display title for your block, which can be translated with `i18n` functions.
@@ -347,6 +347,34 @@ registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 			type: 'boolean',
 			default: false
 		},
+		brailleEnabled: {
+			type: 'boolean',
+			default: false
+		},
+		brailleHideScore: {
+			type: 'boolean',
+			default: false
+		},
+		brailleLyrics: {
+			type: 'boolean',
+			default: false
+		},
+		brailleBarOverBar: {
+			type: 'boolean',
+			default: false
+		},
+		brailleEnsemble: {
+			type: 'boolean',
+			default: false
+		},
+		brailleFacsimile: {
+			type: 'boolean',
+			default: false
+		},
+		brailleShowTranslation: {
+			type: 'boolean',
+			default: false
+		},
 		rerenderDummy: {
 			type: 'object',
 			default: {}
@@ -411,7 +439,14 @@ registerBlockType( 'phonicscore/opensheetmusicdisplay', {
 				"autoGenerateMutipleRestMeasuresFromRestMeasures",
 				"width",
 				"zoom",
-				"rerenderDummy"
+				"rerenderDummy",
+				"brailleEnabled",
+				"brailleHideScore",
+				"brailleLyrics",
+				"brailleBarOverBar",
+				"brailleEnsemble",
+				"brailleFacsimile",
+				"brailleShowTranslation"
 			]
 		}
 	}
