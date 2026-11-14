@@ -4,7 +4,7 @@ Donate link:       https://OSMD.org/Donate
 Tags:              opensheetmusicdisplay,osmd,music,sheet music,musicxml
 Requires at least: 6.3
 Tested up to:      7.1.3
-Stable tag:        1.5.0
+Stable tag:        1.5.1
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -28,16 +28,17 @@ Music Braille is included in the free plugin: display Unicode braille music belo
 
 ## MusicXML Notation Support
 
-This release includes OpenSheetMusicDisplay 2.2.1. In addition to notes, rests, chords, lyrics and tablature, the updated renderer supports:
+This release includes OpenSheetMusicDisplay 2.3.1. In addition to notes, rests, chords, lyrics and tablature, the updated renderer supports:
 
-- Slurs across staves, such as between the two hands of a piano part.
+- Slurs and beams across staves, such as between the two hands of a piano part.
+- Additive time signatures, such as 2+2+3/8.
 - Nested tuplets and tremolos between two notes.
 - Wavy trill extension lines.
 - Swing indications, complex metronome marks and metric modulation note equations.
 - MusicXML measure-repeat signs (simile/slashes) and part-group names and abbreviations.
 - Natural-sharp and natural-flat accidental combinations.
 
-These markings are read from the selected MusicXML file and rendered with the score. The updated engine also improves score loading and rendering performance, with fixes for lyrics, dynamics, tablature and layout after resizing or changing zoom.
+These markings are read from the selected MusicXML file and rendered with the score. The updated engine also improves rendering performance and memory use, with fixes for lyrics, dynamics, tablature, pedal markings, clef and key changes, and layout after resizing or changing zoom.
 
 ## Default Settings and Styling
 
@@ -330,7 +331,7 @@ Please contact us at support@opensheetmusicdisplay.org
 
 = Is feature x, y, or z available? Will it be available? =
 
-We now have a premium add-on to our plugin available here: https://opensheetmusicdisplay.org/wp-plugin/pricing/
+We now have a premium add-on to our plugin available here: https://osmd-wp.com/pricing/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=free
 If you'd like:
 -Audio Player
 -Transposition
@@ -356,11 +357,19 @@ The message "[api-fetch][preload] All preloads consumed." is informational outpu
 
 == Changelog ==
 
+= 1.5.1 =
+* Update the premium pricing link to osmd-wp.com with WordPress.org referral tracking, and add the plugin website to the plugin header.
+* Use the osmd-wp.com purple (#902CAB) for the Sheet Music and QR Code block icons.
+* Update the bundled OpenSheetMusicDisplay library from 2.2.1 to 2.3.1.
+* Render cross-staff beams and additive time signatures such as 2+2+3/8 from MusicXML.
+* Improve rendering speed and memory use, including faster guitar tablature rendering and better cleanup of discarded scores.
+* Include OSMD fixes for cross-staff chords, clef and key changes, accidentals, lyrics, dynamics, pedal markings, multiple rests and MXL loading.
+* Improve tablature bends, slides, ties, colors and dark-mode readability.
+* Compatibility: OSMD now prefixes previously unprefixed SVG classes with osmd- and uses new measure and staff group IDs. Custom CSS or scripts targeting the old renderer selectors need updating; see the upstream breaking changes.
+See the upstream changelog for the full OSMD changes:
+https://github.com/opensheetmusicdisplay/opensheetmusicdisplay/blob/2.3.1/CHANGELOG.md
+
 = 1.5.0 =
-* Upgrade the build toolchain to WordPress Scripts 36.1.0 and Webpack 5, refresh dependency security fixes and track reproducible installs with Node 24.21.0 and npm 12.2.0.
-* Use WordPress's React runtime consistently and provide a JSX compatibility fallback for WordPress 6.3–6.5.
-* Verify linked library commits and copied-asset hashes, and generate dependency metadata for shared and frontend scripts.
-* Document the remaining unpatched build-only braces advisory and the PracticeBird decoder update required upstream in DEPENDENCIES.md.
 * Require WordPress 6.3 or newer and migrate both blocks to API version 3 for the iframe editor.
 * Load renderer libraries and content styles in the editor iframe while keeping editor hooks in the admin window.
 * Remove unused deprecated getMedia lookups and use an absolute PracticeBird endpoint URL for iframe QR previews.

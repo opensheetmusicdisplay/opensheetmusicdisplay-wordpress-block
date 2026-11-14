@@ -1,10 +1,10 @@
 {
 	"opensheetmusicdisplay": {
 		"path": "../opensheetmusicdisplay",
-		"commit": "6e3cbd412274a0cc56ffac87e268d44e9b11ebb0",
-		"version": "2.2.1",
+		"commit": "ffbda4fd407859094254222a9fa4dea5cef12f28",
+		"version": "2.3.1",
 		"assets": {
-			"build/opensheetmusicdisplay.min.js": "11b95f3ce58613ff6e9cd633b7c18c9d4594d79ac3f00daa9664f038142bfa2d"
+			"build/opensheetmusicdisplay.min.js": "caa3052d01f4e1b91fd22e12d6561269d157edced929ef88c95ecb5f9d387812"
 		}
 	},
 	"pb-deep-link": {

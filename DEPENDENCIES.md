@@ -1,6 +1,6 @@
 # Dependency maintenance
 
-The 1.5.0 plugin uses WordPress Scripts 36.1.0 and Webpack 5.111.1. WordPress
+The 1.5.1 plugin uses WordPress Scripts 36.1.0 and Webpack 5.111.1. WordPress
 6.3 remains the minimum supported version. All existing block names, saved
 attributes, shortcode names and extension exports are preserved.
 
@@ -44,9 +44,23 @@ compiled from the recorded source commit or lockfile. In particular, the existin
 PracticeBird bundles predate its current dependency lockfile. A plugin lockfile
 does not freeze the source or dependency tree of a `file:` link.
 
+## Renderer update in 1.5.1
+
+The plugin now bundles OSMD 2.3.1 instead of 2.2.1. `library-inputs.json`
+records the updated sibling commit and built-asset hash, and the WordPress
+renderer script version is 2.3.1 for cache invalidation. The npm dependency
+remains a local link to `../opensheetmusicdisplay`.
+
+OSMD 2.3 changes the SVG IDs of measures and staff groups and prefixes its
+previously unprefixed SVG classes with `osmd-`. Custom CSS and extensions
+selecting the old IDs or classes need updating. See the bundled renderer's
+[upstream changelog](https://github.com/opensheetmusicdisplay/opensheetmusicdisplay/blob/2.3.1/CHANGELOG.md)
+for the selector mappings and removed library APIs.
+
 ## Package inventory
 
-Registry versions were assessed on 2026-10-13.
+The following table records the 1.5.0 toolchain upgrade. Registry versions were
+assessed on 2026-10-13; the later OSMD update is described above.
 
 | Package                      | Previous locked version     | Updated version                   |
 | ---------------------------- | --------------------------- | --------------------------------- |
@@ -142,10 +156,11 @@ changed by this upgrade. Plugin overrides cannot repair copied compiled code.
   flagged by this audit. Latest 2.0.10 changes to AGPL licensing; handle that
   migration upstream rather than forcing it into this plugin.
   [UAParser migration](https://docs.uaparser.dev/intro/whats-new.html).
-- **OSMD:** assess JSZip 3.10.2 upstream. Moving from its patched VexFlow 1.2.93
-  to VexFlow 5 requires an OSMD migration. Its two production-audit findings
-  concern `tar-fs` and `undici` in native installation tooling, rather than
-  identified browser dependencies.
+- **OSMD:** version 2.3.1 now declares JSZip 3.10.2 and removes the optional
+  `gl` dependency. Moving from its patched VexFlow 1.2.93 to VexFlow 5 still
+  requires an OSMD migration. The earlier 1.5.0 review's two OSMD production-audit
+  findings concerned `tar-fs` and `undici` in native installation tooling;
+  those findings are historical, not a fresh audit of OSMD 2.3.1.
 
 ## Validation
 
@@ -154,7 +169,7 @@ After building, use `npm run test:checks`, `npm run audit:check`, `npm run check
 script dependencies, shared extension exports, absence of a bundled React
 implementation and byte-identical copies of the recorded renderer assets.
 
-Validated with Node 24.21.0 / npm 12.2.0:
+The 1.5.0 toolchain upgrade was validated with Node 24.21.0 / npm 12.2.0:
 
 - A clean `npm ci` left the lockfile hash unchanged; `npm ls --all` reported no
   invalid peers, and the full production build and artifact checks passed.

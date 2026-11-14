@@ -1,8 +1,9 @@
 <?php
 /**
  * Plugin Name:     OpenSheetMusicDisplay
+ * Plugin URI:      https://osmd-wp.com/
  * Description:     Block (and shortcode) to render MusicXML in the browser as sheet music and Music Braille using OSMD. Additionally provides a block to deeplink musicXML into the PracticeBird app.
- * Version:         1.5.0
+ * Version:         1.5.1
  * Requires at least: 6.3
  * Author:          opensheetmusicdisplay.org
  * Author URI:		https://opensheetmusicdisplay.org
@@ -565,7 +566,7 @@ function phonicscore_opensheetmusicdisplay_register_scripts(){
 			'react-jsx-runtime',
 			plugins_url( 'build/osmd/react-jsx-runtime.min.js', __FILE__ ),
 			array( 'react' ),
-			'1.5.0',
+			'1.5.1',
 			true
 		);
 	}
@@ -573,14 +574,14 @@ function phonicscore_opensheetmusicdisplay_register_scripts(){
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist',
 		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay.min.js', __FILE__ ) ),
 		array(),
-		'2.2.1',
+		'2.3.1',
 		true
 	);
 	wp_register_script(
 		'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_block_exports',
 		esc_url( plugins_url( 'build/osmd/opensheetmusicdisplay-wordpress-block.min.js', __FILE__ ) ),
 		phonicscore_opensheetmusicdisplay_script_dependencies( 'build/osmd/opensheetmusicdisplay-wordpress-block.min.asset.php', array( 'phonicscore_opensheetmusicdisplay_opensheetmusicdisplay_dist', 'wp-hooks', 'wp-dom-ready' ) ),
-		'1.5.0',
+		'1.5.1',
 		true
 	);
 	wp_register_script(
